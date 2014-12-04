@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Hadoop入门：WordCount的运行 | MingYang&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="MingYang">
+  
+  
+    <meta name="description" content="运行环境
+
+java version “1.6.0_16”
+hadoop 0.20.2
+
+正确步骤
+
+将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。
+将count.jar包上传到装有hadoop的服务器。
+将数据文件（英文单词的文本）上传到服务器。
+执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文">
+  
+  <meta name="description" content="运行环境
+
+java version “1.6.0_16”
+hadoop 0.20.2
+
+正确步骤
+
+将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。
+将count.jar包上传到装有hadoop的服务器。
+将数据文件（英文单词的文本）上传到服务器。
+执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop入门：WordCount的运行">
+<meta property="og:url" content="http://blog.xumingyang.cn/2014/10/30/Hadoop入门：WordCount的运行/">
+<meta property="og:site_name" content="MingYang's blog">
+<meta property="og:description" content="运行环境
+
+java version “1.6.0_16”
+hadoop 0.20.2
+
+正确步骤
+
+将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。
+将count.jar包上传到装有hadoop的服务器。
+将数据文件（英文单词的文本）上传到服务器。
+执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop入门：WordCount的运行">
+<meta name="twitter:description" content="运行环境
+
+java version “1.6.0_16”
+hadoop 0.20.2
+
+正确步骤
+
+将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。
+将count.jar包上传到装有hadoop的服务器。
+将数据文件（英文单词的文本）上传到服务器。
+执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文">
+
+  
+    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'xumyselfcn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">MingYang&#39;s blog</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/10/30/Hadoop入门：WordCount的运行/">
+  <time datetime="2014-10-30T11:22:05.000Z">
+    10月 30 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Hadoop入门：WordCount的运行</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h2 id="运行环境">运行环境</h2>
+<ul>
+<li>java version “1.6.0_16”</li>
+<li>hadoop 0.20.2</li>
+</ul>
+<h2 id="正确步骤">正确步骤</h2>
+<ul>
+<li>将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。</li>
+<li>将count.jar包上传到装有hadoop的服务器。</li>
+<li>将数据文件（英文单词的文本）上传到服务器。</li>
+<li>执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文件的文件夹地址；D：输出路径)<br><a id="more"></a><h2 id="遇见问题">遇见问题</h2>
+<h3 id="打不开jar包">打不开jar包</h3>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Exception <span class="operator">in</span> thread <span class="string">"main"</span> java.io.IOException: Error opening job jar: /user/tseg/xmy/apps/wordCount.jar</div><div class="line"><span class="keyword">at</span> org.apache.hadoop.util.RunJar.main(RunJar.java:<span class="number">90</span>)</div><div class="line">Caused <span class="keyword">by</span>: java.util.zip.ZipException: error <span class="operator">in</span> opening zip <span class="built_in">file</span></div><div class="line"><span class="keyword">at</span> java.util.zip.ZipFile.<span class="built_in">open</span>(Native Method)</div><div class="line"><span class="keyword">at</span> java.util.zip.ZipFile.&lt;init&gt;(ZipFile.java:<span class="number">114</span>)</div><div class="line"><span class="keyword">at</span> java.util.jar.JarFile.&lt;init&gt;(JarFile.java:<span class="number">133</span>)</div><div class="line"><span class="keyword">at</span> java.util.jar.JarFile.&lt;init&gt;(JarFile.java:<span class="number">70</span>)</div><div class="line"><span class="keyword">at</span> org.apache.hadoop.util.RunJar.main(RunJar.java:<span class="number">88</span>)</div></pre></td></tr></table></figure>
+
+<p>错误原因：jar包地址输入的是本机的jar包位置，不需要上传到HDFS上；报错中的 /user/tseg/xmy/apps/wordCount.jar就是HDFS中的位置。</p>
+<h3 id="找不到Map类">找不到Map类</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">java.lang.RuntimeException: java.lang.ClassNotFoundException: Map</div><div class="line">at org.apache.hadoop.conf.Configuration.getClass(Configuration.java:<span class="number">809</span>)</div><div class="line">at org.apache.hadoop.mapreduce.JobContext.getMapperClass(JobContext.java:<span class="number">157</span>)</div><div class="line">at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:<span class="number">569</span>)</div><div class="line">at org.apache.hadoop.mapred.MapTask.run(MapTask.java:<span class="number">305</span>)</div><div class="line">at org.apache.hadoop.mapred.Child.main(Child.java:<span class="number">170</span>)</div><div class="line">Caused <span class="keyword">by</span>: java.lang.ClassNotFoundException: Map</div><div class="line">at java.net.URLClassLoader$<span class="number">1</span>.run(URLClassLoader.java:<span class="number">200</span>)</div><div class="line">at java.security.AccessController.doPrivileged(Native <span class="function"><span class="keyword">Method</span>)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">net</span>.<span class="title">URLClassLoader</span>.<span class="title">findClass</span><span class="params">(URLClassLoader.java:188)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClass</span><span class="params">(ClassLoader.java:307)</span></div><div class="line"><span class="title">at</span> <span class="title">sun</span>.<span class="title">misc</span>.<span class="title">Launcher</span>$<span class="title">AppClassLoader</span>.<span class="title">loadClass</span><span class="params">(Launcher.java:301)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClass</span><span class="params">(ClassLoader.java:252)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClassInternal</span><span class="params">(ClassLoader.java:320)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Class</span>.<span class="title">forName0</span><span class="params">(Native <span class="keyword">Method</span>)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Class</span>.<span class="title">forName</span><span class="params">(<span class="keyword">Class</span>.java:247)</span></div><div class="line"><span class="title">at</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">hadoop</span>.<span class="title">conf</span>.<span class="title">Configuration</span>.<span class="title">getClassByName</span><span class="params">(Configuration.java:762)</span></div><div class="line"><span class="title">at</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">hadoop</span>.<span class="title">conf</span>.<span class="title">Configuration</span>.<span class="title">getClass</span><span class="params">(Configuration.java:807)</span></div><div class="line">... 4 <span class="title">more</span></div></pre></td></tr></table></figure>
+
+<p>解决办法：<br>参见国外友人的一篇博文。在main函数中的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Job job = <span class="keyword">new</span> Job(<span class="keyword">conf</span>, <span class="string">"wordcount"</span>);</div></pre></td></tr></table></figure>
+
+<p>后，增加一行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">job.setJarByClass(WordCount.<span class="keyword">class</span>);</div></pre></td></tr></table></figure>
+
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/hadoop/">hadoop</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="Hadoop入门：WordCount的运行">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">MingYang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'xumyselfcn' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

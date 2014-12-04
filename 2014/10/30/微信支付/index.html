@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>微信支付 | MingYang&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="MingYang">
+  
+  
+    <meta name="description" content="微信支付
+完成微信支付的对接至少需要完成以下五个接口：
+
+支付&amp;amp;通知
+发货
+维权
+告警">
+  
+  <meta name="description" content="微信支付
+完成微信支付的对接至少需要完成以下五个接口：
+
+支付&amp;通知
+发货
+维权
+告警">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信支付">
+<meta property="og:url" content="http://blog.xumingyang.cn/2014/10/30/微信支付/">
+<meta property="og:site_name" content="MingYang's blog">
+<meta property="og:description" content="微信支付
+完成微信支付的对接至少需要完成以下五个接口：
+
+支付&amp;通知
+发货
+维权
+告警">
+<meta property="og:image" content="http://i.imgur.com/itMWD3w.png">
+<meta property="og:image" content="http://i.imgur.com/TdW7Kun.png">
+<meta property="og:image" content="http://i.imgur.com/B1IGqz8.png">
+<meta property="og:image" content="http://i.imgur.com/KeSdkxr.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信支付">
+<meta name="twitter:description" content="微信支付
+完成微信支付的对接至少需要完成以下五个接口：
+
+支付&amp;通知
+发货
+维权
+告警">
+
+  
+    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'xumyselfcn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">MingYang&#39;s blog</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/10/30/微信支付/">
+  <time datetime="2014-10-30T11:22:03.000Z">
+    10月 30 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">微信支付</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><a id="more"></a></p>
+<h2 id="微信支付">微信支付</h2>
+<p>完成微信支付的对接至少需要完成以下五个接口：</p>
+<ul>
+<li>支付&amp;通知</li>
+<li>发货</li>
+<li>维权</li>
+<li>告警<br><a id="more"></a><h3 id="支付&amp;通知接口">支付&amp;通知接口</h3>
+</li>
+</ul>
+<p><img src="http://i.imgur.com/itMWD3w.png" alt="支付&amp;通知"></p>
+<p>调用支付接口，微信会返回信息，同时还会向通知页面（支付接口里面填写的notify_url）post信息。</p>
+<p>微信及时返回的消息格式类似{“errmsg”:”…”} ，其中errmsg可能值为以下三个：</p>
+<pre><code>get_brand_wcpay_reques<span class="variable">t:ok</span>
+get_brand_wcpay_reques<span class="variable">t:cancel</span>
+get_brand_wcpay_reques<span class="variable">t:fail</span>
+</code></pre><p>用户在成功完支付后，微信后台通知（POST）商户服务器（notify_url）支付结果。商户可以使用notify_url的通知结果进行个性化页面展示。</p>
+<p>对后台通知交互时，如果微信收到商户的应答不是success或者超时，微信认为通知失败，微信会通过一定的策略（如 微信会通过一定的策略（如 30 分钟共 分钟共 8次）定期重新发起通知， 尽可能提高的成功率，但微信不保证通知最终能成功。</p>
+<p>由于存在重新发送后台通知的情况，因此同样可能会多次给商户系统。 <strong>商户系统必须能够正确处理重复的通知。</strong></p>
+<h3 id="发货接口">发货接口</h3>
+<p><img src="http://i.imgur.com/TdW7Kun.png" alt="发货"></p>
+<p>为了更好的跟踪订单的情况，需要在第三方收到最终支付通知之后，调用发货API告知微信后天该订单的发货状态。</p>
+<h3 id="维权接口">维权接口</h3>
+<p><img src="http://i.imgur.com/B1IGqz8.png" alt="维权"></p>
+<p>维权接口的实现首先需要在微信公众平台中增加“维权”字样的菜单（不管是几级菜单），然后微信后台会自动为其生成对应的路径页面。</p>
+<p>然后在之前设置的维权页面接收维权信息（在有用户进行维权的时候，微信会post维权信息到商户的服务器上）。</p>
+<p><strong>商户在收到维权信息后，需要返回success。</strong></p>
+<h3 id="告警接口">告警接口</h3>
+<p><img src="http://i.imgur.com/KeSdkxr.png" alt="告警"></p>
+<p>为了及时通知商户异常，微信后台会向商户推送告警通知，包括发货延迟，调用失败，通知失败等情况，通知的地址是商户在申请支付时填写的告警通知url。</p>
+<p><strong>商户收到告警通知后，需要成功返回success。</strong></p>
+<h2 id="—-">—-</h2>
+<p>可能会对你有用处：</p>
+<ul>
+<li><a href="http://mp.weixin.qq.com/debug/cgi-bin/readtmpl?t=pay/index" title="微信官方调试工具" target="_blank" rel="external">微信官方调试工具</a></li>
+<li>在之前做微信支付时候参考的<a href="http://git.oschina.net/gson/wechat" title="微信支付" target="_blank" rel="external">微信公共平台开发模式(JAVA)</a></li>
+<li>有问题发送邮件给：weixinpay@tencent.com</li>
+</ul>
+<p><strong>PS：</strong></p>
+<p>微信支付的官方demo-java-jsapi内有错误。</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/微信支付/">微信支付</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="微信支付">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">MingYang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'xumyselfcn' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

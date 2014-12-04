@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[MingYang's blog]]></title>
+  
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://blog.xumingyang.cn/"/>
+  <updated>2014-10-31T13:19:07.092Z</updated>
+  <id>http://blog.xumingyang.cn/</id>
+  
+  <author>
+    <name><![CDATA[MingYang]]></name>
+    <email><![CDATA[xumyselfcn@163.com]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Hadoop入门：WordCount的运行]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/Hadoop%E5%85%A5%E9%97%A8%EF%BC%9AWordCount%E7%9A%84%E8%BF%90%E8%A1%8C/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/Hadoop入门：WordCount的运行/</id>
+    <published>2014-10-30T11:22:05.000Z</published>
+    <updated>2014-10-30T11:21:04.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="运行环境">运行环境</h2>
+<ul>
+<li>java version “1.6.0_16”</li>
+<li>hadoop 0.20.2</li>
+</ul>
+<h2 id="正确步骤">正确步骤</h2>
+<ul>
+<li>将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。</li>
+<li>将count.jar包上传到装有hadoop的服务器。</li>
+<li>将数据文件（英文单词的文本）上传到服务器。</li>
+<li>执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文件的文件夹地址；D：输出路径)<br><a id="more"></a><h2 id="遇见问题">遇见问题</h2>
+<h3 id="打不开jar包">打不开jar包</h3>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Exception <span class="operator">in</span> thread <span class="string">"main"</span> java.io.IOException: Error opening job jar: /user/tseg/xmy/apps/wordCount.jar</div><div class="line"><span class="keyword">at</span> org.apache.hadoop.util.RunJar.main(RunJar.java:<span class="number">90</span>)</div><div class="line">Caused <span class="keyword">by</span>: java.util.zip.ZipException: error <span class="operator">in</span> opening zip <span class="built_in">file</span></div><div class="line"><span class="keyword">at</span> java.util.zip.ZipFile.<span class="built_in">open</span>(Native Method)</div><div class="line"><span class="keyword">at</span> java.util.zip.ZipFile.&lt;init&gt;(ZipFile.java:<span class="number">114</span>)</div><div class="line"><span class="keyword">at</span> java.util.jar.JarFile.&lt;init&gt;(JarFile.java:<span class="number">133</span>)</div><div class="line"><span class="keyword">at</span> java.util.jar.JarFile.&lt;init&gt;(JarFile.java:<span class="number">70</span>)</div><div class="line"><span class="keyword">at</span> org.apache.hadoop.util.RunJar.main(RunJar.java:<span class="number">88</span>)</div></pre></td></tr></table></figure>
+
+<p>错误原因：jar包地址输入的是本机的jar包位置，不需要上传到HDFS上；报错中的 /user/tseg/xmy/apps/wordCount.jar就是HDFS中的位置。</p>
+<h3 id="找不到Map类">找不到Map类</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">java.lang.RuntimeException: java.lang.ClassNotFoundException: Map</div><div class="line">at org.apache.hadoop.conf.Configuration.getClass(Configuration.java:<span class="number">809</span>)</div><div class="line">at org.apache.hadoop.mapreduce.JobContext.getMapperClass(JobContext.java:<span class="number">157</span>)</div><div class="line">at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:<span class="number">569</span>)</div><div class="line">at org.apache.hadoop.mapred.MapTask.run(MapTask.java:<span class="number">305</span>)</div><div class="line">at org.apache.hadoop.mapred.Child.main(Child.java:<span class="number">170</span>)</div><div class="line">Caused <span class="keyword">by</span>: java.lang.ClassNotFoundException: Map</div><div class="line">at java.net.URLClassLoader$<span class="number">1</span>.run(URLClassLoader.java:<span class="number">200</span>)</div><div class="line">at java.security.AccessController.doPrivileged(Native <span class="function"><span class="keyword">Method</span>)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">net</span>.<span class="title">URLClassLoader</span>.<span class="title">findClass</span><span class="params">(URLClassLoader.java:188)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClass</span><span class="params">(ClassLoader.java:307)</span></div><div class="line"><span class="title">at</span> <span class="title">sun</span>.<span class="title">misc</span>.<span class="title">Launcher</span>$<span class="title">AppClassLoader</span>.<span class="title">loadClass</span><span class="params">(Launcher.java:301)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClass</span><span class="params">(ClassLoader.java:252)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">loadClassInternal</span><span class="params">(ClassLoader.java:320)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Class</span>.<span class="title">forName0</span><span class="params">(Native <span class="keyword">Method</span>)</span></div><div class="line"><span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Class</span>.<span class="title">forName</span><span class="params">(<span class="keyword">Class</span>.java:247)</span></div><div class="line"><span class="title">at</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">hadoop</span>.<span class="title">conf</span>.<span class="title">Configuration</span>.<span class="title">getClassByName</span><span class="params">(Configuration.java:762)</span></div><div class="line"><span class="title">at</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">hadoop</span>.<span class="title">conf</span>.<span class="title">Configuration</span>.<span class="title">getClass</span><span class="params">(Configuration.java:807)</span></div><div class="line">... 4 <span class="title">more</span></div></pre></td></tr></table></figure>
+
+<p>解决办法：<br>参见国外友人的一篇博文。在main函数中的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Job job = <span class="keyword">new</span> Job(<span class="keyword">conf</span>, <span class="string">"wordcount"</span>);</div></pre></td></tr></table></figure>
+
+<p>后，增加一行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">job.setJarByClass(WordCount.<span class="keyword">class</span>);</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="运行环境">运行环境</h2>
+<ul>
+<li>java version “1.6.0_16”</li>
+<li>hadoop 0.20.2</li>
+</ul>
+<h2 id="正确步骤">正确步骤</h2>
+<ul>
+<li>将源码在Eclipse中打成count.jar包（没有打成可执行的jar包）。</li>
+<li>将count.jar包上传到装有hadoop的服务器。</li>
+<li>将数据文件（英文单词的文本）上传到服务器。</li>
+<li>执行 sh hadoop jar A B C D (A：jar包的绝对地址；B：包含main函数的类名；C：包含数据文件的文件夹地址；D：输出路径)<br>]]>
+    
+    </summary>
+    
+      <category term="hadoop" scheme="http://blog.xumingyang.cn/tags/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[GBK格式的sql文件导入乱码问题]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/mysql/GBK%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E9%80%9A%E8%BF%87source%E5%AF%BC%E5%85%A5mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/mysql/GBK数据库文件通过source导入mysql数据库乱码问题/</id>
+    <published>2014-10-30T11:22:04.000Z</published>
+    <updated>2014-10-30T11:21:50.000Z</updated>
+    <content type="html"><![CDATA[<ul>
+<li><p>先设置数据库的格式为gbk</p>
+<blockquote>
+<p>alter database databasename character set gbk;</p>
+</blockquote>
+</li>
+<li><p>然后设置客户端为gbk</p>
+<blockquote>
+<p>set names gbk;</p>
+</blockquote>
+</li>
+<li><p>再通过source导入：</p>
+<blockquote>
+<p>source filename.sql</p>
+</blockquote>
+</li>
+</ul>
+<a id="more"></a>]]></content>
+    <summary type="html">
+    <![CDATA[<ul>
+<li><p>先设置数据库的格式为gbk</p>
+<blockquote>
+<p>alter database databasename character set gbk;</p>
+</blockquote>
+</li>
+<li><p>然后设置客户端为gbk</p>
+<blockquote>
+<p>set names gbk;</p>
+</blockquote>
+</li>
+<li><p>再通过source导入：</p>
+<blockquote>
+<p>source filename.sql</p>
+</blockquote>
+</li>
+</ul>
+]]>
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://blog.xumingyang.cn/tags/mysql/"/>
+    
+      <category term="乱码" scheme="http://blog.xumingyang.cn/tags/%E4%B9%B1%E7%A0%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[微信支付]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/微信支付/</id>
+    <published>2014-10-30T11:22:03.000Z</published>
+    <updated>2014-10-30T11:21:17.000Z</updated>
+    <content type="html"><![CDATA[<p><a id="more"></a></p>
+<h2 id="微信支付">微信支付</h2>
+<p>完成微信支付的对接至少需要完成以下五个接口：</p>
+<ul>
+<li>支付&amp;通知</li>
+<li>发货</li>
+<li>维权</li>
+<li>告警<br><a id="more"></a><h3 id="支付&amp;通知接口">支付&amp;通知接口</h3>
+</li>
+</ul>
+<p><img src="http://i.imgur.com/itMWD3w.png" alt="支付&amp;通知"></p>
+<p>调用支付接口，微信会返回信息，同时还会向通知页面（支付接口里面填写的notify_url）post信息。</p>
+<p>微信及时返回的消息格式类似{“errmsg”:”…”} ，其中errmsg可能值为以下三个：</p>
+<pre><code>get_brand_wcpay_reques<span class="variable">t:ok</span>
+get_brand_wcpay_reques<span class="variable">t:cancel</span>
+get_brand_wcpay_reques<span class="variable">t:fail</span>
+</code></pre><p>用户在成功完支付后，微信后台通知（POST）商户服务器（notify_url）支付结果。商户可以使用notify_url的通知结果进行个性化页面展示。</p>
+<p>对后台通知交互时，如果微信收到商户的应答不是success或者超时，微信认为通知失败，微信会通过一定的策略（如 微信会通过一定的策略（如 30 分钟共 分钟共 8次）定期重新发起通知， 尽可能提高的成功率，但微信不保证通知最终能成功。</p>
+<p>由于存在重新发送后台通知的情况，因此同样可能会多次给商户系统。 <strong>商户系统必须能够正确处理重复的通知。</strong></p>
+<h3 id="发货接口">发货接口</h3>
+<p><img src="http://i.imgur.com/TdW7Kun.png" alt="发货"></p>
+<p>为了更好的跟踪订单的情况，需要在第三方收到最终支付通知之后，调用发货API告知微信后天该订单的发货状态。</p>
+<h3 id="维权接口">维权接口</h3>
+<p><img src="http://i.imgur.com/B1IGqz8.png" alt="维权"></p>
+<p>维权接口的实现首先需要在微信公众平台中增加“维权”字样的菜单（不管是几级菜单），然后微信后台会自动为其生成对应的路径页面。</p>
+<p>然后在之前设置的维权页面接收维权信息（在有用户进行维权的时候，微信会post维权信息到商户的服务器上）。</p>
+<p><strong>商户在收到维权信息后，需要返回success。</strong></p>
+<h3 id="告警接口">告警接口</h3>
+<p><img src="http://i.imgur.com/KeSdkxr.png" alt="告警"></p>
+<p>为了及时通知商户异常，微信后台会向商户推送告警通知，包括发货延迟，调用失败，通知失败等情况，通知的地址是商户在申请支付时填写的告警通知url。</p>
+<p><strong>商户收到告警通知后，需要成功返回success。</strong></p>
+<h2 id="—-">—-</h2>
+<p>可能会对你有用处：</p>
+<ul>
+<li><a href="http://mp.weixin.qq.com/debug/cgi-bin/readtmpl?t=pay/index" title="微信官方调试工具" target="_blank" rel="external">微信官方调试工具</a></li>
+<li>在之前做微信支付时候参考的<a href="http://git.oschina.net/gson/wechat" title="微信支付" target="_blank" rel="external">微信公共平台开发模式(JAVA)</a></li>
+<li>有问题发送邮件给：weixinpay@tencent.com</li>
+</ul>
+<p><strong>PS：</strong></p>
+<p>微信支付的官方demo-java-jsapi内有错误。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><!--more--></p>
+<h2 id="微信支付">微信支付</h2>
+<p>完成微信支付的对接至少需要完成以下五个接口：</p>
+<ul>
+<li>支付&amp;通知</li>
+<li>发货</li>
+<li>维权</li>
+<li>告警<br>]]>
+    
+    </summary>
+    
+      <category term="微信支付" scheme="http://blog.xumingyang.cn/tags/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[人脸识别服务]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E6%9C%8D%E5%8A%A1/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/人脸识别服务/</id>
+    <published>2014-10-30T11:22:03.000Z</published>
+    <updated>2014-10-30T11:13:37.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Face++">Face++</h2>
+<p>嗯，<a href="http://www.faceplusplus.com.cn/api-overview/" title="Face++" target="_blank" rel="external">这个</a>还是挺牛掰的~先收藏，以后估计用得到。</p>
+<h2 id="Baidu人脸识别">Baidu人脸识别</h2>
+<p>在<a href="http://developer.baidu.com/wiki/?title=docs/cplat/media/face" title="CSS的一些核心概念" target="_blank" rel="external">这里</a>，大树底下好乘凉啊。嗯！<br><a id="more"></a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Face++">Face++</h2>
+<p>嗯，<a href="http://www.faceplusplus.com.cn/api-overview/" title="Face++" target="_blank" rel="external">这个</a>还是挺牛掰的~先收藏，以后估计用得到。</p>
+<h2 id="Baidu人脸识别">Baidu人脸识别</h2>
+<p>在<a href="http://developer.baidu.com/wiki/?title=docs/cplat/media/face" title="CSS的一些核心概念" target="_blank" rel="external">这里</a>，大树底下好乘凉啊。嗯！<br>]]>
+    
+    </summary>
+    
+      <category term="人脸识别" scheme="http://blog.xumingyang.cn/tags/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Spring IoC]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/Spring%20IoC/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/Spring IoC/</id>
+    <published>2014-10-30T11:22:02.000Z</published>
+    <updated>2014-10-30T11:21:44.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="IoC容器概念">IoC容器概念</h3>
+<p>IOC容器就是具有依赖注入功能的容器，IOC容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中new相关的对象，应用程序由IOC容器进行组装。在Spring中BeanFactory是IOC容器的实际代表者。</p>
+<h3 id="Bean概念">Bean概念</h3>
+<p>由IOC容器管理的那些组成你应用程序的对象我们就叫它Bean， Bean就是由Spring容器初始化、装配及管理的对象。</p>
+<h3 id="IoC容器使用">IoC容器使用</h3>
+<ul>
+<li>将被管理的对象定义到spring配置文件中</li>
+<li>定义构造函数或者setter方法，让spring将对象注入进去<br><a id="more"></a><h3 id="例子">例子</h3>
+必须的jar包：<br>首先是spring核心jar包：<blockquote>
+<p>org.springframework.core-3.0.5.RELEASE.jar<br>org.springframework.beans-3.0.5.RELEASE.jar<br>org.springframework.context-3.0.5.RELEASE.jar</p>
+</blockquote>
+</li>
+</ul>
+<p>用于log的依赖jar包：</p>
+<blockquote>
+<p>com.springsource.org.apache.log4j-1.2.15.jar<br>com.springsource.org.apache.commons.logging-1.1.1.jar</p>
+</blockquote>
+<p>由于这里使用JUnit来进行测试，所有还需要引入jUnit包:</p>
+<blockquote>
+<p>junit.jar</p>
+</blockquote>
+<p>包含四个文件：</p>
+<ol>
+<li>Bean.java</li>
+<li>BeanTest.java</li>
+<li>applicationContext-bean.xml</li>
+<li>log4j.properties</li>
+</ol>
+<p>Bean.java:</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Bean {
+    String strValue;
+    <span class="keyword">int</span> intValue;
+    <span class="keyword">public</span> String <span class="title">getStrValue</span>() {
+        <span class="keyword">return</span> strValue;
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStrValue</span>(String strValue) {
+        <span class="keyword">this</span>.strValue = strValue;
+    }
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIntValue</span>() {
+        <span class="keyword">return</span> intValue;
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIntValue</span>(<span class="keyword">int</span> intValue) {
+        <span class="keyword">this</span>.intValue = intValue;
+    }
+}
+</code></pre><p>BeanTest.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span> </span>{
+    BeanFactory factory;
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setUp</span>() <span class="keyword">throws</span> Exception {
+        factory = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext-*.xml"</span>);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">injectionTest</span>(){
+        Bean bean = (Bean)factory.getBean(<span class="string">"Bean"</span>);
+        System.out.println(<span class="string">"bean.strValue "</span> + bean.getStrValue());
+        System.out.println(<span class="string">"bean.intValue "</span> + bean.getIntValue());
+    }
+}
+</code></pre><p>applicationContext-bean.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span>
+         <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="attribute">xmlns:aop</span>=<span class="value">"http://www.springframework.org/schema/aop"</span>
+         <span class="attribute">xmlns:tx</span>=<span class="value">"http://www.springframework.org/schema/tx"</span>
+         <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"Bean"</span> <span class="attribute">class</span>=<span class="value">"com.xu.spring.Bean"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"strValue"</span> <span class="attribute">value</span>=<span class="value">"hehe"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"intValue"</span> &gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>11111<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="tag">&lt;/<span class="title">beans</span>&gt;</span>
+</code></pre><p>log4j.properties</p>
+<pre><code># For JBoss: Avoid to setup Log4J outside <span class="variable">$JBOSS_HOME</span>/server/<span class="keyword">default</span>/deploy/log4j.xml!
+# For all other servers: Comment out the Log4J listener <span class="keyword">in</span> web.xml to activate Log4J.
+log4j.rootLogger=INFO, stdout, logfile
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.<span class="keyword">layout</span>=org.apache.log4j.PatternLayout
+log4j.appender.stdout.<span class="keyword">layout</span>.ConversionPattern=<span class="variable">%d</span> <span class="variable">%p</span> [<span class="variable">%c</span>] - <span class="variable">%m</span><span class="variable">%n</span>
+
+log4j.appender.logfile=org.apache.log4j.RollingFileAppender
+log4j.appender.logfile.File=${petstore.root}/WEB-INF/petstore.<span class="keyword">log</span>
+log4j.appender.logfile.MaxFileSize=<span class="number">512</span>KB
+# Keep three backup files.
+log4j.appender.logfile.MaxBackupIndex=<span class="number">3</span>
+# Pattern to output: <span class="keyword">date</span> priority [category] - message
+log4j.appender.logfile.<span class="keyword">layout</span>=org.apache.log4j.PatternLayout
+log4j.appender.logfile.<span class="keyword">layout</span>.ConversionPattern=<span class="variable">%d</span> <span class="variable">%p</span> [<span class="variable">%c</span>] - <span class="variable">%m</span><span class="variable">%n</span>
+</code></pre><p>在applicationContext-bean.xml中，声明了一个bean标签，里面注入了属性strValue和intValue的值（还可以注入其他类型，比如Map，List等类型）。</p>
+<p>在BeanTest.java中setUp函数中初始化的BeanFactory对象，然后在测试函数中就可以通过factory对象获取到Bean中的属性值。</p>
+<p>依赖对象的注入方式，可以采用：</p>
+<ul>
+<li>ref属性</li>
+<li><ref>标签</ref></li>
+<li>内部<bean>来定义</bean></li>
+</ul>
+<blockquote>
+<p>当涉及到该bean引用另外的bean时，可以使用通过名称或者通过类型进行自动装配。</p>
+</blockquote>
+<p>还可以将公共的注入定义描述出来：</p>
+<ul>
+<li>通过<bean>标签定义公共的属性，指定abstract=true</bean></li>
+<li>具有相同属性的类在<bean>标签中指定其parent属性</bean></li>
+</ul>
+<p>可以通过属性编辑器进行特殊类型的注入：</p>
+<ul>
+<li><p>自定义属性编辑器，spring配置文件中的字符串转换成相应的对象进行注入<br>spring已经有内置的属性编辑器，我们可以根据需求自己定义属性编辑器</p>
+</li>
+<li><p>如何定义属性编辑器？</p>
+<ul>
+<li>继承PropertyEditorSupport类，覆写setAsText()方法，参见：UtilDatePropertyEditor.java</li>
+<li>将属性编辑器注册到spring中，参见：applicationContext-editor.xml</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="IoC容器概念">IoC容器概念</h3>
+<p>IOC容器就是具有依赖注入功能的容器，IOC容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中new相关的对象，应用程序由IOC容器进行组装。在Spring中BeanFactory是IOC容器的实际代表者。</p>
+<h3 id="Bean概念">Bean概念</h3>
+<p>由IOC容器管理的那些组成你应用程序的对象我们就叫它Bean， Bean就是由Spring容器初始化、装配及管理的对象。</p>
+<h3 id="IoC容器使用">IoC容器使用</h3>
+<ul>
+<li>将被管理的对象定义到spring配置文件中</li>
+<li>定义构造函数或者setter方法，让spring将对象注入进去<br>]]>
+    
+    </summary>
+    
+      <category term="spring" scheme="http://blog.xumingyang.cn/tags/spring/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[近期计划]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/%E8%BF%91%E6%9C%9F%E8%AE%A1%E5%88%92/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/近期计划/</id>
+    <published>2014-10-30T11:22:02.000Z</published>
+    <updated>2014-10-30T11:21:25.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="看书计划">看书计划</h2>
+<p>虽然现在最熟悉的算是java了，但是总感觉浮于表面，没有深入理解。而且像多线程、网络编程方面根本没有涉及到。准备看下面两本书，深入理解下。</p>
+<h3 id="深入理解Java虚拟机">深入理解Java虚拟机</h3>
+<p><a href="http://icyfenix.iteye.com/" target="_blank" rel="external">周志明</a>的<a href="http://book.douban.com/subject/6522893/" title="深入理解Java虚拟机" target="_blank" rel="external">《深入理解java虚拟机》</a>。</p>
+<h3 id="Java核心技术">Java核心技术</h3>
+<p>显然，要想看完这本大部头确实困难，准备从里面挑一些接触比较少的章节详读。</p>
+<h3 id="Scala程序设计">Scala程序设计</h3>
+<p><a href="http://book.douban.com/subject/4909629/" title=" " target="_blank" rel="external">这本书</a>是Scala的入门书籍。Scala是一种针对 JVM 的通用的编程语言，用来以简明、优雅、类型安全的方式表示常见的编程模式。它无缝集成了面向对象语言和函数式语言的特性，可以大大提高JAVA程序员的编程效率。</p>
+<h3 id="设计模式">设计模式</h3>
+<p>做实验室的项目发现<br><a id="more"></a></p>
+<h2 id="努力的方向">努力的方向</h2>
+<h3 id="LeetCode">LeetCode</h3>
+<p>算法部分一直薄弱，还是得做些题目，锻炼下思维。</p>
+<h3 id="前端框架">前端框架</h3>
+<p>最近有挺多很火的前端框架，准备尝试一下谷歌出品的AngularJS。一直想熟悉一套前后台的框架，能够迅速搭建网站的方法。</p>
+<h3 id="HTML5和jQuery_Mobile">HTML5和jQuery Mobile</h3>
+<p>大趋势</p>
+<h3 id="机器学习">机器学习</h3>
+<p>还是上学期学数据挖掘的文本分类实验里面接触的。包括中文分词，文本预处理方面，朴素贝叶斯的实现，也应用了LibSVM进行文本分类。</p>
+<p>然后就是阿里的大数据竞赛，= =，不过关于机器学习的东西，协同过滤什么的效果貌似不大。哎，还是技术没到家。到了后期就没啥提升。</p>
+<p>实验室项目里面，负责的也是数据挖掘和ETL方面的东西，不过没有涉及到具体的实现，把实验室另一个项目实现的东西集成到系统上。差不多是纯工程性的东西，不过在集成之前需要我把算法全部测试通过，也算熟悉了ETL的各个过程了。</p>
+<p>还是想在机器学习里面再深入一点，准备聚类、分类、线性回归啥的学习下~</p>
+<h3 id="设计模式-1">设计模式</h3>
+<p>实验室的项目中，发现我负责那部分代码的冗余还是挺多的，各个算法执行前后的处理都差不多，可以抽象出来。以前都没用过设计模式，入手了本《设计模式》，开始尝试着用些成熟的模式。</p>
+<h3 id="爬虫？">爬虫？</h3>
+<p>嗯，万一哪天需要些什么数据呢，准备做一个通用性比较高的爬虫工具。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="看书计划">看书计划</h2>
+<p>虽然现在最熟悉的算是java了，但是总感觉浮于表面，没有深入理解。而且像多线程、网络编程方面根本没有涉及到。准备看下面两本书，深入理解下。</p>
+<h3 id="深入理解Java虚拟机">深入理解Java虚拟机</h3>
+<p><a href="http://icyfenix.iteye.com/" target="_blank" rel="external">周志明</a>的<a href="http://book.douban.com/subject/6522893/" title="深入理解Java虚拟机" target="_blank" rel="external">《深入理解java虚拟机》</a>。</p>
+<h3 id="Java核心技术">Java核心技术</h3>
+<p>显然，要想看完这本大部头确实困难，准备从里面挑一些接触比较少的章节详读。</p>
+<h3 id="Scala程序设计">Scala程序设计</h3>
+<p><a href="http://book.douban.com/subject/4909629/" title=" " target="_blank" rel="external">这本书</a>是Scala的入门书籍。Scala是一种针对 JVM 的通用的编程语言，用来以简明、优雅、类型安全的方式表示常见的编程模式。它无缝集成了面向对象语言和函数式语言的特性，可以大大提高JAVA程序员的编程效率。</p>
+<h3 id="设计模式">设计模式</h3>
+<p>做实验室的项目发现<br>]]>
+    
+    </summary>
+    
+      <category term="计划" scheme="http://blog.xumingyang.cn/tags/%E8%AE%A1%E5%88%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[oracle使用问题记录]]></title>
+    <link href="http://blog.xumingyang.cn/2014/10/30/oracle%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
+    <id>http://blog.xumingyang.cn/2014/10/30/oracle问题汇总/</id>
+    <published>2014-10-30T11:22:01.000Z</published>
+    <updated>2014-10-30T11:21:35.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="问题1">问题1</h3>
+<p>描述：ORA-01045: user lacks CREATE SESSION privilege; logon denied</p>
+<p>原因：创建User时没有给赋上create session权限，用户至少需要会话的权利，否则连接也不成功；用户在会话的权利上，应该有其他操作的权利；</p>
+<p>解决办法：</p>
+<ol>
+<li><p>grant connect, resource to username;</p>
+</li>
+<li><p>grant create session to username;</p>
+</li>
+</ol>
+<a id="more"></a>]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="问题1">问题1</h3>
+<p>描述：ORA-01045: user lacks CREATE SESSION privilege; logon denied</p>
+<p>原因：创建User时没有给赋上create session权限，用户至少需要会话的权利，否则连接也不成功；用户在会话的权利上，应该有其他操作的权利；</p>
+<p>解决办法：</p>
+<ol>
+<li><p>grant connect, resource to username;</p>
+</li>
+<li><p>grant create session to username;</p>
+</li>
+</ol>
+]]>
+    
+    </summary>
+    
+      <category term="oracle" scheme="http://blog.xumingyang.cn/tags/oracle/"/>
+    
+      <category term="数据库" scheme="http://blog.xumingyang.cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
+  
+</feed>
