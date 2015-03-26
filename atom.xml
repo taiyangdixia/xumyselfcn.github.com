@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.xumingyang.cn/"/>
-  <updated>2014-12-08T08:19:40.194Z</updated>
+  <updated>2015-03-26T09:30:20.920Z</updated>
   <id>http://blog.xumingyang.cn/</id>
   
   <author>
@@ -15,11 +15,761 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[LinkedList详解]]></title>
+    <link href="http://blog.xumingyang.cn/2015/03/27/LinkedList%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://blog.xumingyang.cn/2015/03/27/LinkedList详解/</id>
+    <published>2015-03-28T01:28:31.000Z</published>
+    <updated>2015-03-26T09:17:33.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>对比上一篇<a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList详解</a> ，我们已经可以大概得知LinkedList有哪些特性了：是线性存储、可以当队列使用、可以调用clone方法、可以序列化。<br><a id="more"></a></p>
+<h2 id="特性">特性</h2>
+<ul>
+<li>LinkedList是双向链表</li>
+<li>实现 Queue 接口，提供先进先出队列操作</li>
+<li>在列表的开头及结尾 get、remove和insert元素提供了统一的命名方法，这些操作允许将链接列表用作堆栈、队列或双端队列 (deque)</li>
+<li>clone、modCount和序列化的情况同ArrayList一致</li>
+</ul>
+<h2 id="详解">详解</h2>
+<h3 id="1、双向链表">1、双向链表</h3>
+<pre><code><span class="keyword">transient</span> <span class="keyword">int</span> <span class="keyword">size</span> = <span class="number">0</span>;
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+</code></pre><p>从其属性定义看，一个指向头结点，一个指向尾节点，这里的Node是LinkedList的一个内部类：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Node&lt;E&gt; {
+    E item;
+    Node&lt;E&gt; <span class="keyword">next</span>;
+    Node&lt;E&gt; prev;
+
+    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; <span class="keyword">next</span>) {
+        <span class="keyword">this</span>.item = element;
+        <span class="keyword">this</span>.<span class="keyword">next</span> = <span class="keyword">next</span>;
+        <span class="keyword">this</span>.prev = prev;
+    }
+}
+</code></pre><h3 id="实现Queue接口">实现Queue接口</h3>
+<p>其实LinkedList不仅可以拿来当Queue使用，也可以当Stack使用，因为它是双向链表！其内部提供的方法有：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span>(E e) 
+<span class="keyword">public</span> E <span class="title">get</span>(<span class="keyword">int</span> index) 
+<span class="keyword">public</span> E <span class="title">getFirst</span>() 
+<span class="keyword">public</span> E <span class="title">getLast</span>() 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerLast</span>(E e) 
+<span class="keyword">public</span> E <span class="title">peek</span>() 
+<span class="keyword">public</span> E <span class="title">peekFirst</span>() 
+<span class="keyword">public</span> E <span class="title">peekLast</span>() 
+<span class="keyword">public</span> E <span class="title">poll</span>() 
+<span class="keyword">public</span> E <span class="title">pollFirst</span>() 
+<span class="keyword">public</span> E <span class="title">pollLast</span>() 
+<span class="keyword">public</span> E <span class="title">pop</span>() 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span>(E e) 
+<span class="keyword">public</span> E <span class="title">remove</span>() 
+<span class="keyword">public</span> E <span class="title">removeFirst</span>() 
+<span class="keyword">public</span> E <span class="title">removeLast</span>() 
+<span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span>() 
+</code></pre><p>队列和栈需要的方法全部都提供了</p>
+<h3 id="其他">其他</h3>
+<ol>
+<li>LinkedList有两个内部类：ListItr和DescendingIterator，分别用来提供正向（从first到last）迭代器和反向（从last到first）迭代器。</li>
+<li>remove(int)和remove(Object)的时间复杂度都是O(n)，因为需要先找到那个int 值/Object对象。</li>
+</ol>
+<h2 id="LinkedList和ArrayList的区别、联系">LinkedList和ArrayList的区别、联系</h2>
+<p>相同点是两者都实现了List, Cloneable, Serializable接口，两者都是线性集合，都可以克隆，序列化。</p>
+<p>ArrayList 采用的是数组形式来保存对象的，这种方式将对象放在连续的位置中，所以最大的缺点就是插入删除时非常麻烦，优点是查询速度快</p>
+<p>LinkedList 采用的将对象存放在独立的空间中，而且在每个空间中还保存下一个链接的索引，但是缺点就是查找非常麻烦，要丛第一个索引开始，优点是插入、删除快。</p>
+<p>更详细的可以参考<a href="http://www.importnew.com/6629.html" target="_blank" rel="external">这篇</a></p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>LinkedList源码</li>
+<li><a href="http://www.importnew.com/6629.html" target="_blank" rel="external">LinkedList和ArrayList的区别</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="概述">概述</h2>
+<p>LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>对比上一篇<a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList详解</a> ，我们已经可以大概得知LinkedList有哪些特性了：是线性存储、可以当队列使用、可以调用clone方法、可以序列化。<br>]]>
+    
+    </summary>
+    
+      <category term="java 容器" scheme="http://blog.xumingyang.cn/tags/java-%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ArrayList详解]]></title>
+    <link href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://blog.xumingyang.cn/2015/03/27/ArrayList详解/</id>
+    <published>2015-03-27T14:28:31.000Z</published>
+    <updated>2015-03-26T08:38:59.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>ArrayList是List、RandomAccess、Cloneable、Serializable接口的可变长数组实现。与Vector的最大区别就是没用使用Synchronized关键字进行同步。不过ArrayList对writeObject和readObject两个方法进行了同步。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, 
+    <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性、当然还有它自己的特性的叠加(这几个都是maker interface，具体见这里)。<br><a id="more"></a></p>
+<h2 id="特性">特性</h2>
+<ul>
+<li>顺序存储</li>
+<li>默认初始大小为10，不够则扩容至原来的1.5倍(oldCapacity + (oldCapacity &gt;&gt; 1)),如果在已知大小的情况下，最好使用public ArrayList(int initialCapacity)构造函数进行初始化。</li>
+<li>使用modCount、expectedModCount机制规避风险（这个是AbstractList接口的特性）</li>
+<li>clone方法用于返回一个当前List的引用，使用时注意避免浅拷贝。Returns a shallow copy of this ArrayList instance.  (The elements themselves are not copied.)</li>
+<li>实现writeObject和readObject方法用于序列化</li>
+</ul>
+<h2 id="详解">详解</h2>
+<p>如下是ArrayList成员对象的定义</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;
+<span class="keyword">private</span> <span class="keyword">transient</span> Object[] elementData;
+<span class="keyword">private</span> <span class="keyword">int</span> size;
+</code></pre><h3 id="1、Add方法、自动扩充和modCount">1、Add方法、自动扩充和modCount</h3>
+<p>数据存储在Object数组中，默认初始大小是10，size存储当前List的长度。ArrayList的主要方法：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span>(E e) {
+    ensureCapacityInternal(size + <span class="number">1</span>);  <span class="comment">// Increments modCount!!</span>
+    elementData[size++] = e;
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacityInternal</span>(<span class="keyword">int</span> minCapacity) {
+    <span class="keyword">if</span> (elementData == EMPTY_ELEMENTDATA) {
+        minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
+    }
+
+    ensureExplicitCapacity(minCapacity);
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureExplicitCapacity</span>(<span class="keyword">int</span> minCapacity) {
+    modCount++;
+
+    <span class="comment">// overflow-conscious code</span>
+    <span class="keyword">if</span> (minCapacity - elementData.length &gt; <span class="number">0</span>)
+        grow(minCapacity);
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span>(<span class="keyword">int</span> minCapacity) {
+    <span class="comment">// overflow-conscious code</span>
+    <span class="keyword">int</span> oldCapacity = elementData.length;
+    <span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);
+    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)
+        newCapacity = minCapacity;
+    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)
+        newCapacity = hugeCapacity(minCapacity);
+    <span class="comment">// minCapacity is usually close to size, so this is a win:</span>
+    elementData = Arrays.copyOf(elementData, newCapacity);
+}
+</code></pre><p>其实add方法没啥好讲的，就是先检查数组长度够不够再装一个，不够的话会调用grow方法“自动变长”，够的话就直接在size位置插入数据，然后把size加1。不过这里有个modCount++，这个modCount其实是在父类AbstractList中定义了一个int型的属性。</p>
+<pre><code><span class="keyword">protected</span> <span class="keyword">transient</span> <span class="keyword">int</span> modCount = <span class="number">0</span>;
+</code></pre><p>在ArrayList的所有涉及结构变化的方法中都增加modCount的值，包括：add()、remove()、addAll()、removeRange()、clear()方法。这些方法每调用一次，modCount的值就加1。</p>
+<p>那么，modCount的作用是什么呢？这里可以把它理解为这个<strong>List的版本号</strong>。    </p>
+<p>但是，<strong>List要版本号干嘛呢</strong>？</p>
+<p>在对一个集合对象进行迭代操作的同时，并不限制对集合对象的元素进行操作，这些操作包括一些可能引起跌代错误的add()或remove()等危险操作。在AbstractList中，使用了一个简单的机制来规避这些风险。这就是modCount和expectedModCount的作用所在。下面是一个例子</p>
+<pre><code>private class Itr implements Iterator&lt;E&gt; {
+    int cursor;       // index of <span class="keyword">next</span> element to <span class="keyword">return</span>
+    int lastRet = -<span class="number">1</span>; // index of last element returned; -<span class="number">1</span> <span class="keyword">if</span> no such
+    int expectedModCount = modCount;
+    <span class="keyword">...</span>
+    <span class="keyword">...</span>
+    final void checkForComodification() {
+            <span class="keyword">if</span> (modCount != expectedModCount)
+                throw new ConcurrentModificationException();
+    }
+    <span class="keyword">...</span>
+    <span class="keyword">...</span>
+}
+</code></pre><p>比如在ArrayList的内部类Itr中的next()、remove()方法中都有调用checkForComodification()方法，目的就是为了防止在执行迭代时，List被修改了，造成数据不一致。除此之外，在writeObject()方法中也使用到了modCount，用法也是类似。</p>
+<pre><code><span class="keyword">public</span> E remove(<span class="keyword">int</span> <span class="keyword">index</span>) {
+    rangeCheck(<span class="keyword">index</span>);
+
+    modCount++;
+    E oldValue = elementData(<span class="keyword">index</span>);
+
+    <span class="keyword">int</span> numMoved = size - <span class="keyword">index</span> - <span class="number">1</span>;
+    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)
+        System.arraycopy(elementData, <span class="keyword">index</span>+<span class="number">1</span>, elementData, <span class="keyword">index</span>,
+                         numMoved);
+    elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span>
+
+    <span class="keyword">return</span> oldValue;
+}
+</code></pre><p>可见，在remove()时，modCount执行了加1操作。</p>
+<h3 id="2、clone，浅拷贝or深拷贝">2、clone，浅拷贝or深拷贝</h3>
+<pre><code><span class="javadoc">/**
+ * Returns a shallow copy of this &lt;tt&gt;ArrayList&lt;/tt&gt; instance.  (The
+ * elements themselves are not copied.)
+ *
+ *<span class="javadoctag"> @return</span> a clone of this &lt;tt&gt;ArrayList&lt;/tt&gt; instance
+ */</span>
+<span class="keyword">public</span> Object <span class="title">clone</span>() {
+    <span class="keyword">try</span> {
+        <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)
+            ArrayList&lt;E&gt; v = (ArrayList&lt;E&gt;) <span class="keyword">super</span>.clone();
+        v.elementData = Arrays.copyOf(elementData, size);
+        v.modCount = <span class="number">0</span>;
+        <span class="keyword">return</span> v;
+    } <span class="keyword">catch</span> (CloneNotSupportedException e) {
+        <span class="comment">// this shouldn't happen, since we are Cloneable</span>
+        <span class="keyword">throw</span> <span class="keyword">new</span> InternalError();
+    }
+}
+</code></pre><p>拷贝之后，存储在原有List和克隆List中的对象会保持一致，并指向Java堆中同一内存地址，造成这一误解的原因是它采用Collections对不可变对象进行了浅拷贝。</p>
+<h3 id="3、序列化">3、序列化</h3>
+<p>在大型网站架构中，经常需要把对象进行序列化操作，以期在另外一台机器中恢复该对象并执行操作。常见的RPC（远程过程调用）经常就需要相应的序列化框架与其搭配使用。在ArrayList中，elementData数组对象定义为<a href="http://www.cnblogs.com/lanxuezaipiao/p/3369962.html" target="_blank" rel="external">transient</a>，也就是“瞬时的”，不能被序列化；这是因为elementData[]中存放的都是数据的引用，都是堆上的地址，所以如果对地址进行序列化其实是没有意义的，所以在这儿需要手工的对ArrayList的元素进行序列化操作。这就是writeObject()的作用。 </p>
+<pre><code><span class="javadoc">/**
+ * Save the state of the &lt;tt&gt;ArrayList&lt;/tt&gt; instance to a stream (that
+ * is, serialize it).
+ *
+ *<span class="javadoctag"> @serialData</span> The length of the array backing the &lt;tt&gt;ArrayList&lt;/tt&gt;
+ *             instance is emitted (int), followed by all of its elements
+ *             (each an &lt;tt&gt;Object&lt;/tt&gt;) in the proper order.
+ */</span>
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span>(java.io.ObjectOutputStream s)
+    <span class="keyword">throws</span> java.io.IOException{
+    <span class="comment">// Write out element count, and any hidden stuff</span>
+    <span class="keyword">int</span> expectedModCount = modCount;
+    s.defaultWriteObject();
+
+    <span class="comment">// Write out size as capacity for behavioural compatibility with clone()</span>
+    s.writeInt(size);
+
+    <span class="comment">// Write out all elements in the proper order.</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;size; i++) {
+        s.writeObject(elementData[i]);
+    }
+
+    <span class="keyword">if</span> (modCount != expectedModCount) {
+        <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();
+    }
+}
+
+<span class="javadoc">/**
+ * Reconstitute the &lt;tt&gt;ArrayList&lt;/tt&gt; instance from a stream (that is,
+ * deserialize it).
+ */</span>
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span>(java.io.ObjectInputStream s)
+    <span class="keyword">throws</span> java.io.IOException, ClassNotFoundException {
+    elementData = EMPTY_ELEMENTDATA;
+
+    <span class="comment">// Read in size, and any hidden stuff</span>
+    s.defaultReadObject();
+
+    <span class="comment">// Read in capacity</span>
+    s.readInt(); <span class="comment">// ignored</span>
+
+    <span class="keyword">if</span> (size &gt; <span class="number">0</span>) {
+        <span class="comment">// be like clone(), allocate array based upon size not capacity</span>
+        ensureCapacityInternal(size);
+
+        Object[] a = elementData;
+        <span class="comment">// Read in all elements in the proper order.</span>
+        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;size; i++) {
+            a[i] = s.readObject();
+        }
+    }
+}
+</code></pre><p>至此，ArrayList中关键点都已经介绍完毕。下面是Java Collection Framework框架图，点击可放大。<br><img src="http://blog.xumingyang.me/imgs/java-collection.jpg" alt="Collection FrameWork"></p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>ArrayList源码（JDK的源码在jdk安装目录下：src.zip）</li>
+<li><a href="http://blog.csdn.net/justin_579/article/details/440003" target="_blank" rel="external">Java源码解读之java.util.ArrayList</a></li>
+<li><a href="http://blog.xumingyang.cn/2015/03/19/RandomAccess%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">RandomAccess详解</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="概述">概述</h2>
+<p>ArrayList是List、RandomAccess、Cloneable、Serializable接口的可变长数组实现。与Vector的最大区别就是没用使用Synchronized关键字进行同步。不过ArrayList对writeObject和readObject两个方法进行了同步。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, 
+    <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性、当然还有它自己的特性的叠加(这几个都是maker interface，具体见这里)。<br>]]>
+    
+    </summary>
+    
+      <category term="java 容器" scheme="http://blog.xumingyang.cn/tags/java-%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java 中的重要知识点]]></title>
+    <link href="http://blog.xumingyang.cn/2015/03/26/Java%20%E8%B5%84%E6%96%99%E6%B1%87%E6%80%BB/"/>
+    <id>http://blog.xumingyang.cn/2015/03/26/Java 资料汇总/</id>
+    <published>2015-03-26T14:28:31.000Z</published>
+    <updated>2015-03-26T09:29:57.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Java的容器">Java的容器</h2>
+<h3 id="非并发容器">非并发容器</h3>
+<ul>
+<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList</a>和LinkedList（各自特点、区别、联系）</li>
+<li>Map（Hash冲突的解决）</li>
+<li>Set</li>
+<li>Stack、Queue</li>
+</ul>
+<h3 id="并发容器">并发容器</h3>
+<ul>
+<li>阻塞类的代表LinkedBlockingDeque、Vector</li>
+<li>非阻塞类的代表ConcurrentLinkedDeque<a id="more"></a></li>
+<li>高效的ConcurrentHashMap</li>
+</ul>
+<h2 id="JVM相关">JVM相关</h2>
+<p><a href="http://en.wikipedia.org/wiki/Java_virtual_machine" target="_blank" rel="external">JVM</a>，也就是Java 虚拟机，由各大厂商根据<a href="https://docs.oracle.com/javase/specs/jvms/se7/html/" target="_blank" rel="external">JVM规范</a>实现的。最有名的是甲骨文公司的HotSpot。JVM主要由：<strong>类加载子系统、运行时数据区（内存空间）、执行引擎和本地方法接口</strong>等组成。其中运行时数据区又由：<strong>方法区、堆、Java栈、PC寄存器、本地方法栈</strong>组成。</p>
+<p><img src="http://blog.xumingyang.me/imgs/jvm2.jpg" alt="JVM主要组成部分"></p>
+<p>这个系列是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>关于周志明的<a href="https://book.douban.com/subject/24722612/" target="_blank" rel="external">《深入理解Java虚拟机》</a>的读书笔记，我自己也看了一遍这本书（我看的是第一版的，现在已经有第二版了），再看看别人是怎么想的，每个人的关注点可能也不一样，有可能他注意到了我忽略的地方，顺带着复习一下，这是一种很好的学习方式。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/jvm-ii/" target="_blank" rel="external">Java内存区域与内存溢出异常</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-iv/" target="_blank" rel="external">JVM性能监控与故障处理工具</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vi/" target="_blank" rel="external">类文件结构</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vii/" target="_blank" rel="external">虚拟机类加载机制</a></li>
+<li><a href="http://www.importnew.com/15362.html" target="_blank" rel="external">深入分析Java ClassLoader原理</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-viii/" target="_blank" rel="external">虚拟机字节码执行引擎</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-ix/" target="_blank" rel="external">类加载及执行子系统的案例与实战</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-xii/" target="_blank" rel="external">Java内存模型与线程</a></li>
+</ul>
+<h2 id="Java多线程">Java多线程</h2>
+<p>以前用到多线程的时候，在网上搜一下资料，实现功能就行；后来看了<a href="http://book.douban.com/subject/25844475/" target="_blank" rel="external">《Java 7并发编程实战手册》</a>算是真正的入门，这本书的特点是例子很多，跟着例子走上手比较容易，缺点就是例子太多，容易只见树木不见森林，局限于某个知识点。</p>
+<p>这里是<a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">《Java 7 Concurrency Cookbook》</a>的中文翻译在线版，已经出版的《Java 7并发编程实战手册》是其中文译本。</p>
+<p>其他的Java并发编程资料：</p>
+<ul>
+<li>排名第一的自然是<a href="http://book.douban.com/subject/10484692/" target="_blank" rel="external">《Java并发编程实战》</a></li>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+</ul>
+<p>怎么才能构建一个Java并发编程的体系呢，下面的这个系统对Java多线程整体过了一遍，这个系列依旧是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>的读书笔记。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part01/" target="_blank" rel="external">Java编程思想-并发系列之一</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part02/" target="_blank" rel="external">Java编程思想-并发系列之二</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part03/" target="_blank" rel="external">Java编程思想-并发系列之三</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part04/" target="_blank" rel="external">Java编程思想-并发系列之四</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part05/" target="_blank" rel="external">Java编程思想-并发系列之五</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part06/" target="_blank" rel="external">Java编程思想-并发系列之六</a></li>
+</ul>
+<h2 id="Java其他关键知识点">Java其他关键知识点</h2>
+<ul>
+<li><a href="http://www.importnew.com/15397.html" target="_blank" rel="external">深入理解Java String#intern() 内存模型</a></li>
+</ul>
+<h3 id="Java序列化">Java序列化</h3>
+<p>Java的序列化就是：对象的持久化。</p>
+<p>下面就是序列化相关的知识点：</p>
+<ul>
+<li>为什么要序列化、序列化的应用场景？</li>
+<li>序列化的实现方法？</li>
+<li>已有的序列化框架？</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Java的容器">Java的容器</h2>
+<h3 id="非并发容器">非并发容器</h3>
+<ul>
+<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList</a>和LinkedList（各自特点、区别、联系）</li>
+<li>Map（Hash冲突的解决）</li>
+<li>Set</li>
+<li>Stack、Queue</li>
+</ul>
+<h3 id="并发容器">并发容器</h3>
+<ul>
+<li>阻塞类的代表LinkedBlockingDeque、Vector</li>
+<li>非阻塞类的代表ConcurrentLinkedDeque]]>
+    
+    </summary>
+    
+      <category term="java" scheme="http://blog.xumingyang.cn/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[RandomAccess详解]]></title>
+    <link href="http://blog.xumingyang.cn/2015/03/19/RandomAccess%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://blog.xumingyang.cn/2015/03/19/RandomAccess详解/</id>
+    <published>2015-03-19T14:28:31.000Z</published>
+    <updated>2015-03-26T08:23:55.000Z</updated>
+    <content type="html"><![CDATA[<p>RandomAccess、Cloneable、Serializable都是标记接口（maker interface），所谓标记接口不会在其内部定义方法，实现标记接口的类表明该类拥有一种特殊的能力。</p>
+<p>比如实现RandomAccess接口的ArrayList有快速随机访问的能力，Cloneable、Serializable与之类似。其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性的叠加。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>RandomAccess is a marker interface, like the Serializable and Cloneable interfaces. All of these marker interfaces do not define methods; instead, they identify a class as having a particular capability.</p>
+</blockquote>
+<p>实现了maker interface的类有什么神奇的作用呢？</p>
+<p>实现了Serializable接口的类的对象，在序列化的时候不会抛出NotSerializableException异常了（除非这个对象还包含其他未实现Serializable接口的内部类）；实现了Cloneable接口的类的对象，在使用clone()方法时，不会抛出CloneNotSupportedException异常了。</p>
+<blockquote>
+<p>In the case of Serializable, the interface specifies that if the class is serialized using the serialization I/O classes, then a NotSerializableException will not be thrown (unless the object contains some other class that cannot be serialized). Cloneable similarly indicates that the use of the Object.clone() method for a Cloneable class will not throw a CloneNotSupportedException.</p>
+</blockquote>
+<p>其实，RandomAccess跟上述两个接口有点区别的。实现RandomAccess接口的集合类意味着：List.get()方法的执行速度会比Iterator.next()方法速度快。 </p>
+<blockquote>
+<p>The RandomAccess interface identifies that a particular java.util.List implementation has fast random access. A more accurate name for the interface would have been FastRandomAccess. This interface tries to define an imprecise concept: how fast is fast? The documentation provides a simple guide: if repeated access using the List.get() method is faster than repeated access using the Iterator.next() method, then the List has fast random access. </p>
+</blockquote>
+<p>关于RandomAccess的一个用法：</p>
+<pre><code><span class="keyword">if</span> (listObject instanceof <span class="type">RandomAccess</span>)
+{
+  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>, n=list.size(); i &lt; n; i++)
+  {
+    o = list.get(i);
+    //<span class="keyword">do</span> something <span class="keyword">with</span> <span class="keyword">object</span> o
+  }
+
+}
+<span class="keyword">else</span>
+{
+  <span class="type">Iterator</span> itr = list.<span class="keyword">iterator</span>();
+  <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>, n=list.size(); i &lt; n; i++)
+  {
+    o = itr.next();
+    //<span class="keyword">do</span> something <span class="keyword">with</span> <span class="keyword">object</span> o
+
+  }
+}
+</code></pre><p>先判断这个对象是不是实现了RandomAccess的接口，如果是，那么就采用get()方法进行遍历；否则就使用迭代器进行遍历。</p>
+<h3 id="参考资料">参考资料</h3>
+<ul>
+<li><a href="http://www.onjava.com/pub/a/onjava/2001/10/23/optimization.html" target="_blank" rel="external">Interface RandomAccess</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>RandomAccess、Cloneable、Serializable都是标记接口（maker interface），所谓标记接口不会在其内部定义方法，实现标记接口的类表明该类拥有一种特殊的能力。</p>
+<p>比如实现RandomAccess接口的ArrayList有快速随机访问的能力，Cloneable、Serializable与之类似。其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性的叠加。</p>
+]]>
+    
+    </summary>
+    
+      <category term="java, maker interface" scheme="http://blog.xumingyang.cn/tags/java-maker-interface/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java中的并发数据集合]]></title>
+    <link href="http://blog.xumingyang.cn/2015/03/12/java%20%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/"/>
+    <id>http://blog.xumingyang.cn/2015/03/12/java 并发数据集合/</id>
+    <published>2015-03-13T00:37:11.000Z</published>
+    <updated>2015-03-25T03:05:36.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2>
+<p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
+<p>一般来说，并发集合有如下两大类：</p>
+<blockquote>
+<ul>
+<li>阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+
+<p>具体的集合如下：</p>
+<ul>
+<li>非阻塞列表，使用ConcurrentLinkedDeque类。</li>
+<li>非阻塞可导航的map，使用<a href="http://ifeve.com/concurrent-collections-6/" target="_blank" rel="external">ConcurrentSkipListMap</a>类。</li>
+<li>阻塞列表，使用LinkedBlockingDeque类。</li>
+<li>用在生产者与消费者数据的阻塞列表，使用LinkedTransferQueue类。</li>
+<li>使用优先级排序元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-4/" target="_blank" rel="external">PriorityBlockingQueue</a>类。</li>
+<li>存储延迟元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-5/" target="_blank" rel="external">DelayQueue</a>类。</li>
+</ul>
+<p><strong>下面详细从ConcurrentLinkedDeque和LinkedBlockingDeque源码入手分析。</strong></p>
+<h2 id="ConcurrentLinkedDeque">ConcurrentLinkedDeque</h2>
+<p>这是一个非阻塞集合，其主要成员对象如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; head;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; tail;
+</code></pre><p>常用的方法有：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span>(E e)
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span>(E e) //内部调用 <span class="title">addLast</span>(E e)
+
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) //调用<span class="title">addFirst</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerLast</span>(E e) //调用<span class="title">addLast</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span>(E e) //内部调用<span class="title">offerLast</span>(E e)
+
+<span class="keyword">public</span> E <span class="title">pollFirst</span>() //弹出第一个，并返回
+<span class="keyword">public</span> E <span class="title">pollLast</span>() //弹出最后一个 并返回
+
+<span class="keyword">public</span> E <span class="title">removeFirst</span>() //调用<span class="title">pollFirst</span>()
+<span class="keyword">public</span> E <span class="title">removeLast</span>() //调用<span class="title">pollLast</span>()
+
+<span class="keyword">public</span> E <span class="title">poll</span>()           { <span class="keyword">return</span> pollFirst(); }
+<span class="keyword">public</span> E <span class="title">remove</span>()         { <span class="keyword">return</span> removeFirst(); }
+<span class="keyword">public</span> E <span class="title">peek</span>()           { <span class="keyword">return</span> peekFirst(); }
+<span class="keyword">public</span> E <span class="title">element</span>()        { <span class="keyword">return</span> getFirst(); }
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span>(E e)     { addFirst(e); }
+<span class="keyword">public</span> E <span class="title">pop</span>()            { <span class="keyword">return</span> removeFirst(); }
+</code></pre><p>以offerFirst()代码为例，查看ConcurrentLinkedDeque内部方法的实现：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) {
+    linkFirst(e);
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">linkFirst</span>(E e) {
+    checkNotNull(e);
+    <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;E&gt;(e);
+
+    restartFromHead:
+    <span class="keyword">for</span> (;;)
+        <span class="keyword">for</span> (Node&lt;E&gt; h = head, p = h, q;;) {
+            <span class="keyword">if</span> ((q = p.prev) != <span class="keyword">null</span> &amp;&amp;
+                (q = (p = q).prev) != <span class="keyword">null</span>)
+                <span class="comment">// Check for head updates every other hop.</span>
+                <span class="comment">// If p == q, we are sure to follow head instead.</span>
+                p = (h != (h = head)) ? h : q;
+            <span class="keyword">else</span> <span class="keyword">if</span> (p.next == p) <span class="comment">// PREV_TERMINATOR</span>
+                <span class="keyword">continue</span> restartFromHead;
+            <span class="keyword">else</span> {
+                <span class="comment">// p is first node</span>
+                newNode.lazySetNext(p); <span class="comment">// CAS piggyback</span>
+                <span class="keyword">if</span> (p.casPrev(<span class="keyword">null</span>, newNode)) {
+                    <span class="comment">// Successful CAS is the linearization point</span>
+                    <span class="comment">// for e to become an element of this deque,</span>
+                    <span class="comment">// and for newNode to become "live".</span>
+                    <span class="keyword">if</span> (p != h) <span class="comment">// hop two nodes at a time</span>
+                        casHead(h, newNode);  <span class="comment">// Failure is OK.</span>
+                    <span class="keyword">return</span>;
+                }
+                <span class="comment">// Lost CAS race to another thread; re-read prev</span>
+            }
+        }
+}
+</code></pre><p>ConcurrentLinkedDeque类中的head和tail是有volatile关键字修饰的，上面插入头结点的关键部分使用的是Node内部类中的方法，具体代码最后有附上。其方法并没有使用任何同步措施，比如：synchronizd关键字或ReentrantLock类，也正是因为这个，所以可以做到非阻塞，读者注意比较下面LinkedBlockingDeque。</p>
+<h2 id="LinkedBlockingDeque">LinkedBlockingDeque</h2>
+<p>这是一个阻塞集合，其主要成员如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> count;
+
+<span class="javadoc">/** Main lock guarding all access */</span>
+<span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();
+
+<span class="javadoc">/** Condition for waiting takes */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = lock.newCondition();
+
+<span class="javadoc">/** Condition for waiting puts */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notFull = lock.newCondition();
+</code></pre><p>常用方法同上面的ConcurrentLinkedDeque类中提供的方法比较类似，addFirst/addLast/offerFirst/offerLast/pollFirst/pollLast等均有提供，不同的是，这些方法中都使用了lock进行同步，以offerFirst()方法为例</p>
+<pre><code><span class="keyword">public</span> boolean <span class="title">offerFirst</span>(E e) {
+    <span class="keyword">if</span> (e == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    Node&lt;E&gt; node = <span class="keyword">new</span> Node&lt;E&gt;(e);
+    final ReentrantLock <span class="keyword">lock</span> = <span class="keyword">this</span>.<span class="keyword">lock</span>;
+    <span class="keyword">lock</span>.<span class="keyword">lock</span>();
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> linkFirst(node);
+    } <span class="keyword">finally</span> {
+        <span class="keyword">lock</span>.unlock();
+    }
+}
+
+<span class="keyword">private</span> boolean <span class="title">linkFirst</span>(Node&lt;E&gt; node) {
+    <span class="comment">// assert lock.isHeldByCurrentThread();</span>
+    <span class="keyword">if</span> (count &gt;= capacity)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    Node&lt;E&gt; f = first;
+    node.next = f;
+    first = node;
+    <span class="keyword">if</span> (last == <span class="keyword">null</span>)
+        last = node;
+    <span class="keyword">else</span>
+        f.prev = node;
+    ++count;
+    notEmpty.signal();
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+</code></pre><p>在向当前deque中插入新数据时，会先使用lock()方法上锁，然后插入新节点作为第一个元素。</p>
+<p><strong>ConcurrentLinkedDeque和LinkedBlockingDeque的区别</strong></p>
+<ul>
+<li>第一个区别：两者的方法一个使用Lock加锁，另一个则不是。</li>
+<li><p>第二个区别：两者的内部Node类也有很大不同（具体看下面附上的Node类的代码）</p>
+<pre><code>  <span class="comment">//ConcurrentLinkedDeque类的Node类</span>
+  <span class="keyword">static</span> <span class="keyword">final</span> class Node&lt;E&gt; {
+      <span class="keyword">volatile</span> Node&lt;E&gt; prev;
+      <span class="keyword">volatile</span> E item;
+      <span class="keyword">volatile</span> Node&lt;E&gt; next;
+
+  Node() {  <span class="comment">// default constructor for NEXT_TERMINATOR, PREV_TERMINATOR</span>
+  }
+
+  <span class="javadoc">/**
+   * Constructs a new node.  Uses relaxed write because item can
+   * only be seen after publication via casNext or casPrev.
+   */</span>
+  Node(E item) {
+      UNSAFE.putObject(<span class="keyword">this</span>, itemOffset, item);
+  }
+
+  <span class="keyword">boolean</span> casItem(E cmp, E val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, itemOffset, cmp, val);
+  }
+
+  <span class="keyword">void</span> lazySetNext(Node&lt;E&gt; val) {
+      UNSAFE.putOrderedObject(<span class="keyword">this</span>, nextOffset, val);
+  }
+
+  <span class="keyword">boolean</span> casNext(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, nextOffset, cmp, val);
+  }
+
+  <span class="keyword">void</span> lazySetPrev(Node&lt;E&gt; val) {
+      UNSAFE.putOrderedObject(<span class="keyword">this</span>, prevOffset, val);
+  }
+
+  <span class="keyword">boolean</span> casPrev(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, prevOffset, cmp, val);
+  }
+
+  <span class="comment">// Unsafe mechanics</span>
+
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> prevOffset;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> itemOffset;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> nextOffset;
+
+  <span class="keyword">static</span> {
+      <span class="keyword">try</span> {
+          UNSAFE = sun.misc.Unsafe.getUnsafe();
+          Class k = Node.class;
+          prevOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"prev"</span>));
+          itemOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"item"</span>));
+          nextOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"next"</span>));
+      } <span class="keyword">catch</span> (Exception e) {
+          <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);
+      }
+  }
+</code></pre><p>  }</p>
+</li>
+</ul>
+<hr>
+<pre><code><span class="comment">//LinkedBlockingDeque类的Node类</span>
+static <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="javadoc">/**
+     * The item, or null if this node has been removed.
+     */</span>
+    E item;
+
+    <span class="javadoc">/**
+     * One of:
+     * - the real predecessor Node
+     * - this Node, meaning the predecessor is tail
+     * - null, meaning there is no predecessor
+     */</span>
+    Node&lt;E&gt; prev;
+
+    <span class="javadoc">/**
+     * One of:
+     * - the real successor Node
+     * - this Node, meaning the successor is head
+     * - null, meaning there is no successor
+     */</span>
+    Node&lt;E&gt; next;
+
+    Node(E x) {
+        item = x;
+    }
+}
+</code></pre><p>有注意到LinkedBlockingDeque内部类的cas开头的几个函数吗?比如：casItem(),casNext()和casPrev(),这些都是CAS操作，CAS(Compare &amp; Set 或者 Compare &amp; Swap)为并发操作对象的提供更好的性能，CAS操作通过以下3个步骤来实现对变量值得修改：</p>
+<ul>
+<li>获取当前内存中的变量的值</li>
+<li>用一个新的临时变量(temporal variable)保存改变后的新值</li>
+<li>如果当前内存中的值等于变量的旧值，则将新值赋值到当前变量；否则不进行任何操作</li>
+</ul>
+<p>这里先介绍一下乐观锁和悲观锁：</p>
+<blockquote>
+<ul>
+<li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。悲观锁假定其他用户企图访问或者改变你正在访问、更改的对象的概率是很高的，因此在悲观锁的环境中，在你开始改变此对象之前就将该对象锁住，并且直到你提交了所作的更改之后才释放锁。</li>
+<li>乐观锁:假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。观锁不能解决脏读的问题。乐观锁则认为其他用户企图改变你正在更改的对象的概率是很小的，因此乐观锁直到你准备提交所作的更改时才将对象锁住，当你读取以及改变该对象时并不加锁。可见乐观锁加锁的时间要比悲观锁短，乐观锁可以用较大的锁粒度获得较好的并发访问性能。乐观锁中如果因为冲突失败就重试，直到成功为止。</li>
+</ul>
+</blockquote>
+<p>对于这个机制，你不需要使用任何同步机制，这样你就避免了deadlocks，也获得了更好的性能。这种机制能保证多个并发线程对一个共享变量操作做到最终一致。Java 在原子类中实现了CAS机制。这些类提供了compareAndSet() 方法；这个方法是CAS操作的实现和其他方法的基础。</p>
+<p>显然，阻塞队列使用悲观锁，基于Lock实现；非阻塞使用乐观锁，基于volatile和CAS实现。</p>
+<h2 id="总结">总结</h2>
+<p>阻塞集合：如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。保证<br>非阻塞集合：如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</p>
+<p>问题1：CAS机制和传统的使用锁或者关键字相比，各自的优缺点，各自的适用情景(扩展阅读中有答案)？</p>
+<p>这里先说一下<a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">CAS的优缺点</a>：</p>
+<blockquote>
+<ul>
+<li><p>优点：<br>非阻塞算法（通常叫作乐观算法）相对于基于锁的版本有几个性能优势。首先，它用硬件的原生形态代替 JVM 的锁定代码路径，从而在更细的粒度层次上（独立的内存位置）进行同步，失败的线程也可以立即重试，而不会被挂起后重新调度。更细的粒度降低了争用的机会，不用重新调度就能重试的能力也降低了争用的成本。即使有少量失败的 CAS 操作，这种方法仍然会比由于锁争用造成的重新调度快得多。</p>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>1、ABA问题<br>CAS操作容易导致ABA问题,也就是在做a++之间，a可能被多个线程修改过了，只不过回到了最初的值，这时CAS会认为a的值没有变。a在外面逛了一圈回来，你能保证它没有做任何坏事，不能！！也许它讨闲，把b的值减了一下，把c的值加了一下等等，更有甚者如果a是一个对象，这个对象有可能是新创建出来的，a是一个引用呢情况又如何，所以这里面还是存在着很多问题的，解决ABA问题的方法有很多，可以考虑增加一个修改计数，只有修改计数不变的且a值不变的情况下才做a++，也可以考虑引入版本号，当版本号相同时才做a++操作等，这和事务原子性处理有点类似！</li>
+<li>2、比较花费CPU资源，即使没有任何争用也会做一些无用功。</li>
+<li>3、会增加程序测试的复杂度，稍不注意就会出现问题。</li>
+</ul>
+</li>
+</ul>
+<p>可以用CAS在无锁的情况下实现原子操作，但要明确应用场合，非常简单的操作且又不想引入锁可以考虑使用CAS操作(比如get/set)，当想要非阻塞地完成某一操作也可以考虑CAS。不推荐在复杂操作中引入CAS，会使程序可读性变差，且难以测试，同时会出现ABA问题。嘿嘿嘿，CAS操作适用于那种读多写少的情况，因为这时CAS在更新时候冲突的概率会大大降低。</p>
+</blockquote>
+<h2 id="补充知识点：">补充知识点：</h2>
+<ol>
+<li>java中CAS的实现被封装在<a href="http://www.docjar.com/html/api/sun/misc/Unsafe.java.html" target="_blank" rel="external">sun.misc.Unsafe</a>类中。</li>
+<li>java.util.concurrent.atomic中的AtomicInteger、AtomicIntegerArray、AtomicLong等都是基于CAS实现的。</li>
+<li>volilate和cas只能乐观锁保证的状态控制的正确，而在设置状态失败的时候，仍然需要阻塞线程。juc里提供了LockSupport的park和unpark方法用于阻塞线程。而不同的场景下需要不同的等待策略和锁共享策略，juc提供了AbstractQueuedSynchronizer（AQS）为基类的一序列不同的锁，底层都是基于CAS、LocakSupport和Queue来管理。</li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="http://ifeve.com/concurrent-collections-1/" target="_blank" rel="external">并发集合</a></li>
+<li><a href="http://ifeve.com/concurrent-collections-9/" target="_blank" rel="external">使用原子 arrays</a></li>
+<li><a href="http://www.cnblogs.com/Bob-FD/p/3352216.html" target="_blank" rel="external">乐观锁和悲观锁的区别</a></li>
+<li><a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">乐观锁与悲观锁及其实现</a></li>
+<li>Java源码（JDK的源码在jdk安装目录下：src.zip）</li>
+</ul>
+<h2 id="本文扩展阅读">本文扩展阅读</h2>
+<ul>
+<li><a href="http://www.infoq.com/cn/articles/atomic-operation" target="_blank" rel="external">原子操作的实现原理</a></li>
+<li><a href="http://www.cnblogs.com/Mainz/p/3546347.html" target="_blank" rel="external">非阻塞同步算法与CAS算法</a></li>
+<li><a href="http://coolshell.cn/articles/8239.html" target="_blank" rel="external">无锁队列的实现</a></li>
+<li><a href="http://ifeve.com/reentrantlock-and-fairness/" target="_blank" rel="external">ReentrantLock(重入锁)以及公平性</a></li>
+</ul>
+<h2 id="Java并发资料">Java并发资料</h2>
+<ul>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+<li><a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">Java 7 并发编程指南</a></li>
+<li><a href="http://ifeve.com/concurrency-modle-seven-week-1/" target="_blank" rel="external">七周七并发模型</a></li>
+</ul>
+<h4 id="本博客文章均为原创，转载请注明出处，附上本文链接">本博客文章均为原创，转载请注明出处，附上本文链接</h4>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="概述">概述</h2>
+<p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
+<p>一般来说，并发集合有如下两大类：</p>
+<blockquote>
+<ul>
+<li>阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
+</blockquote>
+]]>
+    
+    </summary>
+    
+      <category term="java LinkedBlockingDeque ConcurrentLinkedDeque 并发 CAS" scheme="http://blog.xumingyang.cn/tags/java-LinkedBlockingDeque-ConcurrentLinkedDeque-%E5%B9%B6%E5%8F%91-CAS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[从Oracle数据库中大量导出文本数据的实践]]></title>
     <link href="http://blog.xumingyang.cn/2014/12/08/%E4%BB%8EOracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E5%A4%A7%E9%87%8F%E5%AF%BC%E5%87%BA%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/"/>
     <id>http://blog.xumingyang.cn/2014/12/08/从Oracle数据库中大量导出文本数据的实践/</id>
-    <published>2014-12-08T07:32:25.000Z</published>
-    <updated>2014-12-08T08:04:28.000Z</updated>
+    <published>2014-12-08T20:32:25.000Z</published>
+    <updated>2015-03-24T14:04:58.000Z</updated>
     <content type="html"><![CDATA[<h3 id="背景：">背景：</h3>
 <p>在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。</p>
 <h2 id="方案：">方案：</h2>
@@ -110,6 +860,7 @@ sqlplus / <span class="keyword">as</span> sysdba
 <li><a href="https://asktom.oracle.com/pls/apex/f?p=100:11:0::::P11_QUESTION_ID:459020243348" target="_blank" rel="external">关于Pro*C的一篇国外的文章</a></li>
 <li><a href="http://blog.csdn.net/leexide/article/details/17485451" target="_blank" rel="external">Shell脚本学习之expect命令</a></li>
 </ol>
+<h4 id="转载请注明出处，附上本文链接">转载请注明出处，附上本文链接</h4>
 ]]></content>
     <summary type="html">
     <![CDATA[<h3 id="背景：">背景：</h3>

@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>LinkedList详解 | MingYang&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="MingYang">
+  
+  
+    <meta name="description" content="概述
+LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version &quot;1.7.0_40&quot;
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (b">
+  
+  <meta name="description" content="概述
+LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version '1.7.0_40'
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LinkedList详解">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/27/LinkedList详解/">
+<meta property="og:site_name" content="MingYang's blog">
+<meta property="og:description" content="概述
+LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version '1.7.0_40'
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (b">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LinkedList详解">
+<meta name="twitter:description" content="概述
+LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version '1.7.0_40'
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (b">
+
+  
+    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'xumyselfcn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">MingYang&#39;s blog</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="http://cv.xumingyang.cn">CV</a></li>
+      
+        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/03/27/LinkedList详解/">
+  <time datetime="2015-03-28T01:28:31.000Z">
+    3月 27 2015
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">LinkedList详解</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h2 id="概述">概述</h2>
+<p>LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>对比上一篇<a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList详解</a> ，我们已经可以大概得知LinkedList有哪些特性了：是线性存储、可以当队列使用、可以调用clone方法、可以序列化。<br><a id="more"></a></p>
+<h2 id="特性">特性</h2>
+<ul>
+<li>LinkedList是双向链表</li>
+<li>实现 Queue 接口，提供先进先出队列操作</li>
+<li>在列表的开头及结尾 get、remove和insert元素提供了统一的命名方法，这些操作允许将链接列表用作堆栈、队列或双端队列 (deque)</li>
+<li>clone、modCount和序列化的情况同ArrayList一致</li>
+</ul>
+<h2 id="详解">详解</h2>
+<h3 id="1、双向链表">1、双向链表</h3>
+<pre><code><span class="keyword">transient</span> <span class="keyword">int</span> <span class="keyword">size</span> = <span class="number">0</span>;
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+</code></pre><p>从其属性定义看，一个指向头结点，一个指向尾节点，这里的Node是LinkedList的一个内部类：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Node&lt;E&gt; {
+    E item;
+    Node&lt;E&gt; <span class="keyword">next</span>;
+    Node&lt;E&gt; prev;
+
+    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; <span class="keyword">next</span>) {
+        <span class="keyword">this</span>.item = element;
+        <span class="keyword">this</span>.<span class="keyword">next</span> = <span class="keyword">next</span>;
+        <span class="keyword">this</span>.prev = prev;
+    }
+}
+</code></pre><h3 id="实现Queue接口">实现Queue接口</h3>
+<p>其实LinkedList不仅可以拿来当Queue使用，也可以当Stack使用，因为它是双向链表！其内部提供的方法有：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span>(E e) 
+<span class="keyword">public</span> E <span class="title">get</span>(<span class="keyword">int</span> index) 
+<span class="keyword">public</span> E <span class="title">getFirst</span>() 
+<span class="keyword">public</span> E <span class="title">getLast</span>() 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) 
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerLast</span>(E e) 
+<span class="keyword">public</span> E <span class="title">peek</span>() 
+<span class="keyword">public</span> E <span class="title">peekFirst</span>() 
+<span class="keyword">public</span> E <span class="title">peekLast</span>() 
+<span class="keyword">public</span> E <span class="title">poll</span>() 
+<span class="keyword">public</span> E <span class="title">pollFirst</span>() 
+<span class="keyword">public</span> E <span class="title">pollLast</span>() 
+<span class="keyword">public</span> E <span class="title">pop</span>() 
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span>(E e) 
+<span class="keyword">public</span> E <span class="title">remove</span>() 
+<span class="keyword">public</span> E <span class="title">removeFirst</span>() 
+<span class="keyword">public</span> E <span class="title">removeLast</span>() 
+<span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span>() 
+</code></pre><p>队列和栈需要的方法全部都提供了</p>
+<h3 id="其他">其他</h3>
+<ol>
+<li>LinkedList有两个内部类：ListItr和DescendingIterator，分别用来提供正向（从first到last）迭代器和反向（从last到first）迭代器。</li>
+<li>remove(int)和remove(Object)的时间复杂度都是O(n)，因为需要先找到那个int 值/Object对象。</li>
+</ol>
+<h2 id="LinkedList和ArrayList的区别、联系">LinkedList和ArrayList的区别、联系</h2>
+<p>相同点是两者都实现了List, Cloneable, Serializable接口，两者都是线性集合，都可以克隆，序列化。</p>
+<p>ArrayList 采用的是数组形式来保存对象的，这种方式将对象放在连续的位置中，所以最大的缺点就是插入删除时非常麻烦，优点是查询速度快</p>
+<p>LinkedList 采用的将对象存放在独立的空间中，而且在每个空间中还保存下一个链接的索引，但是缺点就是查找非常麻烦，要丛第一个索引开始，优点是插入、删除快。</p>
+<p>更详细的可以参考<a href="http://www.importnew.com/6629.html" target="_blank" rel="external">这篇</a></p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>LinkedList源码</li>
+<li><a href="http://www.importnew.com/6629.html" target="_blank" rel="external">LinkedList和ArrayList的区别</a></li>
+</ul>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/java-容器/">java 容器</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="LinkedList详解">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">MingYang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'xumyselfcn' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
