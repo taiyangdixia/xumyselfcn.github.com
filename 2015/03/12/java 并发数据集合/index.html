@@ -1,0 +1,465 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Java中的并发数据集合 | MingYang&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="MingYang">
+  
+  
+    <meta name="description" content="概述
+并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
+  
+  <meta name="description" content="概述
+并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的并发数据集合">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/12/java 并发数据集合/">
+<meta property="og:site_name" content="MingYang's blog">
+<meta property="og:description" content="概述
+并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java中的并发数据集合">
+<meta name="twitter:description" content="概述
+并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
+
+  
+    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'xumyselfcn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">MingYang&#39;s blog</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="http://cv.xumingyang.cn">CV</a></li>
+      
+        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/03/12/java 并发数据集合/">
+  <time datetime="2015-03-13T00:37:11.000Z">
+    3月 12 2015
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Java中的并发数据集合</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h2 id="概述">概述</h2>
+<p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
+<p>一般来说，并发集合有如下两大类：</p>
+<blockquote>
+<ul>
+<li>阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+
+<p>具体的集合如下：</p>
+<ul>
+<li>非阻塞列表，使用ConcurrentLinkedDeque类。</li>
+<li>非阻塞可导航的map，使用<a href="http://ifeve.com/concurrent-collections-6/" target="_blank" rel="external">ConcurrentSkipListMap</a>类。</li>
+<li>阻塞列表，使用LinkedBlockingDeque类。</li>
+<li>用在生产者与消费者数据的阻塞列表，使用LinkedTransferQueue类。</li>
+<li>使用优先级排序元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-4/" target="_blank" rel="external">PriorityBlockingQueue</a>类。</li>
+<li>存储延迟元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-5/" target="_blank" rel="external">DelayQueue</a>类。</li>
+</ul>
+<p><strong>下面详细从ConcurrentLinkedDeque和LinkedBlockingDeque源码入手分析。</strong></p>
+<h2 id="ConcurrentLinkedDeque">ConcurrentLinkedDeque</h2>
+<p>这是一个非阻塞集合，其主要成员对象如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; head;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; tail;
+</code></pre><p>常用的方法有：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFirst</span>(E e)
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLast</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span>(E e) //内部调用 <span class="title">addLast</span>(E e)
+
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) //调用<span class="title">addFirst</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerLast</span>(E e) //调用<span class="title">addLast</span>(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span>(E e) //内部调用<span class="title">offerLast</span>(E e)
+
+<span class="keyword">public</span> E <span class="title">pollFirst</span>() //弹出第一个，并返回
+<span class="keyword">public</span> E <span class="title">pollLast</span>() //弹出最后一个 并返回
+
+<span class="keyword">public</span> E <span class="title">removeFirst</span>() //调用<span class="title">pollFirst</span>()
+<span class="keyword">public</span> E <span class="title">removeLast</span>() //调用<span class="title">pollLast</span>()
+
+<span class="keyword">public</span> E <span class="title">poll</span>()           { <span class="keyword">return</span> pollFirst(); }
+<span class="keyword">public</span> E <span class="title">remove</span>()         { <span class="keyword">return</span> removeFirst(); }
+<span class="keyword">public</span> E <span class="title">peek</span>()           { <span class="keyword">return</span> peekFirst(); }
+<span class="keyword">public</span> E <span class="title">element</span>()        { <span class="keyword">return</span> getFirst(); }
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span>(E e)     { addFirst(e); }
+<span class="keyword">public</span> E <span class="title">pop</span>()            { <span class="keyword">return</span> removeFirst(); }
+</code></pre><p>以offerFirst()代码为例，查看ConcurrentLinkedDeque内部方法的实现：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offerFirst</span>(E e) {
+    linkFirst(e);
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">linkFirst</span>(E e) {
+    checkNotNull(e);
+    <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;E&gt;(e);
+
+    restartFromHead:
+    <span class="keyword">for</span> (;;)
+        <span class="keyword">for</span> (Node&lt;E&gt; h = head, p = h, q;;) {
+            <span class="keyword">if</span> ((q = p.prev) != <span class="keyword">null</span> &amp;&amp;
+                (q = (p = q).prev) != <span class="keyword">null</span>)
+                <span class="comment">// Check for head updates every other hop.</span>
+                <span class="comment">// If p == q, we are sure to follow head instead.</span>
+                p = (h != (h = head)) ? h : q;
+            <span class="keyword">else</span> <span class="keyword">if</span> (p.next == p) <span class="comment">// PREV_TERMINATOR</span>
+                <span class="keyword">continue</span> restartFromHead;
+            <span class="keyword">else</span> {
+                <span class="comment">// p is first node</span>
+                newNode.lazySetNext(p); <span class="comment">// CAS piggyback</span>
+                <span class="keyword">if</span> (p.casPrev(<span class="keyword">null</span>, newNode)) {
+                    <span class="comment">// Successful CAS is the linearization point</span>
+                    <span class="comment">// for e to become an element of this deque,</span>
+                    <span class="comment">// and for newNode to become "live".</span>
+                    <span class="keyword">if</span> (p != h) <span class="comment">// hop two nodes at a time</span>
+                        casHead(h, newNode);  <span class="comment">// Failure is OK.</span>
+                    <span class="keyword">return</span>;
+                }
+                <span class="comment">// Lost CAS race to another thread; re-read prev</span>
+            }
+        }
+}
+</code></pre><p>ConcurrentLinkedDeque类中的head和tail是有volatile关键字修饰的，上面插入头结点的关键部分使用的是Node内部类中的方法，具体代码最后有附上。其方法并没有使用任何同步措施，比如：synchronizd关键字或ReentrantLock类，也正是因为这个，所以可以做到非阻塞，读者注意比较下面LinkedBlockingDeque。</p>
+<h2 id="LinkedBlockingDeque">LinkedBlockingDeque</h2>
+<p>这是一个阻塞集合，其主要成员如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> count;
+
+<span class="javadoc">/** Main lock guarding all access */</span>
+<span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();
+
+<span class="javadoc">/** Condition for waiting takes */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = lock.newCondition();
+
+<span class="javadoc">/** Condition for waiting puts */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notFull = lock.newCondition();
+</code></pre><p>常用方法同上面的ConcurrentLinkedDeque类中提供的方法比较类似，addFirst/addLast/offerFirst/offerLast/pollFirst/pollLast等均有提供，不同的是，这些方法中都使用了lock进行同步，以offerFirst()方法为例</p>
+<pre><code><span class="keyword">public</span> boolean <span class="title">offerFirst</span>(E e) {
+    <span class="keyword">if</span> (e == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    Node&lt;E&gt; node = <span class="keyword">new</span> Node&lt;E&gt;(e);
+    final ReentrantLock <span class="keyword">lock</span> = <span class="keyword">this</span>.<span class="keyword">lock</span>;
+    <span class="keyword">lock</span>.<span class="keyword">lock</span>();
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> linkFirst(node);
+    } <span class="keyword">finally</span> {
+        <span class="keyword">lock</span>.unlock();
+    }
+}
+
+<span class="keyword">private</span> boolean <span class="title">linkFirst</span>(Node&lt;E&gt; node) {
+    <span class="comment">// assert lock.isHeldByCurrentThread();</span>
+    <span class="keyword">if</span> (count &gt;= capacity)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    Node&lt;E&gt; f = first;
+    node.next = f;
+    first = node;
+    <span class="keyword">if</span> (last == <span class="keyword">null</span>)
+        last = node;
+    <span class="keyword">else</span>
+        f.prev = node;
+    ++count;
+    notEmpty.signal();
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+</code></pre><p>在向当前deque中插入新数据时，会先使用lock()方法上锁，然后插入新节点作为第一个元素。</p>
+<p><strong>ConcurrentLinkedDeque和LinkedBlockingDeque的区别</strong></p>
+<ul>
+<li>第一个区别：两者的方法一个使用Lock加锁，另一个则不是。</li>
+<li><p>第二个区别：两者的内部Node类也有很大不同（具体看下面附上的Node类的代码）</p>
+<pre><code>  <span class="comment">//ConcurrentLinkedDeque类的Node类</span>
+  <span class="keyword">static</span> <span class="keyword">final</span> class Node&lt;E&gt; {
+      <span class="keyword">volatile</span> Node&lt;E&gt; prev;
+      <span class="keyword">volatile</span> E item;
+      <span class="keyword">volatile</span> Node&lt;E&gt; next;
+
+  Node() {  <span class="comment">// default constructor for NEXT_TERMINATOR, PREV_TERMINATOR</span>
+  }
+
+  <span class="javadoc">/**
+   * Constructs a new node.  Uses relaxed write because item can
+   * only be seen after publication via casNext or casPrev.
+   */</span>
+  Node(E item) {
+      UNSAFE.putObject(<span class="keyword">this</span>, itemOffset, item);
+  }
+
+  <span class="keyword">boolean</span> casItem(E cmp, E val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, itemOffset, cmp, val);
+  }
+
+  <span class="keyword">void</span> lazySetNext(Node&lt;E&gt; val) {
+      UNSAFE.putOrderedObject(<span class="keyword">this</span>, nextOffset, val);
+  }
+
+  <span class="keyword">boolean</span> casNext(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, nextOffset, cmp, val);
+  }
+
+  <span class="keyword">void</span> lazySetPrev(Node&lt;E&gt; val) {
+      UNSAFE.putOrderedObject(<span class="keyword">this</span>, prevOffset, val);
+  }
+
+  <span class="keyword">boolean</span> casPrev(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, prevOffset, cmp, val);
+  }
+
+  <span class="comment">// Unsafe mechanics</span>
+
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> prevOffset;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> itemOffset;
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> nextOffset;
+
+  <span class="keyword">static</span> {
+      <span class="keyword">try</span> {
+          UNSAFE = sun.misc.Unsafe.getUnsafe();
+          Class k = Node.class;
+          prevOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"prev"</span>));
+          itemOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"item"</span>));
+          nextOffset = UNSAFE.objectFieldOffset
+              (k.getDeclaredField(<span class="string">"next"</span>));
+      } <span class="keyword">catch</span> (Exception e) {
+          <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);
+      }
+  }
+</code></pre><p>  }</p>
+</li>
+</ul>
+<hr>
+<pre><code><span class="comment">//LinkedBlockingDeque类的Node类</span>
+static <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="javadoc">/**
+     * The item, or null if this node has been removed.
+     */</span>
+    E item;
+
+    <span class="javadoc">/**
+     * One of:
+     * - the real predecessor Node
+     * - this Node, meaning the predecessor is tail
+     * - null, meaning there is no predecessor
+     */</span>
+    Node&lt;E&gt; prev;
+
+    <span class="javadoc">/**
+     * One of:
+     * - the real successor Node
+     * - this Node, meaning the successor is head
+     * - null, meaning there is no successor
+     */</span>
+    Node&lt;E&gt; next;
+
+    Node(E x) {
+        item = x;
+    }
+}
+</code></pre><p>有注意到LinkedBlockingDeque内部类的cas开头的几个函数吗?比如：casItem(),casNext()和casPrev(),这些都是CAS操作，CAS(Compare &amp; Set 或者 Compare &amp; Swap)为并发操作对象的提供更好的性能，CAS操作通过以下3个步骤来实现对变量值得修改：</p>
+<ul>
+<li>获取当前内存中的变量的值</li>
+<li>用一个新的临时变量(temporal variable)保存改变后的新值</li>
+<li>如果当前内存中的值等于变量的旧值，则将新值赋值到当前变量；否则不进行任何操作</li>
+</ul>
+<p>这里先介绍一下乐观锁和悲观锁：</p>
+<blockquote>
+<ul>
+<li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。悲观锁假定其他用户企图访问或者改变你正在访问、更改的对象的概率是很高的，因此在悲观锁的环境中，在你开始改变此对象之前就将该对象锁住，并且直到你提交了所作的更改之后才释放锁。</li>
+<li>乐观锁:假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。观锁不能解决脏读的问题。乐观锁则认为其他用户企图改变你正在更改的对象的概率是很小的，因此乐观锁直到你准备提交所作的更改时才将对象锁住，当你读取以及改变该对象时并不加锁。可见乐观锁加锁的时间要比悲观锁短，乐观锁可以用较大的锁粒度获得较好的并发访问性能。乐观锁中如果因为冲突失败就重试，直到成功为止。</li>
+</ul>
+</blockquote>
+<p>对于这个机制，你不需要使用任何同步机制，这样你就避免了deadlocks，也获得了更好的性能。这种机制能保证多个并发线程对一个共享变量操作做到最终一致。Java 在原子类中实现了CAS机制。这些类提供了compareAndSet() 方法；这个方法是CAS操作的实现和其他方法的基础。</p>
+<p>显然，阻塞队列使用悲观锁，基于Lock实现；非阻塞使用乐观锁，基于volatile和CAS实现。</p>
+<h2 id="总结">总结</h2>
+<p>阻塞集合：如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。保证<br>非阻塞集合：如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</p>
+<p>问题1：CAS机制和传统的使用锁或者关键字相比，各自的优缺点，各自的适用情景(扩展阅读中有答案)？</p>
+<p>这里先说一下<a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">CAS的优缺点</a>：</p>
+<blockquote>
+<ul>
+<li><p>优点：<br>非阻塞算法（通常叫作乐观算法）相对于基于锁的版本有几个性能优势。首先，它用硬件的原生形态代替 JVM 的锁定代码路径，从而在更细的粒度层次上（独立的内存位置）进行同步，失败的线程也可以立即重试，而不会被挂起后重新调度。更细的粒度降低了争用的机会，不用重新调度就能重试的能力也降低了争用的成本。即使有少量失败的 CAS 操作，这种方法仍然会比由于锁争用造成的重新调度快得多。</p>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>1、ABA问题<br>CAS操作容易导致ABA问题,也就是在做a++之间，a可能被多个线程修改过了，只不过回到了最初的值，这时CAS会认为a的值没有变。a在外面逛了一圈回来，你能保证它没有做任何坏事，不能！！也许它讨闲，把b的值减了一下，把c的值加了一下等等，更有甚者如果a是一个对象，这个对象有可能是新创建出来的，a是一个引用呢情况又如何，所以这里面还是存在着很多问题的，解决ABA问题的方法有很多，可以考虑增加一个修改计数，只有修改计数不变的且a值不变的情况下才做a++，也可以考虑引入版本号，当版本号相同时才做a++操作等，这和事务原子性处理有点类似！</li>
+<li>2、比较花费CPU资源，即使没有任何争用也会做一些无用功。</li>
+<li>3、会增加程序测试的复杂度，稍不注意就会出现问题。</li>
+</ul>
+</li>
+</ul>
+<p>可以用CAS在无锁的情况下实现原子操作，但要明确应用场合，非常简单的操作且又不想引入锁可以考虑使用CAS操作(比如get/set)，当想要非阻塞地完成某一操作也可以考虑CAS。不推荐在复杂操作中引入CAS，会使程序可读性变差，且难以测试，同时会出现ABA问题。嘿嘿嘿，CAS操作适用于那种读多写少的情况，因为这时CAS在更新时候冲突的概率会大大降低。</p>
+</blockquote>
+<h2 id="补充知识点：">补充知识点：</h2>
+<ol>
+<li>java中CAS的实现被封装在<a href="http://www.docjar.com/html/api/sun/misc/Unsafe.java.html" target="_blank" rel="external">sun.misc.Unsafe</a>类中。</li>
+<li>java.util.concurrent.atomic中的AtomicInteger、AtomicIntegerArray、AtomicLong等都是基于CAS实现的。</li>
+<li>volilate和cas只能乐观锁保证的状态控制的正确，而在设置状态失败的时候，仍然需要阻塞线程。juc里提供了LockSupport的park和unpark方法用于阻塞线程。而不同的场景下需要不同的等待策略和锁共享策略，juc提供了AbstractQueuedSynchronizer（AQS）为基类的一序列不同的锁，底层都是基于CAS、LocakSupport和Queue来管理。</li>
+</ol>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="http://ifeve.com/concurrent-collections-1/" target="_blank" rel="external">并发集合</a></li>
+<li><a href="http://ifeve.com/concurrent-collections-9/" target="_blank" rel="external">使用原子 arrays</a></li>
+<li><a href="http://www.cnblogs.com/Bob-FD/p/3352216.html" target="_blank" rel="external">乐观锁和悲观锁的区别</a></li>
+<li><a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">乐观锁与悲观锁及其实现</a></li>
+<li>Java源码（JDK的源码在jdk安装目录下：src.zip）</li>
+</ul>
+<h2 id="本文扩展阅读">本文扩展阅读</h2>
+<ul>
+<li><a href="http://www.infoq.com/cn/articles/atomic-operation" target="_blank" rel="external">原子操作的实现原理</a></li>
+<li><a href="http://www.cnblogs.com/Mainz/p/3546347.html" target="_blank" rel="external">非阻塞同步算法与CAS算法</a></li>
+<li><a href="http://coolshell.cn/articles/8239.html" target="_blank" rel="external">无锁队列的实现</a></li>
+<li><a href="http://ifeve.com/reentrantlock-and-fairness/" target="_blank" rel="external">ReentrantLock(重入锁)以及公平性</a></li>
+</ul>
+<h2 id="Java并发资料">Java并发资料</h2>
+<ul>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+<li><a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">Java 7 并发编程指南</a></li>
+<li><a href="http://ifeve.com/concurrency-modle-seven-week-1/" target="_blank" rel="external">七周七并发模型</a></li>
+</ul>
+<h4 id="本博客文章均为原创，转载请注明出处，附上本文链接">本博客文章均为原创，转载请注明出处，附上本文链接</h4>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/java-LinkedBlockingDeque-ConcurrentLinkedDeque-并发-CAS/">java LinkedBlockingDeque ConcurrentLinkedDeque 并发 CAS</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="Java中的并发数据集合">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">MingYang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'xumyselfcn' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

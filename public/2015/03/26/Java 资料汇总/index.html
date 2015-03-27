@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Java 中的重要知识点 | MingYang&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="MingYang">
+  
+  
+    <meta name="description" content="Java的容器
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的代表LinkedBlockingDeque、Vector
+非阻塞类的代表ConcurrentLinkedDeque">
+  
+  <meta name="description" content="Java的容器
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的代表LinkedBlockingDeque、Vector
+非阻塞类的代表ConcurrentLinkedDeque">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 中的重要知识点">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/26/Java 资料汇总/">
+<meta property="og:site_name" content="MingYang's blog">
+<meta property="og:description" content="Java的容器
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的代表LinkedBlockingDeque、Vector
+非阻塞类的代表ConcurrentLinkedDeque">
+<meta property="og:image" content="http://blog.xumingyang.me/imgs/jvm2.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 中的重要知识点">
+<meta name="twitter:description" content="Java的容器
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的代表LinkedBlockingDeque、Vector
+非阻塞类的代表ConcurrentLinkedDeque">
+
+  
+    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'xumyselfcn']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">MingYang&#39;s blog</a></h1>
+    <p><a href="/"></a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="http://cv.xumingyang.cn">CV</a></li>
+      
+        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
+      
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/03/26/Java 资料汇总/">
+  <time datetime="2015-03-26T14:28:31.000Z">
+    3月 26 2015
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Java 中的重要知识点</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h2 id="Java的容器">Java的容器</h2>
+<h3 id="非并发容器">非并发容器</h3>
+<ul>
+<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList</a>和LinkedList（各自特点、区别、联系）</li>
+<li>Map（Hash冲突的解决）</li>
+<li>Set</li>
+<li>Stack、Queue</li>
+</ul>
+<h3 id="并发容器">并发容器</h3>
+<ul>
+<li>阻塞类的代表LinkedBlockingDeque、Vector</li>
+<li>非阻塞类的代表ConcurrentLinkedDeque<a id="more"></a></li>
+<li>高效的ConcurrentHashMap</li>
+</ul>
+<h2 id="JVM相关">JVM相关</h2>
+<p><a href="http://en.wikipedia.org/wiki/Java_virtual_machine" target="_blank" rel="external">JVM</a>，也就是Java 虚拟机，由各大厂商根据<a href="https://docs.oracle.com/javase/specs/jvms/se7/html/" target="_blank" rel="external">JVM规范</a>实现的。最有名的是甲骨文公司的HotSpot。JVM主要由：<strong>类加载子系统、运行时数据区（内存空间）、执行引擎和本地方法接口</strong>等组成。其中运行时数据区又由：<strong>方法区、堆、Java栈、PC寄存器、本地方法栈</strong>组成。</p>
+<p><img src="http://blog.xumingyang.me/imgs/jvm2.jpg" alt="JVM主要组成部分"></p>
+<p>这个系列是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>关于周志明的<a href="https://book.douban.com/subject/24722612/" target="_blank" rel="external">《深入理解Java虚拟机》</a>的读书笔记，我自己也看了一遍这本书（我看的是第一版的，现在已经有第二版了），再看看别人是怎么想的，每个人的关注点可能也不一样，有可能他注意到了我忽略的地方，顺带着复习一下，这是一种很好的学习方式。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/jvm-ii/" target="_blank" rel="external">Java内存区域与内存溢出异常</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-iv/" target="_blank" rel="external">JVM性能监控与故障处理工具</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vi/" target="_blank" rel="external">类文件结构</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vii/" target="_blank" rel="external">虚拟机类加载机制</a></li>
+<li><a href="http://www.importnew.com/15362.html" target="_blank" rel="external">深入分析Java ClassLoader原理</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-viii/" target="_blank" rel="external">虚拟机字节码执行引擎</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-ix/" target="_blank" rel="external">类加载及执行子系统的案例与实战</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-xii/" target="_blank" rel="external">Java内存模型与线程</a></li>
+</ul>
+<h2 id="Java多线程">Java多线程</h2>
+<p>以前用到多线程的时候，在网上搜一下资料，实现功能就行；后来看了<a href="http://book.douban.com/subject/25844475/" target="_blank" rel="external">《Java 7并发编程实战手册》</a>算是真正的入门，这本书的特点是例子很多，跟着例子走上手比较容易，缺点就是例子太多，容易只见树木不见森林，局限于某个知识点。</p>
+<p>这里是<a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">《Java 7 Concurrency Cookbook》</a>的中文翻译在线版，已经出版的《Java 7并发编程实战手册》是其中文译本。</p>
+<p>其他的Java并发编程资料：</p>
+<ul>
+<li>排名第一的自然是<a href="http://book.douban.com/subject/10484692/" target="_blank" rel="external">《Java并发编程实战》</a></li>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+</ul>
+<p>怎么才能构建一个Java并发编程的体系呢，下面的这个系统对Java多线程整体过了一遍，这个系列依旧是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>的读书笔记。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part01/" target="_blank" rel="external">Java编程思想-并发系列之一</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part02/" target="_blank" rel="external">Java编程思想-并发系列之二</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part03/" target="_blank" rel="external">Java编程思想-并发系列之三</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part04/" target="_blank" rel="external">Java编程思想-并发系列之四</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part05/" target="_blank" rel="external">Java编程思想-并发系列之五</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part06/" target="_blank" rel="external">Java编程思想-并发系列之六</a></li>
+</ul>
+<h2 id="Java其他关键知识点">Java其他关键知识点</h2>
+<ul>
+<li><a href="http://www.importnew.com/15397.html" target="_blank" rel="external">深入理解Java String#intern() 内存模型</a></li>
+</ul>
+<h3 id="Java序列化">Java序列化</h3>
+<p>Java的序列化就是：对象的持久化。</p>
+<p>下面就是序列化相关的知识点：</p>
+<ul>
+<li>为什么要序列化、序列化的应用场景？</li>
+<li>序列化的实现方法？</li>
+<li>已有的序列化框架？</li>
+</ul>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+  <div class="tags">
+    <a class="tags-link" href="/tags/java/">java</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">评论</h1>
+  <div class="ds-thread" data-title="Java 中的重要知识点">
+  </div>
+</section>
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">MingYang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'xumyselfcn' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
