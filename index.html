@@ -1,402 +1,471 @@
-<!DOCTYPE HTML>
-<html>
+
+ <!DOCTYPE HTML>
+<html >
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta charset="UTF-8">
   
-  <title>MingYang&#39;s blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  
+    <title>MingYang&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="MingYang">
-  
-  
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="MingYang's blog">
-<meta property="og:url" content="http://blog.xumingyang.cn/">
-<meta property="og:site_name" content="MingYang's blog">
-<meta property="og:description">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MingYang's blog">
-<meta name="twitter:description">
-
-  
-    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'xumyselfcn']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="MingYang&#39;s Blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
 
 </head>
 
-<body>
-  <div class="wrapper">
-    <header id="header">
-  <div class="title">
-    <h1><a href="/">MingYang&#39;s blog</a></h1>
-    <p><a href="/"></a></p>
-  </div>
-  <nav class="nav">
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/04/03/设计数据结构系列(二)/" title="设计合适的数据结构(二)" itemprop="url">
+  
+    <h1 itemprop="name">设计合适的数据结构(二)</h1>
+    
+     
+           <p itemprop="description" >问题背景
+
+设计实现一个抽象数据类型，能支持下列操作：
+
+insert(x)：如果x不在数据结构中，则插入x
+delete(x)：从数据结构中删除x（如果x存在）
+find_next(x)：在数据结构中搜索比x大的最小关键字
+
+所有这些操作在最坏情况下的复杂度要求为O(log n</p>
+        
+    
+    <time datetime="2015-04-03T07:28:31.000Z" itemprop="datePublished">Apr 3 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/04/03/设计数据结构系列(三)/" title="设计合适的数据结构(三)" itemprop="url">
+  
+    <h1 itemprop="name">设计合适的数据结构(三)</h1>
+    
+     
+           <p itemprop="description" >问题背景
+
+构造一个堆，其元素是另外两个大小分别为m和n的堆中的所有元素。堆用链表表示（每个节点有指针指向其两个子节点）。在最坏情况下，算法的时间复杂度为O(log(m+n))。
+
+扩展问题
+
+构造一个堆，包含k个堆中所有的元素，算法的复杂度是多少？
+
+参考资料</p>
+        
+    
+    <time datetime="2015-04-03T07:28:31.000Z" itemprop="datePublished">Apr 3 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/04/02/设计数据结构系列(一)/" title="设计合适的数据结构(一)" itemprop="url">
+  
+    <h1 itemprop="name">设计合适的数据结构(一)</h1>
+    
+     
+           <p itemprop="description" >问题背景
+
+设计实现一个抽象数据类型，能支持下列操作：
+Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。
+Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删</p>
+        
+    
+    <time datetime="2015-04-02T00:28:31.000Z" itemprop="datePublished">Apr 2 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/28/源码分析-Callable/" title="源码浅析-Callable和Future" itemprop="url">
+  
+    <h1 itemprop="name">源码浅析-Callable和Future</h1>
+    
+     
+       <p itemprop="description" >用Callable接口可以干啥
+简单来说，以前多线程的run方法返回值是void，那现在我想让各个线程有返回值咋办：使用Callable接口！
+话不多说，先上例子，这个例子引自“飘过的小牛”的这篇文章中。代码如下：
+class TaskWithResult implements </p>
+      
+    
+    <time datetime="2015-03-28T02:28:31.000Z" itemprop="datePublished">Mar 28 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/27/Java序列化/" title="Java序列化" itemprop="url">
+  
+    <h1 itemprop="name">Java序列化</h1>
+    
+     
+           <p itemprop="description" >序列化的相关知识点
+先看这三个知识点
+
+将对象转换为字节流保存起来，并在以后还原这个对象，这种机制叫做(对象)序列化。
+将一个对象保存到永久存储设备上称为持久化。
+一个对象要想能够实现序列化，必须实现Serializable接口或Externalizable接口。
+
+
+比如内存里</p>
+        
+    
+    <time datetime="2015-03-27T02:28:31.000Z" itemprop="datePublished">Mar 27 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/26/Java线程池ThreadPoolExecutor/" title="源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例" itemprop="url">
+  
+    <h1 itemprop="name">源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例</h1>
+    
+     
+       <p itemprop="description" >ThreadPoolExecutor类是用来创建线程池的类，通常使用Executors里面的静态方法来创建（Executors类似于）。线程池负责管理工作线程，包含一个等待执行的任务队列。线程池的任务队列是一个Runnable集合，工作线程负责从任务队列中取出并执行Runnabl</p>
+      
+    
+    <time datetime="2015-03-26T02:28:31.000Z" itemprop="datePublished">Mar 26 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/25/LinkedList详解/" title="源码浅析-LinkedList详解" itemprop="url">
+  
+    <h1 itemprop="name">源码浅析-LinkedList详解</h1>
+    
+     
+       <p itemprop="description" >概述
+LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version &quot;1.7.0_40&quot;
+//Java(TM) SE Runtime Envi</p>
+      
+    
+    <time datetime="2015-03-25T13:28:31.000Z" itemprop="datePublished">Mar 25 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/23/RandomAccess详解/" title="RandomAccess详解" itemprop="url">
+  
+    <h1 itemprop="name">RandomAccess详解</h1>
+    
+     
+       <p itemprop="description" >RandomAccess、Cloneable、Serializable都是标记接口（maker interface），所谓标记接口不会在其内部定义方法，实现标记接口的类表明该类拥有一种特殊的能力。
+比如实现RandomAccess接口的ArrayList有快速随机访问的能力，Cl</p>
+      
+    
+    <time datetime="2015-03-23T02:28:31.000Z" itemprop="datePublished">Mar 23 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/23/ArrayList详解/" title="源码分析-ArrayList详解" itemprop="url">
+  
+    <h1 itemprop="name">源码分析-ArrayList详解</h1>
+    
+     
+       <p itemprop="description" >概述
+ArrayList是List、RandomAccess、Cloneable、Serializable接口的可变长数组实现。与Vector的最大区别就是没用使用Synchronized关键字进行同步。不过ArrayList对writeObject和readObject两个方法</p>
+      
+    
+    <time datetime="2015-03-23T02:28:31.000Z" itemprop="datePublished">Mar 23 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/03/12/java 并发数据集合/" title="源码浅析-Java中的并发数据集合" itemprop="url">
+  
+    <h1 itemprop="name">源码浅析-Java中的并发数据集合</h1>
+    
+     
+       <p itemprop="description" >概述
+并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立</p>
+      
+    
+    <time datetime="2015-03-12T12:37:11.000Z" itemprop="datePublished">Mar 12 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/02/26/Java 资料汇总/" title="Java 中的重要知识点" itemprop="url">
+  
+    <h1 itemprop="name">Java 中的重要知识点</h1>
+    
+     
+       <p itemprop="description" >Java的容器
+顺序表、集合、队列相关类图Map相关类图（图片来源：Prepare Java Interview）
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的</p>
+      
+    
+    <time datetime="2015-02-26T02:28:31.000Z" itemprop="datePublished">Feb 26 2015</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/" title="从Oracle数据库中大量导出文本数据的实践" itemprop="url">
+  
+    <h1 itemprop="name">从Oracle数据库中大量导出文本数据的实践</h1>
+    
+     
+       <p itemprop="description" >背景：
+在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。
+方案：
+
+通过JDBC连接数据库的方式，从数据库中读取数据，写入文件。
+使用Oracle数据库的exp/expdp工具，导</p>
+      
+    
+    <time datetime="2014-12-08T07:32:25.000Z" itemprop="datePublished">Dec 8 2014</time>
+  </a>
+</section>
+
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
     <ul>
-      
-        <li><a href="/">Home</a></li>
-      
-        <li><a href="/archives">Archives</a></li>
-      
-        <li><a href="/about">About</a></li>
-      
-        <li><a href="http://cv.xumingyang.cn">CV</a></li>
-      
-        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
-      
-      
-        <li><a href="/atom.xml">RSS</a></li>
-      
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
     </ul>
-    <div class="clearfix"></div>
-  </nav>
-  <div class="clearfix"></div>
-</header>
-    <div class="content">
-
-
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/27/LinkedList详解/">
-  <time datetime="2015-03-28T01:28:31.000Z">
-    3月 27 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2015/03/27/LinkedList详解/">LinkedList详解</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h2 id="概述">概述</h2>
-<p>LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。</p>
-<pre><code><span class="comment">//java version "1.7.0_40"</span>
-<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
-<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;
-    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;
-    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
-    ...
-}
-</code></pre><p>对比上一篇<a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList详解</a> ，我们已经可以大概得知LinkedList有哪些特性了：是线性存储、可以当队列使用、可以调用clone方法、可以序列化。<br>
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2015/03/27/LinkedList详解/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/27/ArrayList详解/">
-  <time datetime="2015-03-27T14:28:31.000Z">
-    3月 27 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2015/03/27/ArrayList详解/">ArrayList详解</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h2 id="概述">概述</h2>
-<p>ArrayList是List、RandomAccess、Cloneable、Serializable接口的可变长数组实现。与Vector的最大区别就是没用使用Synchronized关键字进行同步。不过ArrayList对writeObject和readObject两个方法进行了同步。</p>
-<pre><code><span class="comment">//java version "1.7.0_40"</span>
-<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
-<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;
-    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, 
-    <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
-    ...
-}
-</code></pre><p>其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性、当然还有它自己的特性的叠加(这几个都是maker interface，具体见这里)。<br>
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2015/03/27/ArrayList详解/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/26/Java 资料汇总/">
-  <time datetime="2015-03-26T14:28:31.000Z">
-    3月 26 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2015/03/26/Java 资料汇总/">Java 中的重要知识点</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h2 id="Java的容器">Java的容器</h2>
-<h3 id="非并发容器">非并发容器</h3>
-<ul>
-<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList</a>和LinkedList（各自特点、区别、联系）</li>
-<li>Map（Hash冲突的解决）</li>
-<li>Set</li>
-<li>Stack、Queue</li>
-</ul>
-<h3 id="并发容器">并发容器</h3>
-<ul>
-<li>阻塞类的代表LinkedBlockingDeque、Vector</li>
-<li>非阻塞类的代表ConcurrentLinkedDeque
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2015/03/26/Java 资料汇总/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/19/RandomAccess详解/">
-  <time datetime="2015-03-19T14:28:31.000Z">
-    3月 19 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2015/03/19/RandomAccess详解/">RandomAccess详解</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>RandomAccess、Cloneable、Serializable都是标记接口（maker interface），所谓标记接口不会在其内部定义方法，实现标记接口的类表明该类拥有一种特殊的能力。</p>
-<p>比如实现RandomAccess接口的ArrayList有快速随机访问的能力，Cloneable、Serializable与之类似。其实ArrayList的各种特性就是AbstractList、RandomAccess、Cloneable、Serializable几种接口特性的叠加。</p>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2015/03/19/RandomAccess详解/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/12/java 并发数据集合/">
-  <time datetime="2015-03-13T00:37:11.000Z">
-    3月 12 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2015/03/12/java 并发数据集合/">Java中的并发数据集合</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h2 id="概述">概述</h2>
-<p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
-<p>一般来说，并发集合有如下两大类：</p>
-<blockquote>
-<ul>
-<li>阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
-<li>非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
-</ul>
-</blockquote>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2015/03/12/java 并发数据集合/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-    <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/">
-  <time datetime="2014-12-08T20:32:25.000Z">
-    12月 8 2014
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title"><a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/">从Oracle数据库中大量导出文本数据的实践</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h3 id="背景：">背景：</h3>
-<p>在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。</p>
-<h2 id="方案：">方案：</h2>
-<ul>
-<li>通过JDBC连接数据库的方式，从数据库中读取数据，写入文件。</li>
-<li>使用Oracle数据库的exp/expdp工具，导出二进制文件，再转换成文本文件。</li>
-<li>使用spool，在SQL*PLUS中执行。</li>
-<li>使用Pro*C方式。</li>
-<li>使用sqluldr2工具。<br>
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/#more" class="more-link">阅读全文</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
-
 </div>
-  </div>
-  <footer id="footer"><div class="copyright">
-  
-  &copy; 2015 <a href="/">MingYang</a>
-  
-</div>
-<div class="theme-copyright">
-  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
-   | 
-  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
-</div>
-<div class="clearfix"></div></footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-<script src="/js/scale.fix.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
 
 
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
 <script type="text/javascript">
-  var duoshuoQuery = { short_name: 'xumyselfcn' };
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';
-    ds.async = true;
-    ds.src = 'http://static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
 </script>
 
 
 
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
 <script type="text/javascript">
-  (function($){
-    $('.fancybox').fancybox();
-  })(jQuery);
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
 </script>
 
-</body>
-</html>
+
+  </body>
+ </html>

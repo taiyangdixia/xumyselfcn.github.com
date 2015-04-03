@@ -1,123 +1,111 @@
-<!DOCTYPE HTML>
-<html>
+
+ <!DOCTYPE HTML>
+<html >
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta charset="UTF-8">
   
-  <title>Java中的并发数据集合 | MingYang&#39;s blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  
+    <title>源码浅析-Java中的并发数据集合 | MingYang&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
     <meta name="author" content="MingYang">
-  
-  
+    
     <meta name="description" content="概述
 并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
 一般来说，并发集合有如下两大类：
 
 
 阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
-非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
-  
-  <meta name="description" content="概述
-并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
-一般来说，并发集合有如下两大类：
-
-
-阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
-非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Java中的并发数据集合">
-<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/12/java 并发数据集合/">
-<meta property="og:site_name" content="MingYang's blog">
-<meta property="og:description" content="概述
-并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
-一般来说，并发集合有如下两大类：
-
-
-阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
-非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的并发数据集合">
-<meta name="twitter:description" content="概述
-并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
-一般来说，并发集合有如下两大类：
-
-
-阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
-非阻塞集合：这种集合也包括添加和删除数据的操作。如果">
-
-  
-    <link rel="alternate" href="/atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'xumyselfcn']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-</script>
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="源码浅析-Java中的并发数据集合 | MingYang&#39;s Blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
 
 </head>
 
-<body>
-  <div class="wrapper">
-    <header id="header">
-  <div class="title">
-    <h1><a href="/">MingYang&#39;s blog</a></h1>
-    <p><a href="/"></a></p>
-  </div>
-  <nav class="nav">
-    <ul>
-      
-        <li><a href="/">Home</a></li>
-      
-        <li><a href="/archives">Archives</a></li>
-      
-        <li><a href="/about">About</a></li>
-      
-        <li><a href="http://cv.xumingyang.cn">CV</a></li>
-      
-        <li><a href="http://wiki.xumingyang.cn">Wiki</a></li>
-      
-      
-        <li><a href="/atom.xml">RSS</a></li>
-      
-    </ul>
-    <div class="clearfix"></div>
-  </nav>
-  <div class="clearfix"></div>
-</header>
-    <div class="content"><article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <a href="/2015/03/12/java 并发数据集合/">
-  <time datetime="2015-03-13T00:37:11.000Z">
-    3月 12 2015
-  </time>
-</a>
-    
-    
-  
-    <h1 class="title">Java中的并发数据集合</h1>
-  
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
-  </header>
-  
-  <div class="entry">
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-      <h2 id="概述">概述</h2>
+      <a href="/2015/03/12/java 并发数据集合/" title="源码浅析-Java中的并发数据集合" itemprop="url">源码浅析-Java中的并发数据集合</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-12T12:37:11.000Z" itemprop="datePublished">Mar 12 2015</time>
+    Updated:<time datetime="2015-03-30T01:29:32.000Z" itemprop="dateModified">Mar 30 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ConcurrentLinkedDeque"><span class="toc-number">2.</span> <span class="toc-text">ConcurrentLinkedDeque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedBlockingDeque"><span class="toc-number">3.</span> <span class="toc-text">LinkedBlockingDeque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充知识点"><span class="toc-number">5.</span> <span class="toc-text">补充知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本文扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">本文扩展阅读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java并发资料"><span class="toc-number">8.</span> <span class="toc-text">Java并发资料</span></a></li></ol>
+		</div>
+		
+		<h2 id="概述">概述</h2>
 <p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
 <p>一般来说，并发集合有如下两大类：</p>
 <blockquote>
@@ -247,71 +235,69 @@
 <p><strong>ConcurrentLinkedDeque和LinkedBlockingDeque的区别</strong></p>
 <ul>
 <li>第一个区别：两者的方法一个使用Lock加锁，另一个则不是。</li>
-<li><p>第二个区别：两者的内部Node类也有很大不同（具体看下面附上的Node类的代码）</p>
-<pre><code>  <span class="comment">//ConcurrentLinkedDeque类的Node类</span>
-  <span class="keyword">static</span> <span class="keyword">final</span> class Node&lt;E&gt; {
-      <span class="keyword">volatile</span> Node&lt;E&gt; prev;
-      <span class="keyword">volatile</span> E item;
-      <span class="keyword">volatile</span> Node&lt;E&gt; next;
-
-  Node() {  <span class="comment">// default constructor for NEXT_TERMINATOR, PREV_TERMINATOR</span>
-  }
-
-  <span class="javadoc">/**
-   * Constructs a new node.  Uses relaxed write because item can
-   * only be seen after publication via casNext or casPrev.
-   */</span>
-  Node(E item) {
-      UNSAFE.putObject(<span class="keyword">this</span>, itemOffset, item);
-  }
-
-  <span class="keyword">boolean</span> casItem(E cmp, E val) {
-      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, itemOffset, cmp, val);
-  }
-
-  <span class="keyword">void</span> lazySetNext(Node&lt;E&gt; val) {
-      UNSAFE.putOrderedObject(<span class="keyword">this</span>, nextOffset, val);
-  }
-
-  <span class="keyword">boolean</span> casNext(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
-      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, nextOffset, cmp, val);
-  }
-
-  <span class="keyword">void</span> lazySetPrev(Node&lt;E&gt; val) {
-      UNSAFE.putOrderedObject(<span class="keyword">this</span>, prevOffset, val);
-  }
-
-  <span class="keyword">boolean</span> casPrev(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
-      <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, prevOffset, cmp, val);
-  }
-
-  <span class="comment">// Unsafe mechanics</span>
-
-  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;
-  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> prevOffset;
-  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> itemOffset;
-  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> nextOffset;
-
-  <span class="keyword">static</span> {
-      <span class="keyword">try</span> {
-          UNSAFE = sun.misc.Unsafe.getUnsafe();
-          Class k = Node.class;
-          prevOffset = UNSAFE.objectFieldOffset
-              (k.getDeclaredField(<span class="string">"prev"</span>));
-          itemOffset = UNSAFE.objectFieldOffset
-              (k.getDeclaredField(<span class="string">"item"</span>));
-          nextOffset = UNSAFE.objectFieldOffset
-              (k.getDeclaredField(<span class="string">"next"</span>));
-      } <span class="keyword">catch</span> (Exception e) {
-          <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);
-      }
-  }
-</code></pre><p>  }</p>
-</li>
+<li>第二个区别：两者的内部Node类也有很大不同（具体看下面附上的Node类的代码）</li>
 </ul>
-<hr>
-<pre><code><span class="comment">//LinkedBlockingDeque类的Node类</span>
-static <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>{
+<p>ConcurrentLinkedDeque类的Node类</p>
+<pre><code><span class="keyword">static</span> <span class="keyword">final</span> class Node&lt;E&gt; {
+    <span class="keyword">volatile</span> Node&lt;E&gt; prev;
+    <span class="keyword">volatile</span> E item;
+    <span class="keyword">volatile</span> Node&lt;E&gt; next;
+
+    Node() {  <span class="comment">// default constructor for NEXT_TERMINATOR, PREV_TERMINATOR</span>
+    }
+
+    <span class="javadoc">/**
+     * Constructs a new node.  Uses relaxed write because item can
+     * only be seen after publication via casNext or casPrev.
+     */</span>
+    Node(E item) {
+        UNSAFE.putObject(<span class="keyword">this</span>, itemOffset, item);
+    }
+
+    <span class="keyword">boolean</span> casItem(E cmp, E val) {
+        <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, itemOffset, cmp, val);
+    }
+
+    <span class="keyword">void</span> lazySetNext(Node&lt;E&gt; val) {
+        UNSAFE.putOrderedObject(<span class="keyword">this</span>, nextOffset, val);
+    }
+
+    <span class="keyword">boolean</span> casNext(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+        <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, nextOffset, cmp, val);
+    }
+
+    <span class="keyword">void</span> lazySetPrev(Node&lt;E&gt; val) {
+        UNSAFE.putOrderedObject(<span class="keyword">this</span>, prevOffset, val);
+    }
+
+    <span class="keyword">boolean</span> casPrev(Node&lt;E&gt; cmp, Node&lt;E&gt; val) {
+        <span class="keyword">return</span> UNSAFE.compareAndSwapObject(<span class="keyword">this</span>, prevOffset, cmp, val);
+    }
+
+    <span class="comment">// Unsafe mechanics</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> prevOffset;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> itemOffset;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> nextOffset;
+
+    <span class="keyword">static</span> {
+        <span class="keyword">try</span> {
+            UNSAFE = sun.misc.Unsafe.getUnsafe();
+            Class k = Node.class;
+            prevOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"prev"</span>));
+            itemOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"item"</span>));
+            nextOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"next"</span>));
+        } <span class="keyword">catch</span> (Exception e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);
+        }
+    }
+}
+</code></pre><p>LinkedBlockingDeque类的Node类</p>
+<pre><code>static <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>{
     <span class="javadoc">/**
      * The item, or null if this node has been removed.
      */</span>
@@ -343,7 +329,7 @@ static <span class="keyword">final</span> <span class="class"><span class="keywo
 <li>用一个新的临时变量(temporal variable)保存改变后的新值</li>
 <li>如果当前内存中的值等于变量的旧值，则将新值赋值到当前变量；否则不进行任何操作</li>
 </ul>
-<p>这里先介绍一下乐观锁和悲观锁：</p>
+<p>这里先介绍一下<code>乐观锁</code>和<code>悲观锁</code>：</p>
 <blockquote>
 <ul>
 <li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。悲观锁假定其他用户企图访问或者改变你正在访问、更改的对象的概率是很高的，因此在悲观锁的环境中，在你开始改变此对象之前就将该对象锁住，并且直到你提交了所作的更改之后才释放锁。</li>
@@ -353,7 +339,10 @@ static <span class="keyword">final</span> <span class="class"><span class="keywo
 <p>对于这个机制，你不需要使用任何同步机制，这样你就避免了deadlocks，也获得了更好的性能。这种机制能保证多个并发线程对一个共享变量操作做到最终一致。Java 在原子类中实现了CAS机制。这些类提供了compareAndSet() 方法；这个方法是CAS操作的实现和其他方法的基础。</p>
 <p>显然，阻塞队列使用悲观锁，基于Lock实现；非阻塞使用乐观锁，基于volatile和CAS实现。</p>
 <h2 id="总结">总结</h2>
-<p>阻塞集合：如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。保证<br>非阻塞集合：如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</p>
+<ul>
+<li>阻塞集合：如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
 <p>问题1：CAS机制和传统的使用锁或者关键字相比，各自的优缺点，各自的适用情景(扩展阅读中有答案)？</p>
 <p>这里先说一下<a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">CAS的优缺点</a>：</p>
 <blockquote>
@@ -370,7 +359,7 @@ static <span class="keyword">final</span> <span class="class"><span class="keywo
 </ul>
 <p>可以用CAS在无锁的情况下实现原子操作，但要明确应用场合，非常简单的操作且又不想引入锁可以考虑使用CAS操作(比如get/set)，当想要非阻塞地完成某一操作也可以考虑CAS。不推荐在复杂操作中引入CAS，会使程序可读性变差，且难以测试，同时会出现ABA问题。嘿嘿嘿，CAS操作适用于那种读多写少的情况，因为这时CAS在更新时候冲突的概率会大大降低。</p>
 </blockquote>
-<h2 id="补充知识点：">补充知识点：</h2>
+<h2 id="补充知识点">补充知识点</h2>
 <ol>
 <li>java中CAS的实现被封装在<a href="http://www.docjar.com/html/api/sun/misc/Unsafe.java.html" target="_blank" rel="external">sun.misc.Unsafe</a>类中。</li>
 <li>java.util.concurrent.atomic中的AtomicInteger、AtomicIntegerArray、AtomicLong等都是基于CAS实现的。</li>
@@ -397,69 +386,326 @@ static <span class="keyword">final</span> <span class="class"><span class="keywo
 <li><a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">Java 7 并发编程指南</a></li>
 <li><a href="http://ifeve.com/concurrency-modle-seven-week-1/" target="_blank" rel="external">七周七并发模型</a></li>
 </ul>
-<h4 id="本博客文章均为原创，转载请注明出处，附上本文链接">本博客文章均为原创，转载请注明出处，附上本文链接</h4>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
 
-    
-  </div>
-  <footer>
-    
-      
-      
-  <div class="tags">
-    <a class="tags-link" href="/tags/java-LinkedBlockingDeque-ConcurrentLinkedDeque-并发-CAS/">java LinkedBlockingDeque ConcurrentLinkedDeque 并发 CAS</a>
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/LinkedBlockingDeque/">LinkedBlockingDeque</a><a href="/tags/ConcurrentLinkedDeque/">ConcurrentLinkedDeque</a><a href="/tags/并发/">并发</a><a href="/tags/CAS/">CAS</a>
   </div>
 
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
 
 
-<section id="comment">
-  <h1 class="title">评论</h1>
-  <div class="ds-thread" data-title="Java中的并发数据集合">
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/03/12/java 并发数据集合/" data-title="源码浅析-Java中的并发数据集合 | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
   </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/23/ArrayList详解/" title="源码分析-ArrayList详解">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  源码分析-ArrayList详解</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/02/26/Java 资料汇总/"  title="Java 中的重要知识点">
+ <strong>NEXT:</strong><br/> 
+ <span>Java 中的重要知识点
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
 </section>
-</div>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ConcurrentLinkedDeque"><span class="toc-number">2.</span> <span class="toc-text">ConcurrentLinkedDeque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedBlockingDeque"><span class="toc-number">3.</span> <span class="toc-text">LinkedBlockingDeque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充知识点"><span class="toc-number">5.</span> <span class="toc-text">补充知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本文扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">本文扩展阅读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java并发资料"><span class="toc-number">8.</span> <span class="toc-text">Java并发资料</span></a></li></ol>
   </div>
-  <footer id="footer"><div class="copyright">
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
   
-  &copy; 2015 <a href="/">MingYang</a>
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
   
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
+		
+		</ul>
 </div>
-<div class="theme-copyright">
-  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
-   | 
-  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+    </ul>
 </div>
-<div class="clearfix"></div></footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-<script src="/js/scale.fix.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
 
 <script type="text/javascript">
-  var duoshuoQuery = { short_name: 'xumyselfcn' };
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
   (function() {
     var ds = document.createElement('script');
-    ds.type = 'text/javascript';
-    ds.async = true;
-    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
     ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
   })();
-</script>
+</script> 
 
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
 <script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
-  (function($){
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
     $('.fancybox').fancybox();
-  })(jQuery);
+  }
+}); 
 </script>
 
-</body>
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+
+
+  </body>
 </html>

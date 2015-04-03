@@ -1,0 +1,563 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例 | MingYang&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="MingYang">
+    
+    <meta name="description" content="ThreadPoolExecutor类是用来创建线程池的类，通常使用Executors里面的静态方法来创建（Executors类似于）。线程池负责管理工作线程，包含一个等待执行的任务队列。线程池的任务队列是一个Runnable集合，工作线程负责从任务队列中取出并执行Runnable对象。
+java.util.concurrent.executors 提供了 java.util.concurrent.executor 接口的一个Java实现，可以创建线程池。常见的用法如下：
+public class Printer implements Runnable{
+    @Override
+    public void run() {
+        System.out.println(&quot;打印机工作&quot;);
+        TimeUnit.MILLISECONDS.sleep(1000);
+    }
+}
+
+public class Test{
+    ExecutorService exec = Executors.newCachedThreadPool();
+    for(int i = 0; i &amp;lt; 5; i++) {
+        exec.execute(new Printer());
+    }
+    exec.shutdown();
+}">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例 | MingYang&#39;s Blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/26/Java线程池ThreadPoolExecutor/" title="源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例" itemprop="url">源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-26T02:28:31.000Z" itemprop="datePublished">Mar 26 2015</time>
+    Updated:<time datetime="2015-03-28T13:43:31.000Z" itemprop="dateModified">Mar 28 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">1.</span> <span class="toc-text">参考资料</span></a></li></ol>
+		</div>
+		
+		<p>ThreadPoolExecutor类是用来创建线程池的类，通常使用Executors里面的静态方法来创建（Executors类似于）。线程池负责管理工作线程，包含一个等待执行的任务队列。线程池的任务队列是一个Runnable集合，工作线程负责从任务队列中取出并执行Runnable对象。</p>
+<p>java.util.concurrent.executors 提供了 java.util.concurrent.executor 接口的一个Java实现，可以创建线程池。常见的用法如下：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Printer</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>{
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {
+        System.out.println(<span class="string">"打印机工作"</span>);
+        TimeUnit.MILLISECONDS.sleep(<span class="number">1000</span>);
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>{
+    ExecutorService exec = Executors.newCachedThreadPool();
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) {
+        exec.execute(<span class="keyword">new</span> Printer());
+    }
+    exec.shutdown();
+}
+</code></pre><p><a id="more"></a><br>我们拿到一个 ExecutorService 来管理所有的 Thread 对象，在执行完所有的任务后，只需要调用一个 shutdown()即可关闭所有管理的 Thread 对象。这里面我们用的是Executors.newCachedThreadPool()，除此之外，还有另外几种常用的线程池：</p>
+<ul>
+<li>固定工作线程数量的线程池：Executors.newFixedThreadPool()</li>
+<li>一个可缓存的线程池：Executors.newCachedThreadPool()</li>
+<li>单线程化的Executor：Executors.newSingleThreadExecutor()</li>
+<li>支持定时的以及周期性的任务执行：Executors.newScheduledThreadPool()</li>
+</ul>
+<p>主要就是上面那四种，值得注意的是，<strong>这几种线程池的任务队列各不相同</strong>。关于缓冲队列也就是下面构造函数中的形参workQueue的官方英文解释是：</p>
+<blockquote>
+<p>workQueue: the queue to use for holding tasks before they are executed. This queue will hold only the {@code Runnable} tasks submitted by the {@code execute} method.</p>
+</blockquote>
+<ul>
+<li>newFixedThreadPool使用的是LinkedBlockingQueue</li>
+<li>newCachedThreadPool使用的是SynchronousQueue</li>
+<li>newSingleThreadExecutor使用的是LinkedBlockingQueue</li>
+<li>newScheduledThreadPool使用的是DelayedWorkQueue</li>
+</ul>
+<p>这些队列有什么区别呢？我现在也不清楚，明天好好整理整理。</p>
+<p>下面这些是Executors里面给我们定义好的几种线程池，我们可以根据实际情况进行使用，如果都不满足的话，可以自己创建ThreadPoolExecutor，可以更加灵活的设置各种构造参数。</p>
+<p><img src="http://xumyselfcn.github.io/imgs/newThreadPool.png" alt=""></p>
+<p>我们如果看Executors的源码的话，可以发现，上述Executors的四个构造线程池的方法内部都是返回一个新建的ThreadPoolExecutor类，所以我们直接研究ThreadPoolExecutor的构造函数就可以明白Executors创建线程池的原理。</p>
+<pre><code>    <span class="comment">//ThreadPoolExecutor的构造函数</span>
+    <span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span>(<span class="keyword">int</span> corePoolSize,
+        <span class="keyword">int</span> maximumPoolSize,
+        <span class="keyword">long</span> keepAliveTime,
+        TimeUnit unit,
+        BlockingQueue&lt;Runnable&gt; workQueue，
+        ThreadFactory threadFactory,
+        RejectedExecutionHandler handler) {
+        <span class="keyword">this</span>(....);<span class="comment">//调用本地的构造函数</span>
+    }
+</code></pre><p>先解释在上述的构造函数中出现的几个形参：</p>
+<ul>
+<li>corePoolSize：线程池维护线程的最少数量</li>
+<li>maximumPoolSize：线程池维护线程的最大数量</li>
+<li>keepAliveTime：线程池维护线程所允许的空闲时间</li>
+<li>unit： 线程池维护线程所允许的空闲时间的单位，unit可选的参数为java.util.concurrent.TimeUnit中的几个静态属性：<ul>
+<li>NANOSECONDS</li>
+<li>MICROSECONDS</li>
+<li>MILLISECONDS</li>
+<li>SECONDS</li>
+</ul>
+</li>
+<li>workQueue：线程池所使用的缓冲队列，常用的是：java.util.concurrent.ArrayBlockingQueue</li>
+<li>threadFactory：创建新线程时，使用的线程工厂</li>
+<li>handler： 线程池对拒绝任务的处理策略，有四个选择如下：<ul>
+<li>ThreadPoolExecutor.AbortPolicy()：抛出java.util.concurrent.RejectedExecutionException异常</li>
+<li>ThreadPoolExecutor.CallerRunsPolicy()：重试添加当前的任务，他会自动重复调用execute()方法</li>
+<li>ThreadPoolExecutor.DiscardOldestPolicy()：抛弃旧的任务</li>
+<li>ThreadPoolExecutor.DiscardPolicy()：抛弃当前的任务</li>
+</ul>
+</li>
+</ul>
+<p>当一个任务通过execute(Runnable)方法想添加线程到线程池时： </p>
+<ul>
+<li>如果此时线程池中的数量小于corePoolSize，即使线程池中的线程都处于空闲状态，也要创建新的线程来处理被添加的任务。</li>
+<li>如果此时线程池中的数量等于 corePoolSize，但是缓冲队列 workQueue未满，那么任务被放入缓冲队列。</li>
+<li>如果此时线程池中的数量大于corePoolSize，缓冲队列workQueue满，并且线程池中的数量小于maximumPoolSize，建新的线程来处理被添加的任务。</li>
+<li>如果此时线程池中的数量大于corePoolSize，缓冲队列workQueue满，并且线程池中的数量等于 maximumPoolSize，那么通过 handler所指定的策略来处理此任务。也就是：处理任务的优先级为：核心线程corePoolSize、任务队列workQueue、最大线程 maximumPoolSize，如果三者都满了，使用handler处理被拒绝的任务。</li>
+<li>当线程池中的线程数量大于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止。这样，线程池可以动态的调整池中的线程数。</li>
+</ul>
+<p>下面我们看看ThreadPoolExecutor的execute方法，中间的注释描述的跟上面这段意思差不多。</p>
+<pre><code>public void execute(Runnable command) {
+    <span class="keyword">if</span> (command == null)
+        throw new NullPointerException();
+    /*
+     * Proceed <span class="keyword">in</span> <span class="number">3</span> steps:
+     *
+     * <span class="number">1.</span> If fewer than corePoolSize threads are <span class="property">running</span>, <span class="keyword">try</span> <span class="keyword">to</span>
+     * start a new thread <span class="keyword">with</span> <span class="keyword">the</span> <span class="keyword">given</span> command <span class="keyword">as</span> <span class="keyword">its</span> <span class="keyword">first</span>
+     * task.  The call <span class="keyword">to</span> addWorker atomically checks runState <span class="keyword">and</span>
+     * workerCount, <span class="keyword">and</span> so prevents <span class="constant">false</span> alarms <span class="keyword">that</span> would add
+     * threads when <span class="keyword">it</span> shouldn't, <span class="keyword">by</span> <span class="keyword">returning</span> <span class="constant">false</span>.
+     *
+     * <span class="number">2.</span> If a task can be successfully queued, <span class="keyword">then</span> we still need
+     * <span class="keyword">to</span> double-check whether we should have added a thread
+     * (because existing ones died <span class="keyword">since</span> <span class="keyword">last</span> checking) <span class="keyword">or</span> <span class="keyword">that</span>
+     * <span class="keyword">the</span> pool shut down <span class="keyword">since</span> entry <span class="keyword">into</span> this method. So we
+     * recheck state <span class="keyword">and</span> <span class="keyword">if</span> necessary roll <span class="keyword">back</span> <span class="keyword">the</span> enqueuing <span class="keyword">if</span>
+     * stopped, <span class="keyword">or</span> start a new thread <span class="keyword">if</span> there are none.
+     *
+     * <span class="number">3.</span> If we cannot queue task, <span class="keyword">then</span> we <span class="keyword">try</span> <span class="keyword">to</span> add a new
+     * thread.  If <span class="keyword">it</span> fails, we know we are shut down <span class="keyword">or</span> saturated
+     * <span class="keyword">and</span> so reject <span class="keyword">the</span> task.
+     */
+    int c = ctl.<span class="keyword">get</span>();
+    <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) {
+        <span class="keyword">if</span> (addWorker(command, <span class="constant">true</span>))
+<span class="command">            return</span>;
+        c = ctl.<span class="keyword">get</span>();
+    }
+    <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) {
+        int recheck = ctl.<span class="keyword">get</span>();
+        <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))
+            reject(command);
+        <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)
+            addWorker(null, <span class="constant">false</span>);
+    }
+    <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="constant">false</span>))
+        reject(command);
+}
+</code></pre><h2 id="参考资料">参考资料</h2>
+<ul>
+<li>Executors、ThreadPoolExecutor源码</li>
+<li><a href="http://my.oschina.net/linuxred/blog/27924" target="_blank" rel="external">Java线程池ThreadPoolExecutor</a></li>
+</ul>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/多线程/">多线程</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/03/26/Java线程池ThreadPoolExecutor/" data-title="源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例 | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/27/Java序列化/" title="Java序列化">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Java序列化</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/25/LinkedList详解/"  title="源码浅析-LinkedList详解">
+ <strong>NEXT:</strong><br/> 
+ <span>源码浅析-LinkedList详解
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">1.</span> <span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+</html>

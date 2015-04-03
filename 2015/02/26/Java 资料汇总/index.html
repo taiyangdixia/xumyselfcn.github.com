@@ -1,0 +1,498 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java 中的重要知识点 | MingYang&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="MingYang">
+    
+    <meta name="description" content="Java的容器
+顺序表、集合、队列相关类图Map相关类图（图片来源：Prepare Java Interview）
+非并发容器
+
+ArrayList和LinkedList（各自特点、区别、联系）
+Map（Hash冲突的解决）
+Set
+Stack、Queue
+
+并发容器
+
+阻塞类的代表LinkedBlockingDeque、Vector
+非阻塞类的代表ConcurrentLinkedDeque">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="Java 中的重要知识点 | MingYang&#39;s Blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/02/26/Java 资料汇总/" title="Java 中的重要知识点" itemprop="url">Java 中的重要知识点</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-02-26T02:28:31.000Z" itemprop="datePublished">Feb 26 2015</time>
+    Updated:<time datetime="2015-03-28T15:54:53.000Z" itemprop="dateModified">Mar 28 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java的容器"><span class="toc-number">1.</span> <span class="toc-text">Java的容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#非并发容器"><span class="toc-number">1.1.</span> <span class="toc-text">非并发容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并发容器"><span class="toc-number">1.2.</span> <span class="toc-text">并发容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM相关"><span class="toc-number">2.</span> <span class="toc-text">JVM相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java_I/O"><span class="toc-number">3.</span> <span class="toc-text">Java I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java多线程"><span class="toc-number">4.</span> <span class="toc-text">Java多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java其他关键知识点"><span class="toc-number">5.</span> <span class="toc-text">Java其他关键知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java序列化"><span class="toc-number">5.1.</span> <span class="toc-text">Java序列化</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="Java的容器">Java的容器</h2>
+<p>顺序表、集合、队列相关类图<br><img src="http://xumyselfcn.github.io/imgs/Java_collection_implementation1.jpg" alt=""><br>Map相关类图<br><img src="http://xumyselfcn.github.io/imgs/Java_map_implementation1.jpg" alt=""><br>（图片来源：<a href="http://bighai.com/ppjava/?p=158" target="_blank" rel="external">Prepare Java Interview</a>）</p>
+<h3 id="非并发容器">非并发容器</h3>
+<ul>
+<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">ArrayList</a>和<a href="http://blog.xumingyang.cn/2015/03/27/LinkedList%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">LinkedList</a>（各自特点、区别、联系）</li>
+<li><a href="http://www.importnew.com/10620.html" target="_blank" rel="external">Map（Hash冲突的解决）</a></li>
+<li>Set</li>
+<li>Stack、Queue</li>
+</ul>
+<h3 id="并发容器">并发容器</h3>
+<ul>
+<li>阻塞类的代表<a href="http://blog.xumingyang.cn/2015/03/12/java%20%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/#ConcurrentLinkedDeque" target="_blank" rel="external">LinkedBlockingDeque</a>、Vector</li>
+<li>非阻塞类的代表<a href="http://blog.xumingyang.cn/2015/03/12/java%20%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/#LinkedBlockingDeque" target="_blank" rel="external">ConcurrentLinkedDeque</a><a id="more"></a></li>
+<li>高效的<a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/index.html?ca=drs-" target="_blank" rel="external">ConcurrentHashMap</a></li>
+</ul>
+<h2 id="JVM相关">JVM相关</h2>
+<p><a href="http://en.wikipedia.org/wiki/Java_virtual_machine" target="_blank" rel="external">JVM</a>，也就是Java 虚拟机，由各大厂商根据<a href="https://docs.oracle.com/javase/specs/jvms/se7/html/" target="_blank" rel="external">JVM规范</a>实现的。最有名的是甲骨文公司的HotSpot。JVM主要由：<strong>类加载子系统、运行时数据区（内存空间）、执行引擎和本地方法接口</strong>等组成。其中运行时数据区又由：<strong>方法区、堆、Java栈、PC寄存器、本地方法栈</strong>组成。</p>
+<p><img src="http://xumyselfcn.github.io/imgs/jvm2.jpg" alt="JVM主要组成部分"></p>
+<p>这个系列是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>关于周志明的<a href="https://book.douban.com/subject/24722612/" target="_blank" rel="external">《深入理解Java虚拟机》</a>的读书笔记，我自己也看了一遍这本书（我看的是第一版的，现在已经有第二版了），再看看别人是怎么想的，每个人的关注点可能也不一样，有可能他注意到了我忽略的地方，顺带着复习一下，这是一种很好的学习方式。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/jvm-ii/" target="_blank" rel="external">Java内存区域与内存溢出异常</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-iv/" target="_blank" rel="external">JVM性能监控与故障处理工具</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vi/" target="_blank" rel="external">类文件结构</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vii/" target="_blank" rel="external">虚拟机类加载机制</a></li>
+<li><a href="http://www.importnew.com/15362.html" target="_blank" rel="external">深入分析Java ClassLoader原理</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-viii/" target="_blank" rel="external">虚拟机字节码执行引擎</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-ix/" target="_blank" rel="external">类加载及执行子系统的案例与实战</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-xii/" target="_blank" rel="external">Java内存模型与线程</a></li>
+</ul>
+<h2 id="Java_I/O">Java I/O</h2>
+<p>待补充</p>
+<ul>
+<li><a href="http://fangguanhong.iteye.com/blog/1976393" target="_blank" rel="external">Java IO “装饰模式(Decorator)”总结</a></li>
+</ul>
+<h2 id="Java多线程">Java多线程</h2>
+<p>以前用到多线程的时候，在网上搜一下资料，实现功能就行；后来看了<a href="http://book.douban.com/subject/25844475/" target="_blank" rel="external">《Java 7并发编程实战手册》</a>算是真正的入门，这本书的特点是例子很多，跟着例子走上手比较容易，缺点就是例子太多，容易只见树木不见森林，局限于某个知识点。</p>
+<p>这里是<a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">《Java 7 Concurrency Cookbook》</a>的中文翻译在线版，已经出版的《Java 7并发编程实战手册》是其中文译本。</p>
+<p>其他的Java并发编程资料：</p>
+<ul>
+<li>排名第一的自然是<a href="http://book.douban.com/subject/10484692/" target="_blank" rel="external">《Java并发编程实战》</a></li>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+</ul>
+<p>怎么才能构建一个Java并发编程的体系呢，下面的这个系统对Java多线程整体过了一遍，这个系列依旧是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>的读书笔记。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part01/" target="_blank" rel="external">Java编程思想-并发系列之一</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part02/" target="_blank" rel="external">Java编程思想-并发系列之二</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part03/" target="_blank" rel="external">Java编程思想-并发系列之三</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part04/" target="_blank" rel="external">Java编程思想-并发系列之四</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part05/" target="_blank" rel="external">Java编程思想-并发系列之五</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part06/" target="_blank" rel="external">Java编程思想-并发系列之六</a></li>
+</ul>
+<h2 id="Java其他关键知识点">Java其他关键知识点</h2>
+<ul>
+<li><a href="http://www.importnew.com/15397.html" target="_blank" rel="external">深入理解Java String#intern() 内存模型</a></li>
+</ul>
+<h3 id="Java序列化">Java序列化</h3>
+<p>下面就是序列化相关的知识点：</p>
+<ul>
+<li>为什么要序列化、序列化的应用场景？</li>
+<li>序列化的实现方法？</li>
+<li>已有的序列化框架？</li>
+</ul>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/02/26/Java 资料汇总/" data-title="Java 中的重要知识点 | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/12/java 并发数据集合/" title="源码浅析-Java中的并发数据集合">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  源码浅析-Java中的并发数据集合</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/"  title="从Oracle数据库中大量导出文本数据的实践">
+ <strong>NEXT:</strong><br/> 
+ <span>从Oracle数据库中大量导出文本数据的实践
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java的容器"><span class="toc-number">1.</span> <span class="toc-text">Java的容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#非并发容器"><span class="toc-number">1.1.</span> <span class="toc-text">非并发容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并发容器"><span class="toc-number">1.2.</span> <span class="toc-text">并发容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM相关"><span class="toc-number">2.</span> <span class="toc-text">JVM相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java_I/O"><span class="toc-number">3.</span> <span class="toc-text">Java I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java多线程"><span class="toc-number">4.</span> <span class="toc-text">Java多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java其他关键知识点"><span class="toc-number">5.</span> <span class="toc-text">Java其他关键知识点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java序列化"><span class="toc-number">5.1.</span> <span class="toc-text">Java序列化</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+</html>

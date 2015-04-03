@@ -1,0 +1,546 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>设计合适的数据结构(一) | MingYang&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="MingYang">
+    
+    <meta name="description" content="问题背景
+
+设计实现一个抽象数据类型，能支持下列操作：
+Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。
+Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。
+这">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="设计合适的数据结构(一) | MingYang&#39;s Blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/02/设计数据结构系列(一)/" title="设计合适的数据结构(一)" itemprop="url">设计合适的数据结构(一)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-02T00:28:31.000Z" itemprop="datePublished">Apr 2 2015</time>
+    Updated:<time datetime="2015-04-03T09:11:16.000Z" itemprop="dateModified">Apr 3 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景"><span class="toc-number">1.</span> <span class="toc-text">问题背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一版"><span class="toc-number">1.1.</span> <span class="toc-text">第一版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二版"><span class="toc-number">1.2.</span> <span class="toc-text">第二版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三版"><span class="toc-number">1.3.</span> <span class="toc-text">第三版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四版"><span class="toc-number">1.4.</span> <span class="toc-text">第四版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题一"><span class="toc-number">2.</span> <span class="toc-text">扩展问题一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题二"><span class="toc-number">3.</span> <span class="toc-text">扩展问题二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+		</div>
+		
+		<h2 id="问题背景">问题背景</h2>
+<blockquote>
+<p>设计实现一个抽象数据类型，能支持下列操作：</p>
+<p>Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。</p>
+<p>Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。</p>
+<p>这种抽象数据类型又称为池（或者包）。它对存储工作很有用，产生的新工作被插入到池中；而当有工人可用时，将从池中删除一项工作。所有的操作都只需要O(1)的时间。</p>
+</blockquote>
+<h3 id="第一版">第一版</h3>
+<p>本题初见，感觉队列(或者栈)比较满足，因为只需要支持插入操作和删除任意一个元素并返回该值就行，甚至对于重复元素也不需要进行特别的修改，代码如下：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pool</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;</span>{
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">6070787603102142467</span>L;
+    Queue&lt;E&gt; queue = <span class="keyword">new</span> LinkedList&lt;E&gt;();
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span>(E e){
+        queue.add(e);
+    }
+
+    <span class="keyword">public</span> E <span class="title">remove</span>(){
+        <span class="keyword">return</span> queue.poll();
+    }
+
+}
+</code></pre><p>这种情况对于工人消耗工作的速度<code>大于等于</code>工作生成的速度时，比较推荐。因为队列不会增长的很快，否则，数据结构中存储的元素数量会越来越多，最终甚至会导致OOM(OutOfMemery)。一般可以给队列设置个容量最大值，当触发这个最大值时，则不会再进行插入操作。多线程情况下，就是生产线程进入wait状态(当队列中有元素删除时，再将生产队列唤醒)。</p>
+<h3 id="第二版">第二版</h3>
+<p>这里有个问题，对于重复工作——也就是数据结构中有很多副本的话，这个数据结构其实是有压缩的空间的，增加一个计数部分。比如像下面这样增加一个内部类：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Entry&lt;E&gt;{
+    <span class="keyword">int</span> count = <span class="number">0</span>;
+    E e;
+    Entry(E e){
+        <span class="keyword">this</span>.e = e;
+    }
+    <span class="keyword">private</span> boolean <span class="title">delete</span>(){
+        <span class="keyword">if</span>(count &gt; <span class="number">0</span>)
+            count--;
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span>(){
+        count++;
+    }
+}
+</code></pre><p>但是这样的话每次插入和删除都要遍历一遍，才能确定是否里面存在该值，然后进行对应的count++或者count—操作。虽然省了空间，但是时间复杂度却变成了O(n)。有没有办法能够压缩空间，又让时间复杂度为O(1)呢？</p>
+<h3 id="第三版">第三版</h3>
+<p>从实际情况来看，回到刚才的情景中，其实“工作”类型数量有限，我们完全可以确定好某个“工作”所在的位置：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Pool&lt;E&gt;{
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Entry&lt;E&gt;{
+        <span class="keyword">int</span> count = <span class="number">0</span>;
+        E e;
+        Entry(E e){
+            <span class="keyword">this</span>.e = e;
+        }
+        <span class="keyword">private</span> boolean <span class="title">delete</span>(){
+            <span class="keyword">if</span>(count &gt; <span class="number">0</span>)
+                count--;
+            <span class="keyword">else</span>
+                <span class="keyword">return</span> <span class="keyword">false</span>;
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span>(){
+            count++;
+        }
+    }
+    <span class="comment">//默认的工作类型</span>
+    <span class="keyword">enum</span> WorkType{
+        ONE,TWO,THREE,FOUR;
+    }
+
+    Entry[] queue = <span class="keyword">new</span> Entry[WorkType.values().length];
+    <span class="keyword">int</span> size = <span class="number">0</span>;
+
+    <span class="comment">/*插入时，先判断e的工作类型，然后再将该工作类型处的Entry的count加一，同时size也加1。E中也需要有描述工作类型的属性。*/</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span>(Entry e){
+    }
+    <span class="comment">//这个相对复杂些，可操作性也更大    </span>
+    <span class="keyword">public</span> Entry <span class="title">remove</span>(){
+    }
+}
+</code></pre><p>可以把数组的每个元素看成一个桶，具体的remove操作，先判断<code>size&gt;0</code>，然后从数组第一个“桶”开始往后看，若该项的<code>count!=0</code>就直接返回对应的Entry，并且count—；基于此，这种方案适用的场景是：</p>
+<ul>
+<li>工作类型比较少且已知</li>
+<li>需要实现工作优先级</li>
+</ul>
+<p>工作优先级的实现在remove里面，数组中的每个“桶”，删除的时候从优先级高的开始删。</p>
+<h3 id="第四版">第四版</h3>
+<p>这里可以借鉴Hash。存储工作队列的依然用的数组，具体的存放通过hash来映射。这个版本同上面那个的区别在于：</p>
+<ul>
+<li>不受限与具体的工作类型</li>
+<li>会有空间浪费，但是依然可以保证insert和remove的O(1)时间复杂度</li>
+<li>若出现碰撞，则直接进行扩容操作（或者限制每个hash值中链表的长度，参照HashMap）</li>
+<li>不利于实现工作优先级</li>
+<li>适用于有大量重复工作类型且工作类型未知的情况</li>
+</ul>
+<p>这里结合了数组和链表的优点。其实HashMap也是如此，一方面吸取了数组的随机存取的优点，另一方面用链表补充了数组某位置碰撞产生的问题。</p>
+<h2 id="扩展问题一">扩展问题一</h2>
+<blockquote>
+<p>假设每个元素在数据结构中只出现一次，那么插入操作就必须检查是否有重复的元素存在。像上题那样实现这种数据类型，而且要加上重复元素检验的功能。在最坏情况下每个操作的复杂度是多少？对平均而言，怎样设计数据结构最好？</p>
+</blockquote>
+<p>针对上面的第一版，重复元素检验的时间复杂度是O(n)。可以基于第四版进行改进，其实就是使用类似于HashSet的数据结构，天然无重复元素。这样重复元素的检验可以控制在常数时间内，最坏情况也是如此。</p>
+<h2 id="扩展问题二">扩展问题二</h2>
+<blockquote>
+<p>假设所有的元素都可以用1到n直接的整数来编号，且n足够小以至于我们可以分配大小为O(n)的内存。每个元素最多只能出现一次。设计一个算法，其insert和remove操作的时间复杂度为O(1)。</p>
+</blockquote>
+<p>这种情况其实就是上面第三版考虑的情况，可以直接使用第三版。</p>
+<p>第三版中的remove函数其实还是有点问题的，使用数组存储，必须挨个看那个“桶”里面有元素（就是count&gt;0）。其实还是有办法避免这种情况的，就是再搞一个Set，里面存放count&gt;0的“桶”的位置，每次从Set里面取“桶”的编号。不过多了一个维护Set的开销，但是这个的时间复杂度是O(1)的，所以还是可以满足题目要求的。</p>
+<p>其实因为n比较小，在实际情况中挨个看也不会消耗很多时间的。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>本题来自<a href="http://book.douban.com/subject/1436134/" target="_blank" rel="external">《算法引论》</a>P63页习题4.10-4.12</li>
+<li>关于HashMap的一些资料<ul>
+<li>首推HashMap的源码</li>
+<li><a href="http://beyond99.blog.51cto.com/1469451/429789" target="_blank" rel="external">Java HashMap实现详解</a></li>
+<li><a href="http://github.thinkingbar.com/hashmap-analysis/" target="_blank" rel="external">HashMap源码剖析</a></li>
+<li><a href="http://stackoverflow.com/questions/9335169/understanding-strange-java-hash-function" target="_blank" rel="external">Understanding strange Java hash function</a></li>
+</ul>
+</li>
+</ul>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/数据结构/">数据结构</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/基础知识/">基础知识</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/04/02/设计数据结构系列(一)/" data-title="设计合适的数据结构(一) | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/03/设计数据结构系列(三)/" title="设计合适的数据结构(三)">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  设计合适的数据结构(三)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/28/源码分析-Callable/"  title="源码浅析-Callable和Future">
+ <strong>NEXT:</strong><br/> 
+ <span>源码浅析-Callable和Future
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景"><span class="toc-number">1.</span> <span class="toc-text">问题背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一版"><span class="toc-number">1.1.</span> <span class="toc-text">第一版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二版"><span class="toc-number">1.2.</span> <span class="toc-text">第二版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三版"><span class="toc-number">1.3.</span> <span class="toc-text">第三版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四版"><span class="toc-number">1.4.</span> <span class="toc-text">第四版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题一"><span class="toc-number">2.</span> <span class="toc-text">扩展问题一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题二"><span class="toc-number">3.</span> <span class="toc-text">扩展问题二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+</html>
