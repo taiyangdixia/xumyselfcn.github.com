@@ -1,10 +1,10 @@
 
  <!DOCTYPE HTML>
-<html >
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>设计合适的数据结构(一) | MingYang&#39;s Blog</title>
+    <title>设计合适的数据结构(一) | MingYang&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="MingYang">
@@ -20,11 +20,11 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="xmysilas" />
-    <meta name="twitter:title" content="设计合适的数据结构(一) | MingYang&#39;s Blog" />
+    <meta name="twitter:title" content="设计合适的数据结构(一) | MingYang&#39;s blog" />
       
     
     
-    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
     
     
     <link rel="icon" href="/img/favicon.ico">
@@ -42,14 +42,14 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
       <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 					
 						<li><a href="/reading">Reading</a></li>
 					
-						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+						<li><a href="/pocket">Pocket</a></li>
 					
 						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
 					
@@ -68,7 +68,7 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
 					</form>
 					
@@ -91,8 +91,8 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
       <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-04-02T00:28:31.000Z" itemprop="datePublished">Apr 2 2015</time>
-    Updated:<time datetime="2015-04-03T09:11:16.000Z" itemprop="dateModified">Apr 3 2015</time>
+    <time datetime="2015-04-02T12:28:31.000Z" itemprop="datePublished">4月 2 2015</time>
+    更新日期:<time datetime="2015-04-03T09:11:16.000Z" itemprop="dateModified">4月 3 2015</time>
     
   </p>
 </header>
@@ -100,7 +100,7 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景"><span class="toc-number">1.</span> <span class="toc-text">问题背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一版"><span class="toc-number">1.1.</span> <span class="toc-text">第一版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二版"><span class="toc-number">1.2.</span> <span class="toc-text">第二版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三版"><span class="toc-number">1.3.</span> <span class="toc-text">第三版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四版"><span class="toc-number">1.4.</span> <span class="toc-text">第四版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题一"><span class="toc-number">2.</span> <span class="toc-text">扩展问题一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题二"><span class="toc-number">3.</span> <span class="toc-text">扩展问题二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
 		</div>
 		
@@ -241,7 +241,7 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 
 <div class="article-share" id="share">
 
-  <div data-url="http://blog.xumingyang.cn/2015/04/02/设计数据结构系列(一)/" data-title="设计合适的数据结构(一) | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  <div data-url="http://blog.xumingyang.cn/2015/04/02/设计数据结构系列(一)/" data-title="设计合适的数据结构(一) | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
   </div>
 
 </div>
@@ -251,10 +251,10 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/04/03/设计数据结构系列(三)/" title="设计合适的数据结构(三)">
+ <a href="/2015/04/03/设计数据结构系列(二)/" title="设计合适的数据结构(二)">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  设计合适的数据结构(三)</span>
+  设计合适的数据结构(二)</span>
 </a>
 </div>
 
@@ -276,27 +276,35 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 
 </div>  
 
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景"><span class="toc-number">1.</span> <span class="toc-text">问题背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一版"><span class="toc-number">1.1.</span> <span class="toc-text">第一版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二版"><span class="toc-number">1.2.</span> <span class="toc-text">第二版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三版"><span class="toc-number">1.3.</span> <span class="toc-text">第三版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四版"><span class="toc-number">1.4.</span> <span class="toc-text">第四版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题一"><span class="toc-number">2.</span> <span class="toc-text">扩展问题一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展问题二"><span class="toc-number">3.</span> <span class="toc-text">扩展问题二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
 		
 			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
 		
-			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
+		
+			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
 		
 		</ul>
 </div>
@@ -304,7 +312,7 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
@@ -313,13 +321,21 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 		
 			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
+		
 			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
 		
 			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
 		
 			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
 		
 			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
 		
 			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
 		
@@ -331,28 +347,29 @@ Remove():从数据结构中删除任意一个元素，然后返回该值。同�
 		
 			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
 		
+			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
 			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
 		
 			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
 		
 			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
 		
-			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
-		
 		</ul>
 </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
       <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
     </ul>
 </div>
 
 
   <div class="rsspart">
-	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -539,6 +556,15 @@ $(document).ready(function(){
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
 ga('send', 'pageview');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
 
 

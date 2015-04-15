@@ -1,10 +1,10 @@
 
  <!DOCTYPE HTML>
-<html >
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>Java序列化 | MingYang&#39;s Blog</title>
+    <title>Java序列化 | MingYang&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="MingYang">
@@ -23,11 +23,11 @@
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="xmysilas" />
-    <meta name="twitter:title" content="Java序列化 | MingYang&#39;s Blog" />
+    <meta name="twitter:title" content="Java序列化 | MingYang&#39;s blog" />
       
     
     
-    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
     
     
     <link rel="icon" href="/img/favicon.ico">
@@ -45,14 +45,14 @@
       <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +63,7 @@
 					
 						<li><a href="/reading">Reading</a></li>
 					
-						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+						<li><a href="/pocket">Pocket</a></li>
 					
 						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
 					
@@ -71,7 +71,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
 					</form>
 					
@@ -94,8 +94,8 @@
       <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-03-27T02:28:31.000Z" itemprop="datePublished">Mar 27 2015</time>
-    Updated:<time datetime="2015-04-03T09:11:59.000Z" itemprop="dateModified">Apr 3 2015</time>
+    <time datetime="2015-03-27T14:28:31.000Z" itemprop="datePublished">3月 27 2015</time>
+    更新日期:<time datetime="2015-04-15T08:58:39.000Z" itemprop="dateModified">4月 15 2015</time>
     
   </p>
 </header>
@@ -103,7 +103,7 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的相关知识点"><span class="toc-number">1.</span> <span class="toc-text">序列化的相关知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的实现"><span class="toc-number">2.</span> <span class="toc-text">序列化的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Java内置的序列化方式："><span class="toc-number">2.1.</span> <span class="toc-text">使用Java内置的序列化方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他序列化方式"><span class="toc-number">2.2.</span> <span class="toc-text">其他序列化方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#影响序列化的因素"><span class="toc-number">3.</span> <span class="toc-text">影响序列化的因素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#transient关键字"><span class="toc-number">3.1.</span> <span class="toc-text">transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#writeObject()方法与readObject()方法"><span class="toc-number">3.2.</span> <span class="toc-text">writeObject()方法与readObject()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Externalizable接口"><span class="toc-number">3.3.</span> <span class="toc-text">Externalizable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readResolve()方法"><span class="toc-number">3.4.</span> <span class="toc-text">readResolve()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serialVersionUID"><span class="toc-number">3.5.</span> <span class="toc-text">serialVersionUID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化协议&框架"><span class="toc-number">4.</span> <span class="toc-text">序列化协议&框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化协议"><span class="toc-number">4.1.</span> <span class="toc-text">序列化协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化框架:"><span class="toc-number">4.2.</span> <span class="toc-text">序列化框架:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化中需要注意的地方"><span class="toc-number">5.</span> <span class="toc-text">序列化中需要注意的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">扩展阅读</span></a></li></ol>
 		</div>
 		
@@ -164,8 +164,8 @@
 </blockquote>
 <h3 id="Externalizable接口">Externalizable接口</h3>
 <p>无论是使用transient关键字，还是使用writeObject()和readObject()方法，其实都是基于Serializable接口的序列化。JDK中提供了另一个序列化接口—Externalizable，使用该接口之后，之前基于Serializable接口的序列化机制就将失效。</p>
-<p>Externalizable继承于Serializable，当使用该接口时，序列化的细节需要由程序员去完成。如上所示的代码，由于writeExternal()与readExternal()方法未作任何处理，那么该序列化行为将不会保存/读取任何一个字段。这也就是为什么输出结果中所有字段的值均为空。</p>
-<p>另外，若使用Externalizable进行序列化，当读取对象时，会调用被序列化类的无参构造器去创建一个新的对象，然后再将被保存对象的字段的值分别填充到新对象中。这就是为什么在此次序列化过程中Person类的无参构造器会被调用。由于这个原因，实现Externalizable接口的类必须要提供一个无参的构造器，且它的访问权限为public。</p>
+<p>Externalizable继承于Serializable，当使用该接口时，序列化的细节需要由程序员去完成。如果writeExternal()与readExternal()方法未作任何处理，那么该序列化行为将不会保存/读取任何一个字段，输出结果中所有字段的值均为空。</p>
+<p>另外，若使用Externalizable进行序列化，当读取对象时，会调用被序列化类的无参构造器去创建一个新的对象，然后再将被保存对象的字段的值分别填充到新对象中。实现Externalizable接口的类必须要提供一个无参的构造器，且它的访问权限为public。</p>
 <h3 id="readResolve()方法">readResolve()方法</h3>
 <p>当我们使用Singleton模式时，应该是期望某个类的实例应该是唯一的，但如果该类是可序列化的，那么情况可能会略有不同，因为我们不希望在反序列化时生成多个对象。</p>
 <p>无论是实现Serializable接口，或是Externalizable接口，当从I/O流中读取对象时，readResolve()方法都会被调用到。实际上就是用readResolve()中返回的对象直接替换在反序列化过程中创建的对象，而被创建的对象则会被垃圾回收掉。</p>
@@ -239,7 +239,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://blog.xumingyang.cn/2015/03/27/Java序列化/" data-title="Java序列化 | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  <div data-url="http://blog.xumingyang.cn/2015/03/27/Java序列化/" data-title="Java序列化 | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
   </div>
 
 </div>
@@ -249,10 +249,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/03/28/源码分析-Callable/" title="源码浅析-Callable和Future">
+ <a href="/2015/03/27/wiki/Java中的final和static关键字/" title="Java中的final和static关键字[转]">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  源码浅析-Callable和Future</span>
+  Java中的final和static关键字[转]</span>
 </a>
 </div>
 
@@ -274,27 +274,35 @@
 
 </div>  
 
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
   <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的相关知识点"><span class="toc-number">1.</span> <span class="toc-text">序列化的相关知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的实现"><span class="toc-number">2.</span> <span class="toc-text">序列化的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Java内置的序列化方式："><span class="toc-number">2.1.</span> <span class="toc-text">使用Java内置的序列化方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他序列化方式"><span class="toc-number">2.2.</span> <span class="toc-text">其他序列化方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#影响序列化的因素"><span class="toc-number">3.</span> <span class="toc-text">影响序列化的因素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#transient关键字"><span class="toc-number">3.1.</span> <span class="toc-text">transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#writeObject()方法与readObject()方法"><span class="toc-number">3.2.</span> <span class="toc-text">writeObject()方法与readObject()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Externalizable接口"><span class="toc-number">3.3.</span> <span class="toc-text">Externalizable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readResolve()方法"><span class="toc-number">3.4.</span> <span class="toc-text">readResolve()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serialVersionUID"><span class="toc-number">3.5.</span> <span class="toc-text">serialVersionUID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化协议&框架"><span class="toc-number">4.</span> <span class="toc-text">序列化协议&框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化协议"><span class="toc-number">4.1.</span> <span class="toc-text">序列化协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化框架:"><span class="toc-number">4.2.</span> <span class="toc-text">序列化框架:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化中需要注意的地方"><span class="toc-number">5.</span> <span class="toc-text">序列化中需要注意的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">扩展阅读</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
 		
 			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
 		
-			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
+		
+			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
 		
 		</ul>
 </div>
@@ -302,7 +310,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
@@ -311,13 +319,21 @@
 		
 			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
+		
 			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
 		
 			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
 		
 			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
 		
 			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
 		
 			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
 		
@@ -329,28 +345,29 @@
 		
 			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
 		
+			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
 			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
 		
 			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
 		
 			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
 		
-			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
-		
 		</ul>
 </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
       <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
     </ul>
 </div>
 
 
   <div class="rsspart">
-	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -537,6 +554,15 @@ $(document).ready(function(){
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
 ga('send', 'pageview');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
 
 

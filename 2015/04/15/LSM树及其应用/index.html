@@ -1,0 +1,511 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>LSM树及其应用 | MingYang&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="MingYang">
+    
+    <meta name="description" itemprop="description" content="本文主要讲述了LSM树，及基于LSM树实现的LevelDB。">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="LSM树及其应用 | MingYang&#39;s blog" />
+      
+        <meta name="twitter:description" content="本文主要讲述了LSM树，及基于LSM树实现的LevelDB。" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="/pocket">Pocket</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/15/LSM树及其应用/" title="LSM树及其应用" itemprop="url">LSM树及其应用</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-15T22:55:31.000Z" itemprop="datePublished">4月 15 2015</time>
+    更新日期:<time datetime="2015-04-15T13:29:49.000Z" itemprop="dateModified">4月 15 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#所谓LOG"><span class="toc-number">1.1.</span> <span class="toc-text">所谓LOG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#所谓MERGE"><span class="toc-number">1.2.</span> <span class="toc-text">所谓MERGE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#详解，以LevelDB为例"><span class="toc-number">2.</span> <span class="toc-text">详解，以LevelDB为例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据时"><span class="toc-number">2.1.</span> <span class="toc-text">插入数据时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MemTable大小达到限定时"><span class="toc-number">2.2.</span> <span class="toc-text">MemTable大小达到限定时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于SSTable"><span class="toc-number">2.3.</span> <span class="toc-text">关于SSTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manifest文件"><span class="toc-number">2.4.</span> <span class="toc-text">Manifest文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Current文件"><span class="toc-number">2.5.</span> <span class="toc-text">Current文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Compaction操作"><span class="toc-number">2.6.</span> <span class="toc-text">Compaction操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#minor_Compaction"><span class="toc-number">2.6.1.</span> <span class="toc-text">minor Compaction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#major_Compaction"><span class="toc-number">2.6.2.</span> <span class="toc-text">major Compaction</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展资料"><span class="toc-number">4.</span> <span class="toc-text">扩展资料</span></a></li></ol>
+		</div>
+		
+		<h2 id="概述">概述</h2>
+<p>LSM树的全称是Log Structured Merge Tree。从英文名中可以猜出来这个必然跟Log和Merge相关。具体来说：LSM树是将大量的随机写操作转换成批量的序列写，这样可以极大的提升磁盘数据的写入速度，不过会牺牲读取的效率。</p>
+<blockquote>
+<p>有种说法，基于LSM树实现的HBase的写性能比Mysql高了一个数量级，读性能低了一个数量级。</p>
+</blockquote>
+<h3 id="所谓LOG">所谓LOG</h3>
+<p>对数据的修改增量保持在内存中，达到指定的大小限制后，将这些修改操作批量写入磁盘。因为这部分是在内存中操作，所以在操作前会将操作写入log文件中进行持久化，然后再执行相应的操作。</p>
+<h3 id="所谓MERGE">所谓MERGE</h3>
+<p>上面说到，内存中的数据达到指定的大小限制，会将其写入磁盘，就这样每次写入一部分文件进入磁盘，在读取的时候就需要执行<code>merge</code>操作，这里，在后面的介绍LevelDB中有详细的描述。</p>
+<h2 id="详解，以LevelDB为例">详解，以LevelDB为例</h2>
+<p>LSM树在大数据存储系统中获得了极为广泛的应用，比如BigTable中的单机数据存储引擎本质上就是LSM树，基于Flash的海量存储系统SILT也采用了LSM树，内存数据库RAMCloud同样采用了这个数据结构。除此之外，LevelDB也使用了LSM树，这里以LevelDB的LSM树结构来大致介绍其 一般实现原理，其他系统使用LSM树的方式与此类似。</p>
+<p><a href="http://leveldb.org/" target="_blank" rel="external">LevelDB</a>是由谷歌公司研发的k/V数据库，LevelDB的静态结构如下图（<a href="http://www.cnblogs.com/haippy/archive/2011/12/04/2276064.html" target="_blank" rel="external">图片源自这里</a>）：</p>
+<p><img src="http://blog.xumingyang.me/imgs/leveldb-static.png" alt="LevelDB静态图"></p>
+<p>构成LevelDB静态结构包括6个主要部分：</p>
+<ul>
+<li>（内存）MemTable</li>
+<li>（内存）Immutable MemTable</li>
+<li>（磁盘）Current文件</li>
+<li>（磁盘）manifest文件</li>
+<li>（磁盘）log文件</li>
+<li>（磁盘）SSTable文件</li>
+</ul>
+<h3 id="插入数据时">插入数据时</h3>
+<p>当应用写入一条Key：Value记录的时候，LevelDB会先往log文件里写入，成功后将记录插进MemTable文件中，这样基本就完成了写操作，因为一次写操作只涉及一次磁盘顺序写和一次内存写入，而MemTable才用了维护有序记录快速插入查找的<code>SkipList</code>数据结构。</p>
+<blockquote>
+<p>log文件在系统中的作用主要用于系统崩溃恢复而不丢失数据，假如没有log文件，因为写入的记录刚开始是保存在内存中的，此时如果系统崩溃，内存中的数据还没有来得及保存到磁盘，所以会丢失数据。</p>
+</blockquote>
+<h3 id="MemTable大小达到限定时">MemTable大小达到限定时</h3>
+<p>当MemTable插入的数据占用内存到了一个界限后，需要将内存的记录导出到外存文件中，LevelDB会生成新的log文件和MemTable，原先的MemTable就成为Immutable MemTable，顾名思义，就是说这个MemTable的内容是不可更改的，只能读不能写入或删除。新来的数据被记录到新的log文件和MemTable，LevelDB后台调度会将Immutable MemTable的数据导出到磁盘，形成一个新的SSTable文件。SSTable就是由内存中的数据不断导出并进行Compaction操作后形成的，而且SSTable的所有文件是一种层级结构，第一层是Level 0 ，第二层是 Level 1 ，依次类推，层级逐渐增高，这也是称之为LevelDB的原因。</p>
+<p>小节一下上面的过程：</p>
+<ol>
+<li>数据进入内存</li>
+<li>记录log，数据插入MemTable</li>
+<li>MemTable文件达到上限，变身Immutable MemTable，dump到磁盘，形成SSTable</li>
+<li>生成新的MemTable，log</li>
+</ol>
+<h3 id="关于SSTable">关于SSTable</h3>
+<p>通过上面的描述，可以知道Level 0层的SSTable是如何形成的。显然这些SSTable是（主键）有序的。其它Level的SSTable是由上一层Level里面的SSTable文件合并（多个有序文件的合并，这里使用的是多路归并算法）而成，其内部也是（主键）有序的。</p>
+<p>有个值得注意的地方，level 0和其他level不一样的是：第0层的不同的SSTable之间主键范围有重复。比如该层的两个文件A和B，A的主键范围是{bar,cat}，B的主键的范围是{blue,same}，那么很有可能两个文件都存在key=”blood”的记录。对于其他的level则不会有这种情况。</p>
+<p>关于SSTable这部分推荐<a href="https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/" target="_blank" rel="external">这篇文章</a>，这里有个国人参考上篇写的<a href="http://www.cnblogs.com/fxjwind/archive/2012/08/14/2638371.html" target="_blank" rel="external">一篇文章</a>。</p>
+<h3 id="Manifest文件">Manifest文件</h3>
+<p>manifest里面记录了SSTable各个文件的管理信息，比如属于哪个Level，文件名称，最小key和最大key各自是多少。</p>
+<p><img src="http://blog.xumingyang.me/imgs/leveldb-manifest.png" alt="LevelDB静态图"></p>
+<h3 id="Current文件">Current文件</h3>
+<p>记载当前的manifest文件名。因为在LevelDB运行过程中，随着Compaction的进行，SSTable文件会发生变化，会有新的文件产生，老的文件被废弃，manifest也会跟着反映这种变化，此时往往会生成新的manifest文件来记载这种变化，而Current则用来指定哪个manifest文件才是我们关心的那个。</p>
+<h3 id="Compaction操作">Compaction操作</h3>
+<ul>
+<li>minor Compaction：当内存中的MemTable大小达到一定值时，将内容保存到磁盘中。</li>
+<li>major Compaction：当某个Level下的SSTable文件树木超过一定设置值后，LevelDB会从这个Level的SSTable中选择一个文件(Level&gt;0)，将其和高一层级的Level+1的SSTable文件合并，这就是major Compaction。</li>
+</ul>
+<h4 id="minor_Compaction">minor Compaction</h4>
+<p>当memtable数量到了一定程度会转换为immutable memtable，此时不能往其中写入记录，只能从中读取KV内容。之前介绍过，immutable memtable其实是一个多层级队列SkipList，其中的记录是根据key有序排列的。所以这个minor compaction实现起来也很简单，就是按照immutable memtable中记录由小到大遍历，并依次写入一个level 0 的新建SSTable文件中，写完后建立文件的index 数据，这样就完成了一次minor compaction。从图中也可以看出，对于被删除的记录，在minor compaction过程中并不真正删除这个记录，原因也很简单，这里只知道要删掉key记录，但是这个KV数据在哪里?那需要复杂的查找，所以在minor compaction的时候并不做删除，只是将这个key作为一个记录写入文件中，至于真正的删除操作，在以后更高层级的compaction中会去做。</p>
+<h4 id="major_Compaction">major Compaction</h4>
+<p>我们知道在大于0的层级中，每个SSTable文件内的Key都是由小到大有序存储的，而且不同文件之间的key范围（文件内最小key和最大key之间）不会有任何重叠。Level 0的SSTable文件有些特殊，尽管每个文件也是根据Key由小到大排列，但是因为level 0的文件是通过minor compaction直接生成的，所以任意两个level 0下的两个sstable文件可能再key范围上有重叠。所以在做major compaction的时候，对于大于level 0的层级，选择其中一个文件就行，但是对于level 0来说，指定某个文件后，本level中很可能有其他SSTable文件的key范围和这个文件有重叠，这种情况下，要找出所有有重叠的文件和level 1的文件进行合并，即level 0在进行文件选择的时候，可能会有多个文件参与major compaction。</p>
+<p>levelDb在选定某个level进行compaction后，还要选择是具体哪个文件要进行compaction，levelDb在这里有个小技巧， 就是说轮流来，比如这次是文件A进行compaction，那么下次就是在key range上紧挨着文件A的文件B进行compaction，这样每个文件都会有机会轮流和高层的level 文件进行合并。</p>
+<p>如果选好了level L的文件A和level L+1层的文件进行合并，那么问题又来了，应该选择level L+1哪些文件进行合并？levelDb选择L+1层中和文件A在key range上有重叠的所有文件来和文件A进行合并。</p>
+<p>也就是说，选定了level L的文件A,之后在level L+1中找到了所有需要合并的文件B,C,D…..等等。剩下的问题就是具体是如何进行major 合并的？就是说给定了一系列文件，每个文件内部是key有序的，如何对这些文件进行合并，使得新生成的文件仍然Key有序，同时抛掉哪些不再有价值的KV 数据。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>张俊林《大数据日知录》第二章：大数据常用的算法和数据结构</li>
+<li><a href="https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/" target="_blank" rel="external">SSTable and Log Structured Storage: LevelDB</a>（<a href="http://www.cnblogs.com/fxjwind/archive/2012/08/14/2638371.html" target="_blank" rel="external">这里</a>有个中文的）</li>
+<li><a href="http://www.cnblogs.com/haippy/archive/2011/12/04/2276064.html" target="_blank" rel="external">LevelDB 实现原理</a>（这篇文章主要搬自<a href="http://www.samecity.com/blog/Index.asp?SortID=12" target="_blank" rel="external">levelDB日知录</a>）</li>
+</ul>
+<h2 id="扩展资料">扩展资料</h2>
+<ul>
+<li><a href="http://tech.uc.cn/?p=2592" target="_blank" rel="external">RocksDB介绍：一个比LevelDB更彪悍的引擎</a></li>
+</ul>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LSM/">LSM</a><a href="/tags/大数据/">大数据</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/大数据/">大数据</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/04/15/LSM树及其应用/" data-title="LSM树及其应用 | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/04/08/Java中一些被遗忘的数据结构/"  title="Java中一些被遗忘的数据结构">
+ <strong>NEXT:</strong><br/> 
+ <span>Java中一些被遗忘的数据结构
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#所谓LOG"><span class="toc-number">1.1.</span> <span class="toc-text">所谓LOG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#所谓MERGE"><span class="toc-number">1.2.</span> <span class="toc-text">所谓MERGE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#详解，以LevelDB为例"><span class="toc-number">2.</span> <span class="toc-text">详解，以LevelDB为例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据时"><span class="toc-number">2.1.</span> <span class="toc-text">插入数据时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MemTable大小达到限定时"><span class="toc-number">2.2.</span> <span class="toc-text">MemTable大小达到限定时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于SSTable"><span class="toc-number">2.3.</span> <span class="toc-text">关于SSTable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manifest文件"><span class="toc-number">2.4.</span> <span class="toc-text">Manifest文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Current文件"><span class="toc-number">2.5.</span> <span class="toc-text">Current文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Compaction操作"><span class="toc-number">2.6.</span> <span class="toc-text">Compaction操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#minor_Compaction"><span class="toc-number">2.6.1.</span> <span class="toc-text">minor Compaction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#major_Compaction"><span class="toc-number">2.6.2.</span> <span class="toc-text">major Compaction</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展资料"><span class="toc-number">4.</span> <span class="toc-text">扩展资料</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
+		
+			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  </body>
+</html>

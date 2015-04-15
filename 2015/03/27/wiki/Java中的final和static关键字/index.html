@@ -1,0 +1,632 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java中的final和static关键字[转] | MingYang&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="MingYang">
+    
+    <meta name="description" content="关键字final
+根据程序上下文环境，Java关键字final有“这是无法改变的”或者“终态的”含义，它可以修饰非抽象类、非抽象类成员方法和变量。你可能出于两种理解而需要阻止改变：设计或效率。
+
+final类不能被继承，没有子类，final类中的方法默认是final的。 
+final方法不能被子类的">
+    
+    
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="xmysilas" />
+    <meta name="twitter:title" content="Java中的final和static关键字[转] | MingYang&#39;s blog" />
+      
+    
+    
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/doge.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/reading">Reading</a></li>
+					
+						<li><a href="/pocket">Pocket</a></li>
+					
+						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/27/wiki/Java中的final和static关键字/" title="Java中的final和static关键字[转]" itemprop="url">Java中的final和static关键字[转]</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-27T14:28:31.000Z" itemprop="datePublished">3月 27 2015</time>
+    更新日期:<time datetime="2015-03-29T04:39:24.000Z" itemprop="dateModified">3月 29 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字final"><span class="toc-number">1.</span> <span class="toc-text">关键字final</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#final类"><span class="toc-number">1.0.1.</span> <span class="toc-text">final类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final方法"><span class="toc-number">1.0.2.</span> <span class="toc-text">final方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final变量（常量）"><span class="toc-number">1.0.3.</span> <span class="toc-text">final变量（常量）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final参数"><span class="toc-number">1.0.4.</span> <span class="toc-text">final参数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字static"><span class="toc-number">2.</span> <span class="toc-text">关键字static</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static变量"><span class="toc-number">2.0.1.</span> <span class="toc-text">static变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#静态方法"><span class="toc-number">2.0.2.</span> <span class="toc-text">静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static代码块"><span class="toc-number">2.0.3.</span> <span class="toc-text">static代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static和final一块用表示什么"><span class="toc-number">2.0.4.</span> <span class="toc-text">static和final一块用表示什么</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="关键字final">关键字final</h1>
+<p>根据程序上下文环境，Java关键字final有“这是无法改变的”或者“终态的”含义，它可以修饰非抽象类、非抽象类成员方法和变量。你可能出于两种理解而需要阻止改变：设计或效率。</p>
+<ul>
+<li>final类不能被继承，没有子类，final类中的方法默认是final的。 </li>
+<li>final方法不能被子类的方法覆盖，但可以被继承。 </li>
+<li>final成员变量表示常量，只能被赋值一次，赋值后值不再改变。 </li>
+<li>final不能用于修饰构造方法。 </li>
+</ul>
+<blockquote>
+<p>注意：父类的private成员方法是不能被子类方法覆盖的，因此private类型的方法默认是final类型的。 </p>
+</blockquote>
+<h3 id="final类">final类</h3>
+<p>final类不能被继承，因此final类的成员方法没有机会被覆盖，默认都是final的。在设计类时候，如果这个类不需要有子类，类的实现细节不允许改变，并且确信这个类不会载被扩展，那么就设计为final类。</p>
+<h3 id="final方法">final方法</h3>
+<p>如果一个类不允许其子类覆盖某个方法，则可以把这个方法声明为final方法。<br>使用final方法的原因有二： </p>
+<ul>
+<li>把方法锁定，防止任何继承类修改它的意义和实现。 </li>
+<li>高效。编译器在遇到调用final方法时候会转入内嵌机制，大大提高执行效率。 </li>
+</ul>
+<p>例如：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test1</span> </span>{ 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) { 
+        <span class="comment">// TODO 自动生成方法存根 </span>
+    } 
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f1</span>() { 
+        System.out.println(<span class="string">"f1"</span>); 
+    } 
+    <span class="comment">//无法被子类覆盖的方法 </span>
+    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">f2</span>() { 
+        System.out.println(<span class="string">"f2"</span>); 
+    } 
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f3</span>() { 
+        System.out.println(<span class="string">"f3"</span>); 
+    } 
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">f4</span>() { 
+        System.out.println(<span class="string">"f4"</span>); 
+    } 
+} 
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test2</span> <span class="keyword">extends</span> <span class="title">Test1</span> </span>{ 
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f1</span>(){ 
+        System.out.println(<span class="string">"Test1父类方法f1被覆盖!"</span>); 
+    } 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) { 
+        Test2 t=<span class="keyword">new</span> Test2(); 
+        t.f1(); 
+        t.f2(); <span class="comment">//调用从父类继承过来的final方法 </span>
+        t.f3(); <span class="comment">//调用从父类继承过来的方法 </span>
+        <span class="comment">//t.f4(); //调用失败，无法从父类继承获得 </span>
+    } 
+} 
+</code></pre><h3 id="final变量（常量）">final变量（常量）</h3>
+<p>用final修饰的成员变量表示常量，值一旦给定就无法改变！ final修饰的变量有三种：静态变量、实例变量和局部变量，分别表示三种类型的常量。 从下面的例子中可以看出，一旦给final变量初值后，值就不能再改变了。另外，final变量定义的时候，可以先声明，而不给初值，这中变量也称为final空白，无论什么情况，编译器都确保空白final在使用之前必须被初始化。但是，final空白在final关键字final的使用上提供了更大的灵活性，为此，一个类中的final数据成员就可以实现依对象而有所不同，却有保持其恒定不变的特征。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test3</span> </span>{ 
+    <span class="keyword">private</span> <span class="keyword">final</span> String S=<span class="string">"final实例变量S"</span>; 
+    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> A=<span class="number">100</span>; 
+    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> B=<span class="number">90</span>; 
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> C=<span class="number">80</span>; 
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> D=<span class="number">70</span>; 
+
+    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> E; <span class="comment">//final空白,必须在初始化对象的时候赋初值 </span>
+
+    <span class="keyword">public</span> <span class="title">Test3</span>(<span class="keyword">int</span> x){ 
+        E=x; 
+    } 
+
+    <span class="javadoc">/** 
+    *<span class="javadoctag"> @param</span> args 
+    */</span> 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) { 
+        Test3 t=<span class="keyword">new</span> Test3(<span class="number">2</span>); 
+        <span class="comment">//t.A=101; //出错,final变量的值一旦给定就无法改变 </span>
+        <span class="comment">//t.B=91; //出错,final变量的值一旦给定就无法改变 </span>
+        <span class="comment">//t.C=81; //出错,final变量的值一旦给定就无法改变 </span>
+        <span class="comment">//t.D=71; //出错,final变量的值一旦给定就无法改变 </span>
+
+        System.out.println(t.A); 
+        System.out.println(t.B); 
+        System.out.println(t.C); <span class="comment">//不推荐用对象方式访问静态字段 </span>
+        System.out.println(t.D); <span class="comment">//不推荐用对象方式访问静态字段 </span>
+        System.out.println(Test3.C); 
+        System.out.println(Test3.D); 
+        <span class="comment">//System.out.println(Test3.E); //出错,因为E为final空白,依据不同对象值有所不同. </span>
+        System.out.println(t.E); 
+
+        Test3 t1=<span class="keyword">new</span> Test3(<span class="number">3</span>); 
+        System.out.println(t1.E); <span class="comment">//final空白变量E依据对象的不同而不同 </span>
+    } 
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">test</span>(){ 
+        System.out.println(<span class="keyword">new</span> Test3(<span class="number">1</span>).A); 
+        System.out.println(Test3.C); 
+        System.out.println(Test3.D); 
+    } 
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span>(){ 
+        <span class="keyword">final</span> <span class="keyword">int</span> a; <span class="comment">//final空白,在需要的时候才赋值 </span>
+        <span class="keyword">final</span> <span class="keyword">int</span> b=<span class="number">4</span>; <span class="comment">//局部常量--final用于局部变量的情形 </span>
+        <span class="keyword">final</span> <span class="keyword">int</span> c; <span class="comment">//final空白,一直没有给赋值. </span>
+        a=<span class="number">3</span>; 
+        <span class="comment">//a=4; 出错,已经给赋过值了. </span>
+        <span class="comment">//b=2; 出错,已经给赋过值了. </span>
+    } 
+} 
+</code></pre><h3 id="final参数">final参数</h3>
+<p>当函数参数为final类型时，你可以读取使用该参数，但是无法改变该参数的值。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test4 { 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) { 
+        <span class="keyword">new</span> Test4().f1(<span class="number">2</span>); 
+    } 
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f1</span>(final <span class="keyword">int</span> i){ 
+        <span class="comment">//i++; //i是final类型的,值不允许改变的. </span>
+        System.<span class="keyword">out</span>.print(i); 
+    } 
+} 
+</code></pre><h1 id="关键字static">关键字static</h1>
+<p>static表示“全局”或者“静态”的意思，用来修饰成员变量和成员方法，也可以形成静态static代码块，但是Java语言中没有全局变量的概念。被static修饰的成员变量和成员方法独立于该类的任何对象。也就是说，它不依赖类特定的实例，被类的所有实例共享。只要这个类被加载， Java虚拟机就能根据类名在运行时数据区的方法区内定找到他们。因此，static对象可以在它的任何对象创建之前访问，无需引用任何对象。</p>
+<p>用public修饰的static成员变量和成员方法本质是全局变量和全局方法，当声明它类的对象市，不生成static变量的副本，而是类的所有实例共享同一个static变量。</p>
+<p>static变量前可以有private修饰，表示这个变量可以在类的静态代码块中，或者类的其他静态成员方法中使用（当然也可以在非静态成员方法中使用—废话）， 但是不能在其他类中通过类名来直接引用，这一点很重要。实际上你需要搞明白，private是访问权限限定，static表示不要实例化就可以使用，这样 就容易理解多了。static前面加上其它访问权限关键字的效果也以此类推。 </p>
+<p>static修饰的成员变量和成员方法习惯上称为静态变量和静态方法，可以直接通过类名来访问，访问语法为：</p>
+<ul>
+<li>类名.静态方法名(参数列表…) </li>
+<li>类名.静态变量名 </li>
+</ul>
+<p>用static修饰的代码块表示静态代码块，当Java虚拟机（JVM）加载类时，就会执行该代码块（用处非常大，呵呵）。 </p>
+<h3 id="static变量">static变量</h3>
+<p>按照是否静态的对类成员变量进行分类可分两种：一种是被static修饰的变量，叫静态变量或类变量；另一种是没有被static修饰的变量，叫实例变量。两者的区别是： </p>
+<ul>
+<li>对于静态变量在内存中只有一个拷贝（节省内存），JVM只为静态分配一次内存，在加载类的过程中完成静态变量的内存分配，可用类名直接访问（方便），当然也可以通过对象来访问（但是这是不推荐的）。 </li>
+<li>对于实例变量，每创建一个实例，就会为实例变量分配一次内存，实例变量可以在内存中有多个拷贝，互不影响（灵活）。 </li>
+</ul>
+<h3 id="静态方法">静态方法</h3>
+<p>静态方法可以直接通过类名调用，任何的实例也都可以调用，因此静态方法中不能用this和super关键字，不能直接访问所属类的实例变量和实例方法(就是不带static的成员变量和成员成员方法)，只能访问所属类的静态成员变量和成员方法。因为实例成员与特定的对象关联！因为static方法独立于任何实例，因此static方法必须被实现，而不能是抽象的abstract。</p>
+<h3 id="static代码块">static代码块</h3>
+<p>static代码块也叫静态代码块，是在类中独立于类成员的static语句块，可以有多个，位置可以随便放，它不在任何的方法体内，JVM加载类时会执行这些静态的代码块，如果static代码块有多个，JVM将按照它们在类中出现的先后顺序依次执行它们，每个代码块只会被执行一次。例如：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test5 { 
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> a; 
+    <span class="keyword">private</span> <span class="keyword">int</span> b; 
+
+    <span class="keyword">static</span>{ 
+        Test5.a=<span class="number">3</span>; 
+        System.<span class="keyword">out</span>.println(a); 
+        Test5 t=<span class="keyword">new</span> Test5(); 
+        t.f(); 
+        t.b=<span class="number">1000</span>; 
+        System.<span class="keyword">out</span>.println(t.b); 
+    } 
+    <span class="keyword">static</span>{ 
+        Test5.a=<span class="number">4</span>; 
+        System.<span class="keyword">out</span>.println(a); 
+    } 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) { 
+        <span class="comment">// TODO 自动生成方法存根 </span>
+    } 
+    <span class="keyword">static</span>{ 
+        Test5.a=<span class="number">5</span>; 
+        System.<span class="keyword">out</span>.println(a); 
+    } 
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">f</span>(){ 
+        System.<span class="keyword">out</span>.println(<span class="string">"hhahhahah"</span>); 
+    } 
+} 
+
+<span class="comment">//程序输出</span>
+<span class="number">3</span> 
+hhahhahah 
+<span class="number">1000</span> 
+<span class="number">4</span> 
+<span class="number">5</span> 
+</code></pre><h3 id="static和final一块用表示什么">static和final一块用表示什么</h3>
+<p>static final用来修饰成员变量和成员方法，可简单理解为“全局常量”！</p>
+<ul>
+<li>对于变量，表示一旦给值就不可修改，并且通过类名可以访问。 </li>
+<li>对于方法，表示不可覆盖，并且可以通过类名直接访问。</li>
+</ul>
+<p>本文转载自：<a href="http://www.blogjava.net/hongzionline/archive/2007/09/19/146392.html" target="_blank" rel="external">java—-final 关键字 和 static 用法</a></p>
+ 
+		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java-final-static/">java final static</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://blog.xumingyang.cn/2015/03/27/wiki/Java中的final和static关键字/" data-title="Java中的final和static关键字[转] | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/28/源码分析-Callable/" title="源码浅析-Callable和Future">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  源码浅析-Callable和Future</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/27/Java序列化/"  title="Java序列化">
+ <strong>NEXT:</strong><br/> 
+ <span>Java序列化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字final"><span class="toc-number">1.</span> <span class="toc-text">关键字final</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#final类"><span class="toc-number">1.0.1.</span> <span class="toc-text">final类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final方法"><span class="toc-number">1.0.2.</span> <span class="toc-text">final方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final变量（常量）"><span class="toc-number">1.0.3.</span> <span class="toc-text">final变量（常量）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#final参数"><span class="toc-number">1.0.4.</span> <span class="toc-text">final参数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关键字static"><span class="toc-number">2.</span> <span class="toc-text">关键字static</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static变量"><span class="toc-number">2.0.1.</span> <span class="toc-text">static变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#静态方法"><span class="toc-number">2.0.2.</span> <span class="toc-text">静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static代码块"><span class="toc-number">2.0.3.</span> <span class="toc-text">static代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static和final一块用表示什么"><span class="toc-number">2.0.4.</span> <span class="toc-text">static和final一块用表示什么</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
+		
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
+		
+			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
+		
+			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
+		
+			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
+		
+			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
+		
+			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
+		
+		
+		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
+		
+		
+		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"xumyselfcn"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
+ga('send', 'pageview');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+  </body>
+</html>

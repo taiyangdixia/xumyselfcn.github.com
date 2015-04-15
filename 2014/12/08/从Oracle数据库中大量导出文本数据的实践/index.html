@@ -1,33 +1,31 @@
 
  <!DOCTYPE HTML>
-<html >
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s Blog</title>
+    <title>从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="MingYang">
     
-    <meta name="description" content="背景：
+    <meta name="description" content="背景
 在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。
-方案：
+使用JDBC
+通过JDBC连接数据库的方式导出数据，最开始的想法是这样：
 
-通过JDBC连接数据库的方式，从数据库中读取数据，写入文件。
-使用Oracle数据库的exp/expdp工具，导出二进制文件，再转换成文本文件。
-使用spool，在SQL*PLUS中执行。
-使用Pro*C方式。
-使用sqluldr2工具。">
+读取该表的记录数M
+设置每次读取的记录数N，计算出读取的次数X=M/">
     
     
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="xmysilas" />
-    <meta name="twitter:title" content="从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s Blog" />
+    <meta name="twitter:title" content="从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s blog" />
       
     
     
-    <link rel="alternate" href="atom.xml" title="MingYang&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
     
     
     <link rel="icon" href="/img/favicon.ico">
@@ -45,14 +43,14 @@
       <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s Blog" title="MingYang&#39;s Blog"/></a>
+				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="MingYang&#39;s Blog">MingYang&#39;s Blog</a></h1>
+				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +61,7 @@
 					
 						<li><a href="/reading">Reading</a></li>
 					
-						<li><a href="http://wiki.xumingyang.cn/">Wiki</a></li>
+						<li><a href="/pocket">Pocket</a></li>
 					
 						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
 					
@@ -71,7 +69,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
 					</form>
 					
@@ -94,8 +92,8 @@
       <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-12-08T07:32:25.000Z" itemprop="datePublished">Dec 8 2014</time>
-    Updated:<time datetime="2015-03-28T09:12:55.000Z" itemprop="dateModified">Mar 28 2015</time>
+    <time datetime="2014-12-08T20:32:25.000Z" itemprop="datePublished">12月 8 2014</time>
+    更新日期:<time datetime="2015-04-09T12:01:58.000Z" itemprop="dateModified">4月 9 2015</time>
     
   </p>
 </header>
@@ -103,21 +101,14 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景："><span class="toc-number">1.</span> <span class="toc-text">背景：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方案："><span class="toc-number"></span> <span class="toc-text">方案：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案1："><span class="toc-number">1.</span> <span class="toc-text">方案1：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案2："><span class="toc-number">2.</span> <span class="toc-text">方案2：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案3："><span class="toc-number">3.</span> <span class="toc-text">方案3：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案4"><span class="toc-number">4.</span> <span class="toc-text">方案4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案5"><span class="toc-number">5.</span> <span class="toc-text">方案5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number"></span> <span class="toc-text">参考资料</span></a>
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDBC"><span class="toc-number">2.</span> <span class="toc-text">使用JDBC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用exp/expdp"><span class="toc-number">3.</span> <span class="toc-text">使用exp/expdp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spool"><span class="toc-number">4.</span> <span class="toc-text">使用spool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Pro*C"><span class="toc-number">5.</span> <span class="toc-text">使用Pro*C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用sqluldr2工具"><span class="toc-number">6.</span> <span class="toc-text">使用sqluldr2工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
 		</div>
 		
-		<h3 id="背景：">背景：</h3>
+		<h2 id="背景">背景</h2>
 <p>在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。</p>
-<h2 id="方案：">方案：</h2>
-<ul>
-<li>通过JDBC连接数据库的方式，从数据库中读取数据，写入文件。</li>
-<li>使用Oracle数据库的exp/expdp工具，导出二进制文件，再转换成文本文件。</li>
-<li>使用spool，在SQL*PLUS中执行。</li>
-<li>使用Pro*C方式。</li>
-<li>使用sqluldr2工具。<br><a id="more"></a><h3 id="方案1：">方案1：</h3>
-通过JDBC连接数据库的方式导出数据，最开始的想法是这样：</li>
-</ul>
+<h2 id="使用JDBC">使用JDBC</h2>
+<p>通过JDBC连接数据库的方式导出数据，最开始的想法是这样：</p>
 <ol>
 <li>读取该表的记录数M</li>
 <li>设置每次读取的记录数N，计算出读取的次数X=M/N+1</li>
@@ -137,7 +128,7 @@
 <p><img src="http://img-niren.qiniudn.com/1-2.png" alt=""></p>
 <p>测试了下，结果依旧不理想。仔细分析了下各个过程的耗时，发现瓶颈均是在从数据库读取数据这个地方。最开始读取一次大概1s的样子，到最后甚至得需要10s中才能返回一条记录，而且多线程并不能起到加快读取数据的目的。</p>
 <p>好吧，瓶颈在数据库读取部分。其实也就表明，这种方法不行啊~</p>
-<h3 id="方案2：">方案2：</h3>
+<h2 id="使用exp/expdp">使用exp/expdp</h2>
 <p>这里使用的是oracle提供的expdp工具，使用这个工具的大概步骤如下：</p>
 <pre><code>//这是在SQL*PLUS中进行操作
 //创建逻辑目录
@@ -152,7 +143,7 @@
 <p>但是这个方案有个问题，导出的二进制数据如何转换成文本数据？</p>
 <p>找了一下，没有理想的方案。</p>
 <p>关于expdp命令的详细信息可以参考<a href="http://shitou118.blog.51cto.com/715507/310033" target="_blank" rel="external">expdp impdp 数据库导入导出命令详解</a></p>
-<h3 id="方案3：">方案3：</h3>
+<h2 id="使用spool">使用spool</h2>
 <p>使用spool。这里是从某个表中导出数据的spool脚本：</p>
 <pre><code><span class="operator"><span class="keyword">set</span> echo <span class="keyword">on</span>;</span>
 <span class="operator"><span class="keyword">set</span> feedback <span class="keyword">on</span>;</span>
@@ -173,10 +164,10 @@ sqlplus / <span class="keyword">as</span> sysdba
 <span class="comment">#@后面跟的是脚本的路径</span>
 <span class="decorator">@spool.sh</span>
 </code></pre><p>这种方法效率也是比较低。</p>
-<h3 id="方案4">方案4</h3>
-<p>仿照网上的Pro*C程序一直编译出错，恨啊~据说这个的效率非常高。</p>
-<h3 id="方案5">方案5</h3>
-<p>这个方案也是最后准备采用的。</p>
+<h2 id="使用Pro*C">使用Pro*C</h2>
+<p>仿照网上的Pro*C程序一直编译出错，据说这个的效率非常高。</p>
+<h2 id="使用sqluldr2工具">使用sqluldr2工具</h2>
+<p>这个方案也是最后采用的。</p>
 <p>sqluldr2工具是由<a href="http://weibo.com/dbatools" target="_blank" rel="external">平民架构</a>开发的，有免费版和商业版之分，不过我这里免费版就已经够用了。这个工具可以在<a href="http://www.anysql.net/download" target="_blank" rel="external">anysql</a>下载到（第5个，Oracle文本导出工具），里面有windows/linux的32/64位四个版本的执行文件。</p>
 <p>我是把这个工具放在了/usr/local/bin中，因为这个路径已经在环境变量中设置了，所以现在可以全局使用这个命令。</p>
 <p>直接使用命令：</p>
@@ -217,7 +208,7 @@ sqlplus / <span class="keyword">as</span> sysdba
 
 <div class="article-share" id="share">
 
-  <div data-url="http://blog.xumingyang.cn/2014/12/08/从Oracle数据库中大量导出文本数据的实践/" data-title="从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s Blog" data-tsina="2133408912" class="share clearfix">
+  <div data-url="http://blog.xumingyang.cn/2014/12/08/从Oracle数据库中大量导出文本数据的实践/" data-title="从Oracle数据库中大量导出文本数据的实践 | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
   </div>
 
 </div>
@@ -235,6 +226,14 @@ sqlplus / <span class="keyword">as</span> sysdba
 </div>
 
 
+<div class="next">
+<a href="/2014/10/15/wiki/docker入门操作/"  title="docker 入门操作">
+ <strong>NEXT:</strong><br/> 
+ <span>docker 入门操作
+</span>
+</a>
+</div>
+
 </nav>
 
 	
@@ -244,27 +243,35 @@ sqlplus / <span class="keyword">as</span> sysdba
 
 </div>  
 
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景："><span class="toc-number">1.</span> <span class="toc-text">背景：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方案："><span class="toc-number"></span> <span class="toc-text">方案：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案1："><span class="toc-number">1.</span> <span class="toc-text">方案1：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案2："><span class="toc-number">2.</span> <span class="toc-text">方案2：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案3："><span class="toc-number">3.</span> <span class="toc-text">方案3：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案4"><span class="toc-number">4.</span> <span class="toc-text">方案4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方案5"><span class="toc-number">5.</span> <span class="toc-text">方案5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number"></span> <span class="toc-text">参考资料</span></a>
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDBC"><span class="toc-number">2.</span> <span class="toc-text">使用JDBC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用exp/expdp"><span class="toc-number">3.</span> <span class="toc-text">使用exp/expdp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用spool"><span class="toc-number">4.</span> <span class="toc-text">使用spool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Pro*C"><span class="toc-number">5.</span> <span class="toc-text">使用Pro*C</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用sqluldr2工具"><span class="toc-number">6.</span> <span class="toc-text">使用sqluldr2工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/Java/" title="Java">Java<sup>8</sup></a></li>
+			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
 		
 			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
 		
-			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>3</sup></a></li>
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		
+			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
+		
+			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
+			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
 		
 		</ul>
 </div>
@@ -272,7 +279,7 @@ sqlplus / <span class="keyword">as</span> sysdba
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
@@ -281,13 +288,21 @@ sqlplus / <span class="keyword">as</span> sysdba
 		
 			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
+		
 			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
+		
+			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
 		
 			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
 		
 			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
 		
 			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+		
+			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
 		
 			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
 		
@@ -299,28 +314,29 @@ sqlplus / <span class="keyword">as</span> sysdba
 		
 			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
 		
+			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
+		
 			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
 		
 			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
 		
 			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
 		
-			<li><a href="/tags/数据结构/" title="数据结构">数据结构<sup>3</sup></a></li>
-		
 		</ul>
 </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
       <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
+      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
     </ul>
 </div>
 
 
   <div class="rsspart">
-	<a href="atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -507,6 +523,15 @@ $(document).ready(function(){
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
 ga('send', 'pageview');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
 
 
