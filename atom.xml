@@ -2173,7 +2173,7 @@ private void linkFirst(<span class="keyword">E</span> <span class="keyword">e</s
     <link href="http://blog.xumingyang.cn/2014/12/08/%E4%BB%8EOracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E5%A4%A7%E9%87%8F%E5%AF%BC%E5%87%BA%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/"/>
     <id>http://blog.xumingyang.cn/2014/12/08/从Oracle数据库中大量导出文本数据的实践/</id>
     <published>2014-12-08T20:32:25.000Z</published>
-    <updated>2015-09-07T08:04:56.000Z</updated>
+    <updated>2015-09-29T02:45:51.000Z</updated>
     <content type="html"><![CDATA[<h2 id="背景">背景</h2><p>在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。</p>
 <h2 id="使用JDBC">使用JDBC</h2><p>通过JDBC连接数据库的方式导出数据，最开始的想法是这样：</p>
 <ol>
@@ -2239,7 +2239,7 @@ spool off;
 </code></pre><p>就可以导出common表中的数据了，在当前路径中生成文件data.csv。</p>
 <p>这里有关于expdp和sqluldr2的性能测试截图：</p>
 <p>这个是expdp工具的测试截图<br><img src="http://img-niren.qiniudn.com/expdp-modify.png" alt=""><br>这个是sqluldr2工具的测试截图<br><img src="http://img-niren.qiniudn.com/sqluldr2-modify.png" alt=""></p>
-<p>两者导出的数据都是一样的，一共26405520行记录，大约1.4GG。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
+<p>两者导出的数据都是一样的，一共26405520GB。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
 <p>在实际项目中遇到了一个问题：这个工具（不止这个工具，除了第一种方案，其他的都需要）必须得在有oracle环境下才能运行，项目部署的用户和数据库的用户并不是同一个。</p>
 <p>一个方法就是在当前用户下，切换到另外一个用户去执行命令，但是这就需要输入数据库用户的用户名和密码，查资料可以通过安装expect工具，写成shell脚本，然后程序直接调用执行这个脚本。</p>
 <p>另一个方法是在数据库用户下部署一个server，当需要导出数据的时候，给该server发送相应的信息（包括需要导出的表名，字段名）。server接受信息之后开始执行数据导出工作。</p>

@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://img-niren.qiniudn.com/1-2.png">
 <meta property="og:image" content="http://img-niren.qiniudn.com/expdp-modify.png">
 <meta property="og:image" content="http://img-niren.qiniudn.com/sqluldr2-modify.png">
-<meta property="og:updated_time" content="2015-09-07T08:04:56.000Z">
+<meta property="og:updated_time" content="2015-09-29T02:45:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从Oracle数据库中大量导出文本数据的实践">
 <meta name="twitter:description" content="背景在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。
@@ -313,7 +313,7 @@ spool off;
 </code></pre><p>就可以导出common表中的数据了，在当前路径中生成文件data.csv。</p>
 <p>这里有关于expdp和sqluldr2的性能测试截图：</p>
 <p>这个是expdp工具的测试截图<br><img src="http://img-niren.qiniudn.com/expdp-modify.png" alt=""><br>这个是sqluldr2工具的测试截图<br><img src="http://img-niren.qiniudn.com/sqluldr2-modify.png" alt=""></p>
-<p>两者导出的数据都是一样的，一共26405520行记录，大约1.4GG。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
+<p>两者导出的数据都是一样的，一共26405520GB。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
 <p>在实际项目中遇到了一个问题：这个工具（不止这个工具，除了第一种方案，其他的都需要）必须得在有oracle环境下才能运行，项目部署的用户和数据库的用户并不是同一个。</p>
 <p>一个方法就是在当前用户下，切换到另外一个用户去执行命令，但是这就需要输入数据库用户的用户名和密码，查资料可以通过安装expect工具，写成shell脚本，然后程序直接调用执行这个脚本。</p>
 <p>另一个方法是在数据库用户下部署一个server，当需要导出数据的时候，给该server发送相应的信息（包括需要导出的表名，字段名）。server接受信息之后开始执行数据导出工作。</p>

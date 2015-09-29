@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.xumingyang.cn/2014/12/08/%E4%BB%8EOracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E5%A4%A7%E9%87%8F%E5%AF%BC%E5%87%BA%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2015-09-29T02:45:51.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.xumingyang.cn/2014/03/19/wiki/Scala%E7%9A%84%E4%B8%89%E4%B8%AA%E7%89%B9%E6%AE%8A%E7%B1%BB%E5%9E%8BNothing%E3%80%81Any%E3%80%81Option/</loc>
     <lastmod>2015-09-08T02:17:22.000Z</lastmod>
   </url>
@@ -79,11 +84,6 @@
   <url>
     <loc>http://blog.xumingyang.cn/2015/04/03/%E8%AE%BE%E8%AE%A1%E5%90%88%E9%80%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84(%E4%BA%8C)/</loc>
     <lastmod>2015-09-07T08:05:04.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://blog.xumingyang.cn/2014/12/08/%E4%BB%8EOracle%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E5%A4%A7%E9%87%8F%E5%AF%BC%E5%87%BA%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/</loc>
-    <lastmod>2015-09-07T08:04:56.000Z</lastmod>
   </url>
   
   <url>
