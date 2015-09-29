@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java 中的重要知识点 | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Java的容器顺序表、集合、队列相关类图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 中的重要知识点">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/02/26/Java 中的重要知识点/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="Java的容器顺序表、集合、队列相关类图">
+<meta property="og:image" content="http://xumyselfcn.github.io/imgs/Java_collection_implementation1.jpg">
+<meta property="og:image" content="http://xumyselfcn.github.io/imgs/Java_map_implementation1.jpg">
+<meta property="og:image" content="http://xumyselfcn.github.io/imgs/jvm2.jpg">
+<meta property="og:updated_time" content="2015-09-07T08:04:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 中的重要知识点">
+<meta name="twitter:description" content="Java的容器顺序表、集合、队列相关类图">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Java 中的重要知识点" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/26/Java 中的重要知识点/" class="article-date">
+  	<time datetime="2015-02-26T15:28:31.000Z" itemprop="datePublished">2015-02-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java 中的重要知识点
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Java/">Java</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Java的容器">Java的容器</h2><p>顺序表、集合、队列相关类图<br><a id="more"></a><br><img src="http://xumyselfcn.github.io/imgs/Java_collection_implementation1.jpg" alt=""><br>Map相关类图<br><img src="http://xumyselfcn.github.io/imgs/Java_map_implementation1.jpg" alt=""><br>（图片来源：<a href="http://bighai.com/ppjava/?p=158" target="_blank" rel="external">Prepare Java Interview</a>）<br>上面第二幅图有错，LinkHashMap=&gt;LinkedHashMap</p>
+<h3 id="非并发容器">非并发容器</h3><ul>
+<li><a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/">ArrayList</a>和<a href="http://blog.xumingyang.cn/2015/03/27/LinkedList%E8%AF%A6%E8%A7%A3/">LinkedList</a>（各自特点、区别、联系）</li>
+<li><a href="http://www.importnew.com/10620.html" target="_blank" rel="external">Map（Hash冲突的解决）</a></li>
+<li>Set</li>
+<li>Stack、Queue</li>
+</ul>
+<p><a href="http://www.cnblogs.com/skywang12345/p/3323085.html#3157660" target="_blank" rel="external">这位</a>总结的很不错，推荐给大家。</p>
+<h3 id="并发容器">并发容器</h3><ul>
+<li>阻塞类的代表<a href="http://blog.xumingyang.cn/2015/03/12/java%20%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/#ConcurrentLinkedDeque">LinkedBlockingDeque</a>、Vector</li>
+<li>非阻塞类的代表<a href="http://blog.xumingyang.cn/2015/03/12/java%20%E5%B9%B6%E5%8F%91%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/#LinkedBlockingDeque">ConcurrentLinkedDeque</a><!--more--></li>
+<li>高效的<a href="http://www.ibm.com/developerworks/cn/java/java-lo-concurrenthashmap/index.html?ca=drs-" target="_blank" rel="external">ConcurrentHashMap</a></li>
+</ul>
+<h2 id="JVM相关">JVM相关</h2><p><a href="http://en.wikipedia.org/wiki/Java_virtual_machine" target="_blank" rel="external">JVM</a>，也就是Java 虚拟机，由各大厂商根据<a href="https://docs.oracle.com/javase/specs/jvms/se7/html/" target="_blank" rel="external">JVM规范</a>实现的。最有名的是甲骨文公司的HotSpot。JVM主要由：<strong>类加载子系统、运行时数据区（内存空间）、执行引擎和本地方法接口</strong>等组成。其中运行时数据区又由：<strong>方法区、堆、Java栈、PC寄存器、本地方法栈</strong>组成。</p>
+<p><img src="http://xumyselfcn.github.io/imgs/jvm2.jpg" alt="JVM主要组成部分"></p>
+<p>这个系列是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>关于周志明的<a href="https://book.douban.com/subject/24722612/" target="_blank" rel="external">《深入理解Java虚拟机》</a>的读书笔记，我自己也看了一遍这本书（我看的是第一版的，现在已经有第二版了），再看看别人是怎么想的，每个人的关注点可能也不一样，有可能他注意到了我忽略的地方，顺带着复习一下，这是一种很好的学习方式。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/jvm-ii/" target="_blank" rel="external">Java内存区域与内存溢出异常</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-iv/" target="_blank" rel="external">JVM性能监控与故障处理工具</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vi/" target="_blank" rel="external">类文件结构</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-vii/" target="_blank" rel="external">虚拟机类加载机制</a></li>
+<li><a href="http://www.importnew.com/15362.html" target="_blank" rel="external">深入分析Java ClassLoader原理</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-viii/" target="_blank" rel="external">虚拟机字节码执行引擎</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-ix/" target="_blank" rel="external">类加载及执行子系统的案例与实战</a></li>
+<li><a href="http://github.thinkingbar.com/jvm-xii/" target="_blank" rel="external">Java内存模型与线程</a></li>
+</ul>
+<h2 id="Java_I/O">Java I/O</h2><p>待补充</p>
+<ul>
+<li><a href="http://fangguanhong.iteye.com/blog/1976393" target="_blank" rel="external">Java IO “装饰模式(Decorator)”总结</a></li>
+</ul>
+<h2 id="Java多线程">Java多线程</h2><p>以前用到多线程的时候，在网上搜一下资料，实现功能就行；后来看了<a href="http://book.douban.com/subject/25844475/" target="_blank" rel="external">《Java 7并发编程实战手册》</a>算是真正的入门，这本书的特点是例子很多，跟着例子走上手比较容易，缺点就是例子太多，容易只见树木不见森林，局限于某个知识点。</p>
+<p>这里是<a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">《Java 7 Concurrency Cookbook》</a>的中文翻译在线版，已经出版的《Java 7并发编程实战手册》是其中文译本。</p>
+<p>其他的Java并发编程资料：</p>
+<ul>
+<li>排名第一的自然是<a href="http://book.douban.com/subject/10484692/" target="_blank" rel="external">《Java并发编程实战》</a></li>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+</ul>
+<p>怎么才能构建一个Java并发编程的体系呢，下面的这个系统对Java多线程整体过了一遍，这个系列依旧是<a href="http://github.thinkingbar.com/" target="_blank" rel="external">飘过的小牛</a>的读书笔记。</p>
+<ul>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part01/" target="_blank" rel="external">Java编程思想-并发系列之一</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part02/" target="_blank" rel="external">Java编程思想-并发系列之二</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part03/" target="_blank" rel="external">Java编程思想-并发系列之三</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part04/" target="_blank" rel="external">Java编程思想-并发系列之四</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part05/" target="_blank" rel="external">Java编程思想-并发系列之五</a></li>
+<li><a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part06/" target="_blank" rel="external">Java编程思想-并发系列之六</a></li>
+</ul>
+<h2 id="Java其他关键知识点">Java其他关键知识点</h2><ul>
+<li><a href="http://www.importnew.com/15397.html" target="_blank" rel="external">深入理解Java String#intern() 内存模型</a></li>
+</ul>
+<h3 id="Java序列化">Java序列化</h3><p>下面就是序列化相关的知识点：</p>
+<ul>
+<li>为什么要序列化、序列化的应用场景？</li>
+<li>序列化的实现方法？</li>
+<li>已有的序列化框架？</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/12/源码浅析-Java中的并发数据集合/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          源码浅析-Java中的并发数据集合
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">从Oracle数据库中大量导出文本数据的实践</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Java 中的重要知识点" data-title="Java 中的重要知识点" data-url="http://blog.xumingyang.cn/2015/02/26/Java 中的重要知识点/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,124 +1,255 @@
-
- <!DOCTYPE HTML>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   
-    <title>Java序列化 | MingYang&#39;s blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
-    
-    <meta name="author" content="MingYang">
-    
-    <meta name="description" content="序列化的相关知识点
-先看这三个知识点
+  <title>Java序列化 | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="序列化的相关知识点先看这三个知识点
 
 将对象转换为字节流保存起来，并在以后还原这个对象，这种机制叫做(对象)序列化。
 将一个对象保存到永久存储设备上称为持久化。
-一个对象要想能够实现序列化，必须实现Serializable接口或Externalizable接口。
+一个对象要想能够实现序列化，必须实现Serializable接口或Externalizable接口。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java序列化">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/27/Java序列化/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="序列化的相关知识点先看这三个知识点
+
+将对象转换为字节流保存起来，并在以后还原这个对象，这种机制叫做(对象)序列化。
+将一个对象保存到永久存储设备上称为持久化。
+一个对象要想能够实现序列化，必须实现Serializable接口或Externalizable接口。">
+<meta property="og:updated_time" content="2015-09-07T08:04:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java序列化">
+<meta name="twitter:description" content="序列化的相关知识点先看这三个知识点
+
+将对象转换为字节流保存起来，并在以后还原这个对象，这种机制叫做(对象)序列化。
+将一个对象保存到永久存储设备上称为持久化。
+一个对象要想能够实现序列化，必须实现Serializable接口或Externalizable接口。">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Java序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/27/Java序列化/" class="article-date">
+  	<time datetime="2015-03-27T14:28:31.000Z" itemprop="datePublished">2015-03-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java序列化
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/序列化/">序列化</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Java/">Java</a>
+	</div>
 
 
-比如内存里面有Person这样">
-    
-    
-    
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="xmysilas" />
-    <meta name="twitter:title" content="Java序列化 | MingYang&#39;s blog" />
+        <div class="clearfix"></div>
+      </div>
       
     
-    
-    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/doge.png">
-    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
-    
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-</head>
-
-  <body>
-    <header>
-      <div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
-				<h2 class="blog-motto"></h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/reading">Reading</a></li>
-					
-						<li><a href="/pocket">Pocket</a></li>
-					
-						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
-					
-					<li>
-					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/27/Java序列化/" title="Java序列化" itemprop="url">Java序列化</a>
-  </h1>
-  <p class="article-author">By
-    
-      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
-    </p>
-  <p class="article-time">
-    <time datetime="2015-03-27T14:28:31.000Z" itemprop="datePublished">3月 27 2015</time>
-    更新日期:<time datetime="2015-04-15T08:58:39.000Z" itemprop="dateModified">4月 15 2015</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的相关知识点"><span class="toc-number">1.</span> <span class="toc-text">序列化的相关知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的实现"><span class="toc-number">2.</span> <span class="toc-text">序列化的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Java内置的序列化方式："><span class="toc-number">2.1.</span> <span class="toc-text">使用Java内置的序列化方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他序列化方式"><span class="toc-number">2.2.</span> <span class="toc-text">其他序列化方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#影响序列化的因素"><span class="toc-number">3.</span> <span class="toc-text">影响序列化的因素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#transient关键字"><span class="toc-number">3.1.</span> <span class="toc-text">transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#writeObject()方法与readObject()方法"><span class="toc-number">3.2.</span> <span class="toc-text">writeObject()方法与readObject()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Externalizable接口"><span class="toc-number">3.3.</span> <span class="toc-text">Externalizable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readResolve()方法"><span class="toc-number">3.4.</span> <span class="toc-text">readResolve()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serialVersionUID"><span class="toc-number">3.5.</span> <span class="toc-text">serialVersionUID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化协议&框架"><span class="toc-number">4.</span> <span class="toc-text">序列化协议&框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化协议"><span class="toc-number">4.1.</span> <span class="toc-text">序列化协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化框架:"><span class="toc-number">4.2.</span> <span class="toc-text">序列化框架:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化中需要注意的地方"><span class="toc-number">5.</span> <span class="toc-text">序列化中需要注意的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">扩展阅读</span></a></li></ol>
-		</div>
-		
-		<h2 id="序列化的相关知识点">序列化的相关知识点</h2>
-<p>先看这三个知识点</p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="序列化的相关知识点">序列化的相关知识点</h2><p>先看这三个知识点</p>
 <ul>
 <li>将对象转换为字节流保存起来，并在以后还原这个对象，这种机制叫做<code>(对象)序列化</code>。</li>
 <li>将一个对象保存到永久存储设备上称为<code>持久化</code>。</li>
-<li>一个对象要想能够实现序列化，必须实现<code>Serializable</code>接口或<code>Externalizable</code>接口。</li>
-</ul>
+<li>一个对象要想能够实现序列化，必须实现<code>Serializable</code>接口或<code>Externalizable</code>接口。<a id="more"></a>
 <blockquote>
 <p>比如内存里面有Person这样一个对象，这个对象已经new出来了，接下来我把这个对象保存到文件里面，因为内存里面的东西一旦java虚拟机关闭了就都没有了，所以保存到文件里面，保存到文件之后，等到下一次java虚拟机再次起来之后，我再把这个Person对象从文件里面读取回来，再加载到内存中，这就是序列化。<strong>必须注意地是，对象序列化保存的是对象的”状态”，即它的成员变量。由此可知，对象序列化不会关注类中的静态变量。</strong></p>
 </blockquote>
+</li>
+</ul>
 <p>好了，如果您是初次接触序列化，建议您先看一下<a href="http://www.w3cschool.cc/java/java-serialization.html" target="_blank" rel="external">这个入门的小例子</a>~</p>
-<p>Serializable是一个<code>标记接口</code>(maker interface)，关于标记接口可以参考<a href="http://blog.xumingyang.cn/2015/03/23/RandomAccess%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">这篇文章</a>。若某个类实现了Serializable接口，编译器就知道这个类是可以序列化的；否则，序列化一个没有实现该接口的对象，会抛出NotSerializableException异常。</p>
+<p>Serializable是一个<code>标记接口</code>(maker interface)，关于标记接口可以参考<a href="http://blog.xumingyang.cn/2015/03/23/RandomAccess%E8%AF%A6%E8%A7%A3/">这篇文章</a>。若某个类实现了Serializable接口，编译器就知道这个类是可以序列化的；否则，序列化一个没有实现该接口的对象，会抛出NotSerializableException异常。</p>
 <p>这里需要厘清<code>序列化</code>和<code>持久化</code>的概念，下面是一些关于序列化/持久化的说法：</p>
 <p><a href="http://www.zhihu.com/people/xu-chen-5" target="_blank" rel="external">徐辰</a></p>
 <blockquote>
@@ -145,36 +276,25 @@
 <li>序列化就是把对象转化成字节流，以备后面再使用反序列化还原对象。</li>
 <li>持久化则是把对象保存起来。</li>
 </ul>
-<h2 id="序列化的实现">序列化的实现</h2>
-<h3 id="使用Java内置的序列化方式：">使用Java内置的序列化方式：</h3>
-<ul>
+<h2 id="序列化的实现">序列化的实现</h2><h3 id="使用Java内置的序列化方式：">使用Java内置的序列化方式：</h3><ul>
 <li>如果需要让某个对象可以支持序列化机制，必须让它的类是可序列化（serializable），为了让某个类可序列化的，必须实现如下两个接口之一： Serializable，Externalizable。</li>
 <li>所有在网络上传输的对象都应该是可序列化的，否则将会出现异常；所有需要保存到磁盘里的对象的类都必须可序列化。（通常建议：程序创建的每个JavaBean类都实现Serializable)</li>
 </ul>
-<h3 id="其他序列化方式">其他序列化方式</h3>
-<p>有时候Java内置的序列化方式并不能满足我们的需求，因此又有了其他的序列化方式，具体请看<code>序列化协议&amp;框架</code>部分。</p>
-<h2 id="影响序列化的因素">影响序列化的因素</h2>
-<h3 id="transient关键字">transient关键字</h3>
-<p>当某个字段被声明为transient后，默认序列化机制就会忽略该字段。</p>
-<h3 id="writeObject()方法与readObject()方法">writeObject()方法与readObject()方法</h3>
-<p>如果实现了Serializable接口的对象重写了writeObject方法，则该对象的序列化操作就交给了该函数。一般还要相应的实现readObject方法。</p>
+<h3 id="其他序列化方式">其他序列化方式</h3><p>有时候Java内置的序列化方式并不能满足我们的需求，因此又有了其他的序列化方式，具体请看<code>序列化协议&amp;框架</code>部分。</p>
+<h2 id="影响序列化的因素">影响序列化的因素</h2><h3 id="transient关键字">transient关键字</h3><p>当某个字段被声明为transient后，默认序列化机制就会忽略该字段。</p>
+<h3 id="writeObject()方法与readObject()方法">writeObject()方法与readObject()方法</h3><p>如果实现了Serializable接口的对象重写了writeObject方法，则该对象的序列化操作就交给了该函数。一般还要相应的实现readObject方法。</p>
 <p>必须注意地是，writeObject()与readObject()都是private方法，那么它们是如何被调用的呢？毫无疑问，是使用反射。详情可见ObjectOutputStream中的writeSerialData方法，以及ObjectInputStream中的readSerialData方法。</p>
 <blockquote>
 <p>一般在集合类中，都会把存储数据的数组（或Node节点）设置为transient，然后重写writeObject和readObject方法。这是因为那些数组（或Node节点）里面存储的可能并不是原生类型，而是堆上对象的引用地址，那么我们如果直接把这些地址进行序列化操作是毫无意义的，所以需要重写writeObject和readObject方法。</p>
 </blockquote>
-<h3 id="Externalizable接口">Externalizable接口</h3>
-<p>无论是使用transient关键字，还是使用writeObject()和readObject()方法，其实都是基于Serializable接口的序列化。JDK中提供了另一个序列化接口—Externalizable，使用该接口之后，之前基于Serializable接口的序列化机制就将失效。</p>
+<h3 id="Externalizable接口">Externalizable接口</h3><p>无论是使用transient关键字，还是使用writeObject()和readObject()方法，其实都是基于Serializable接口的序列化。JDK中提供了另一个序列化接口–Externalizable，使用该接口之后，之前基于Serializable接口的序列化机制就将失效。</p>
 <p>Externalizable继承于Serializable，当使用该接口时，序列化的细节需要由程序员去完成。如果writeExternal()与readExternal()方法未作任何处理，那么该序列化行为将不会保存/读取任何一个字段，输出结果中所有字段的值均为空。</p>
 <p>另外，若使用Externalizable进行序列化，当读取对象时，会调用被序列化类的无参构造器去创建一个新的对象，然后再将被保存对象的字段的值分别填充到新对象中。实现Externalizable接口的类必须要提供一个无参的构造器，且它的访问权限为public。</p>
-<h3 id="readResolve()方法">readResolve()方法</h3>
-<p>当我们使用Singleton模式时，应该是期望某个类的实例应该是唯一的，但如果该类是可序列化的，那么情况可能会略有不同，因为我们不希望在反序列化时生成多个对象。</p>
+<h3 id="readResolve()方法">readResolve()方法</h3><p>当我们使用Singleton模式时，应该是期望某个类的实例应该是唯一的，但如果该类是可序列化的，那么情况可能会略有不同，因为我们不希望在反序列化时生成多个对象。</p>
 <p>无论是实现Serializable接口，或是Externalizable接口，当从I/O流中读取对象时，readResolve()方法都会被调用到。实际上就是用readResolve()中返回的对象直接替换在反序列化过程中创建的对象，而被创建的对象则会被垃圾回收掉。</p>
-<h3 id="serialVersionUID">serialVersionUID</h3>
-<p><strong>SerialVersionUid</strong>，简言之，其目的是序列化对象版本控制，有关各版本反序列化时是否兼容。如果在新版本中这个值修改了，新版本就不兼容旧版本，反序列化时会抛出<strong>InvalidClassException</strong>异常。如果修改较小，比如仅仅是增加了一个属性，我们希望向下兼容，老版本的数据都能保留，那就不用修改；如果我们删除了一个属性，或者更改了类的继承关系，必然不兼容旧数据，这时就应该手动更新版本号，即<strong>SerialVersionUid</strong>。</p>
+<h3 id="serialVersionUID">serialVersionUID</h3><p><strong>SerialVersionUid</strong>，简言之，其目的是序列化对象版本控制，有关各版本反序列化时是否兼容。如果在新版本中这个值修改了，新版本就不兼容旧版本，反序列化时会抛出<strong>InvalidClassException</strong>异常。如果修改较小，比如仅仅是增加了一个属性，我们希望向下兼容，老版本的数据都能保留，那就不用修改；如果我们删除了一个属性，或者更改了类的继承关系，必然不兼容旧数据，这时就应该手动更新版本号，即<strong>SerialVersionUid</strong>。</p>
 <p>更加详细的关于serialVersionUID的讲解可以在<a href="http://blog.csdn.net/fbysss/article/details/5844478" target="_blank" rel="external">这篇文章</a>里面见到。</p>
-<h2 id="序列化协议&amp;框架">序列化协议&amp;框架</h2>
-<h3 id="序列化协议">序列化协议</h3>
-<ul>
+<h2 id="序列化协议&amp;框架">序列化协议&amp;框架</h2><h3 id="序列化协议">序列化协议</h3><ul>
 <li>XML</li>
 <li>JSON</li>
 <li>Protobuf</li>
@@ -182,8 +302,7 @@
 <li>Avro</li>
 </ul>
 <p>更多的关于序列化协议的介绍可以看<a href="http://tech.meituan.com/serialization_vs_deserialization.html" target="_blank" rel="external">序列化和反序列化</a></p>
-<h3 id="序列化框架:">序列化框架:</h3>
-<ul>
+<h3 id="序列化框架:">序列化框架:</h3><ul>
 <li>Kryo</li>
 <li>Hessian</li>
 <li>Protostuff</li>
@@ -191,8 +310,7 @@
 <li>Java</li>
 </ul>
 <p>更多的关于序列化框架的介绍可以看<a href="http://x-rip.iteye.com/blog/1555293" target="_blank" rel="external">序列化框架 kryo VS hessian VS Protostuff VS java</a>。</p>
-<h2 id="序列化中需要注意的地方">序列化中需要注意的地方</h2>
-<ul>
+<h2 id="序列化中需要注意的地方">序列化中需要注意的地方</h2><ul>
 <li>当一个对象被序列化时，只保存对象的非静态成员变量，不能保存任何的成员方法和静态的成员变量。 </li>
 <li>如果一个对象的成员变量是一个对象，那么这个对象的数据成员也会被保存。</li>
 <li>如果一个可序列化的对象包含对某个不可序列化的对象的引用，那么整个序列化操作将会失败，我们可以将这个对象引用标记为transient，那么对象仍然可以序列化。</li>
@@ -203,8 +321,7 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="参考资料">参考资料</h2>
-<ul>
+<h2 id="参考资料">参考资料</h2><ul>
 <li><a href="http://www.w3cschool.cc/java/java-serialization.html" target="_blank" rel="external">Java序列化(这里提供了一个最基础的示例)</a></li>
 <li><a href="http://www.zhihu.com/question/20706270" target="_blank" rel="external">什么是对象持久化，与数据序列化有何联系？(来自知乎)</a></li>
 <li><a href="http://fangguanhong.iteye.com/blog/1976911" target="_blank" rel="external">“java对象序列化与对象反序列化”深入详解</a></li>
@@ -212,359 +329,141 @@
 <li><a href="http://developer.51cto.com/art/200908/147650.htm" target="_blank" rel="external">Java序列化的机制和原理</a></li>
 <li><a href="http://blog.csdn.net/fbysss/article/details/5844478" target="_blank" rel="external">深入理解Java序列化中的SerialVersionUid</a></li>
 </ul>
-<h2 id="扩展阅读">扩展阅读</h2>
-<ul>
+<h2 id="扩展阅读">扩展阅读</h2><ul>
 <li><a href="http://tech.meituan.com/serialization_vs_deserialization.html" target="_blank" rel="external">序列化和反序列化(来自美团技术博客)</a></li>
 <li><a href="http://www.ibm.com/developerworks/cn/java/j-lo-serial/" target="_blank" rel="external">Java序列化的高级认识</a></li>
 <li><a href="http://tangyongjunbk.blog.163.com/blog/static/128389013201082481625255/" target="_blank" rel="external">如何生成一个SerialVersionUID</a></li>
 <li><a href="http://lenjey.iteye.com/blog/513736" target="_blank" rel="external">对象序列化为何要定义serialVersionUID的来龙去脉</a></li>
 </ul>
- 
-		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
-	</div>
-		<footer class="article-footer clearfix">
 
-  <div class="article-tags">
+      
+    </div>
+    
+  </div>
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/序列化/">序列化</a>
-  </div>
-
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java/">Java</a>
-</div>
-
-
-
-<div class="article-share" id="share">
-
-  <div data-url="http://blog.xumingyang.cn/2015/03/27/Java序列化/" data-title="Java序列化 | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
-  </div>
-
-</div>
-</footer>   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2015/03/27/wiki/Java中的final和static关键字/" title="Java中的final和static关键字[转]">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Java中的final和static关键字[转]</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2015/03/26/Java线程池ThreadPoolExecutor/"  title="源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例">
- <strong>NEXT:</strong><br/> 
- <span>源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例
-</span>
-</a>
-</div>
-
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/27/wiki/Java中的final和static关键字[转]/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Java中的final和static关键字[转]
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/26/源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
 </nav>
 
-	
-<section class="comment">
-	<div class="ds-thread"></div>
-</section>
-
-</div>  
-
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的相关知识点"><span class="toc-number">1.</span> <span class="toc-text">序列化的相关知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化的实现"><span class="toc-number">2.</span> <span class="toc-text">序列化的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Java内置的序列化方式："><span class="toc-number">2.1.</span> <span class="toc-text">使用Java内置的序列化方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他序列化方式"><span class="toc-number">2.2.</span> <span class="toc-text">其他序列化方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#影响序列化的因素"><span class="toc-number">3.</span> <span class="toc-text">影响序列化的因素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#transient关键字"><span class="toc-number">3.1.</span> <span class="toc-text">transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#writeObject()方法与readObject()方法"><span class="toc-number">3.2.</span> <span class="toc-text">writeObject()方法与readObject()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Externalizable接口"><span class="toc-number">3.3.</span> <span class="toc-text">Externalizable接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readResolve()方法"><span class="toc-number">3.4.</span> <span class="toc-text">readResolve()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#serialVersionUID"><span class="toc-number">3.5.</span> <span class="toc-text">serialVersionUID</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化协议&框架"><span class="toc-number">4.</span> <span class="toc-text">序列化协议&框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化协议"><span class="toc-number">4.1.</span> <span class="toc-text">序列化协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化框架:"><span class="toc-number">4.2.</span> <span class="toc-text">序列化框架:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列化中需要注意的地方"><span class="toc-number">5.</span> <span class="toc-text">序列化中需要注意的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展阅读"><span class="toc-number">7.</span> <span class="toc-text">扩展阅读</span></a></li></ol>
-  </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
-<aside class="clearfix">
-
   
-<div class="categorieslist">
-	<p class="asidetitle">分类</p>
-		<ul>
-		
-			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
-		
-			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
-		
-			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
-		
-			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
-		
-			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
-		
-			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
-		
-			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
-		
-		</ul>
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
 </div>
 
 
-  
-<div class="tagslist">
-	<p class="asidetitle">标签</p>
-		<ul class="clearfix">
-		
-			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
-		
-			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
-		
-			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
-		
-			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
-		
-			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
-		
-			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
-		
-			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
-		
-			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
-		
-			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
-		
-			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
-		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
-		
-			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
-		
-			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
-		
-			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
-		
-			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
-		
-		</ul>
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Java序列化" data-title="Java序列化" data-url="http://blog.xumingyang.cn/2015/03/27/Java序列化/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
 </div>
 
 
-  <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
-    <ul>
-      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
-      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
-    </ul>
-</div>
 
 
-  <div class="rsspart">
-	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
-
-</aside>
-</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<div class="social-font clearfix">
-		
-		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
-		
-		
-		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
-		
-		
-		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
-		
-		
-		
-	</div>
-		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
-		
-		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
-		
-		</p>
-</div>
+  </div>
 </footer>
-    <script src="/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
-        
-    }
-  });
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      h  = $('article h2')
-      ah = $('article h2'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  if(ah.length==0){
-    t.css('display','none');
-  }else{
-    c.click(function(){
-      ta.css('display', 'block').addClass('fadeIn');
-    });
-    o.click(function(){
-      ta.css('display', 'none');
-    });
-    $(window).scroll(function(){
-      ta.css("top",Math.max(140,320-$(this).scrollTop()));
-    });
-  };
-});
-</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina');
-  var html = [
-  '<a href="#" class="overlay" id="qrcode"></a>',
-  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
-  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-  $('.article-share-qrcode').click(function(){
-    var imgSrc = $('#qrcode-pic').attr('data-src');
-    $('#qrcode-pic').attr('src', imgSrc);
-    $('#qrcode-pic').load(function(){
-        $('.qrcode strong').text(' ');
-    });
-  });
-});     
-</script>
-
-
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"xumyselfcn"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-}); 
-</script>
-
-
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
-ga('send', 'pageview');
-</script>
 <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
-  </body>
+  </div>
+</body>
 </html>

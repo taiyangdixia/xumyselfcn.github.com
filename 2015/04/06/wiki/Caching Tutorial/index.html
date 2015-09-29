@@ -1,138 +1,258 @@
-
- <!DOCTYPE HTML>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   
-    <title>Caching Tutorial | MingYang&#39;s blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
-    
-    <meta name="author" content="MingYang">
-    
-    <meta name="description" content="前言
-全文转载，原地址：https://www.mnot.net/cache_docs/#BROWSER
+  <title>Caching Tutorial | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="##前言全文转载，原地址：https://www.mnot.net/cache_docs/#BROWSER
 中文翻译地址：http://www.chedong.com/tech/cache_docs.html
 Caching Tutorial
+This is an informational document. Although technical in nature, it attempts t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Caching Tutorial">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/04/06/wiki/Caching Tutorial/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="##前言全文转载，原地址：https://www.mnot.net/cache_docs/#BROWSER
+中文翻译地址：http://www.chedong.com/tech/cache_docs.html
+Caching Tutorial
+This is an informational document. Although technical in nature, it attempts t">
+<meta property="og:updated_time" content="2015-09-07T08:05:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Caching Tutorial">
+<meta name="twitter:description" content="##前言全文转载，原地址：https://www.mnot.net/cache_docs/#BROWSER
+中文翻译地址：http://www.chedong.com/tech/cache_docs.html
+Caching Tutorial
+This is an informational document. Although technical in nature, it attempts t">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
 
-This is an informational doc">
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-wiki/Caching Tutorial" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/06/wiki/Caching Tutorial/" class="article-date">
+  	<time datetime="2015-04-06T14:17:16.000Z" itemprop="datePublished">2015-04-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
     
     
-    
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="xmysilas" />
-    <meta name="twitter:title" content="Caching Tutorial | MingYang&#39;s blog" />
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Caching Tutorial
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/干货/">干货</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
       
     
-    
-    <link rel="alternate" href="atom.xml" title="MingYang&#39;s blog" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/doge.png">
-    <link rel="apple-touch-icon-precomposed" href="/img/doge.png">
-    
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-
-</head>
-
-  <body>
-    <header>
-      <div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/doge.png" alt="MingYang&#39;s blog" title="MingYang&#39;s blog"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="MingYang&#39;s blog">MingYang&#39;s blog</a></h1>
-				<h2 class="blog-motto"></h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/reading">Reading</a></li>
-					
-						<li><a href="/pocket">Pocket</a></li>
-					
-						<li><a href="http://cv.xumingyang.cn/">CV</a></li>
-					
-					<li>
-					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:blog.xumingyang.cn">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/06/wiki/Caching Tutorial/" title="Caching Tutorial" itemprop="url">Caching Tutorial</a>
-  </h1>
-  <p class="article-author">By
-    
-      <a href="http://blog.xumingyang.cn" title="MingYang">MingYang</a>
-    </p>
-  <p class="article-time">
-    <time datetime="2015-04-06T14:17:16.000Z" itemprop="datePublished">4月 6 2015</time>
-    更新日期:<time datetime="2015-04-08T06:14:31.000Z" itemprop="dateModified">4月 8 2015</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Caching_Tutorial"><span class="toc-number">2.</span> <span class="toc-text">Caching Tutorial</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What’s_a_Web_Cache?_Why_do_people_use_them?"><span class="toc-number">2.1.</span> <span class="toc-text">What’s a Web Cache? Why do people use them?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kinds_of_Web_Caches"><span class="toc-number">2.2.</span> <span class="toc-text">Kinds of Web Caches</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Browser_Caches"><span class="toc-number">2.2.1.</span> <span class="toc-text">Browser Caches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Proxy_Caches"><span class="toc-number">2.2.2.</span> <span class="toc-text">Proxy Caches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gateway_Caches"><span class="toc-number">2.2.3.</span> <span class="toc-text">Gateway Caches</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aren’t_Web_Caches_bad_for_me?_Why_should_I_help_them?"><span class="toc-number">2.3.</span> <span class="toc-text">Aren’t Web Caches bad for me? Why should I help them?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How_Web_Caches_Work"><span class="toc-number">2.4.</span> <span class="toc-text">How Web Caches Work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How_(and_how_not)_to_Control_Caches"><span class="toc-number">2.5.</span> <span class="toc-text">How (and how not) to Control Caches</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTML_Meta_Tags_and_HTTP_Headers"><span class="toc-number">2.5.1.</span> <span class="toc-text">HTML Meta Tags and HTTP Headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pragma_HTTP_Headers_(and_why_they_don’t_work)"><span class="toc-number">2.5.2.</span> <span class="toc-text">Pragma HTTP Headers (and why they don’t work)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Controlling_Freshness_with_the_Expires_HTTP_Header"><span class="toc-number">2.5.3.</span> <span class="toc-text">Controlling Freshness with the Expires HTTP Header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache-Control_HTTP_Headers"><span class="toc-number">2.5.4.</span> <span class="toc-text">Cache-Control HTTP Headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Validators_and_Validation"><span class="toc-number">2.5.5.</span> <span class="toc-text">Validators and Validation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tips_for_Building_a_Cache-Aware_Site"><span class="toc-number">2.6.</span> <span class="toc-text">Tips for Building a Cache-Aware Site</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Writing_Cache-Aware_Scripts"><span class="toc-number">2.7.</span> <span class="toc-text">Writing Cache-Aware Scripts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Frequently_Asked_Questions"><span class="toc-number">2.8.</span> <span class="toc-text">Frequently Asked Questions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#What_are_the_most_important_things_to_make_cacheable?"><span class="toc-number">2.8.1.</span> <span class="toc-text">What are the most important things to make cacheable?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How_can_I_make_my_pages_as_fast_as_possible_with_caches?"><span class="toc-number">2.8.2.</span> <span class="toc-text">How can I make my pages as fast as possible with caches?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I_understand_that_caching_is_good,_but_I_need_to_keep_statistics_on_how_many_people_visit_my_page!"><span class="toc-number">2.8.3.</span> <span class="toc-text">I understand that caching is good, but I need to keep statistics on how many people visit my page!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How_can_I_see_a_representation’s_HTTP_headers?"><span class="toc-number">2.8.4.</span> <span class="toc-text">How can I see a representation’s HTTP headers?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#My_pages_are_password-protected;_how_do_proxy_caches_deal_with_them?"><span class="toc-number">2.8.5.</span> <span class="toc-text">My pages are password-protected; how do proxy caches deal with them?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Should_I_worry_about_security_if_people_access_my_site_through_a_cache?"><span class="toc-number">2.8.6.</span> <span class="toc-text">Should I worry about security if people access my site through a cache?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I’m_looking_for_an_integrated_Web_publishing_solution-_Which_ones_are_cache-aware?"><span class="toc-number">2.8.7.</span> <span class="toc-text">I’m looking for an integrated Web publishing solution. Which ones are cache-aware?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#My_images_expire_a_month_from_now,_but_I_need_to_change_them_in_the_caches_now!"><span class="toc-number">2.8.8.</span> <span class="toc-text">My images expire a month from now, but I need to change them in the caches now!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I_run_a_Web_Hosting_service-_How_can_I_let_my_users_publish_cache-friendly_pages?"><span class="toc-number">2.8.9.</span> <span class="toc-text">I run a Web Hosting service. How can I let my users publish cache-friendly pages?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I’ve_marked_my_pages_as_cacheable,_but_my_browser_keeps_requesting_them_on_every_request-_How_do_I_force_the_cache_to_keep_representations_of_them?"><span class="toc-number">2.8.10.</span> <span class="toc-text">I’ve marked my pages as cacheable, but my browser keeps requesting them on every request. How do I force the cache to keep representations of them?</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation_Notes_—_Web_Servers"><span class="toc-number">2.9.</span> <span class="toc-text">Implementation Notes — Web Servers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache_HTTP_Server"><span class="toc-number">2.9.1.</span> <span class="toc-text">Apache HTTP Server</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#activate_mod_expires"><span class="toc-number">2.10.</span> <span class="toc-text">activate mod_expires</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expire_-gif’s_1_month_from_when_they’re_accessed"><span class="toc-number">2.11.</span> <span class="toc-text">Expire .gif’s 1 month from when they’re accessed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expire_everything_else_1_day_from_when_it’s_last_modified"><span class="toc-number">2.12.</span> <span class="toc-text">Expire everything else 1 day from when it’s last modified</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#(this_uses_the_Alternative_syntax)"><span class="toc-number">2.13.</span> <span class="toc-text">(this uses the Alternative syntax)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Apply_a_Cache-Control_header_to_index-html"><span class="toc-number">2.14.</span> <span class="toc-text">Apply a Cache-Control header to index.html</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Microsoft_IIS"><span class="toc-number">2.14.1.</span> <span class="toc-text">Microsoft IIS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Netscape/iPlanet_Enterprise_Server"><span class="toc-number">2.14.2.</span> <span class="toc-text">Netscape/iPlanet Enterprise Server</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation_Notes_—_Server-Side_Scripting"><span class="toc-number">2.15.</span> <span class="toc-text">Implementation Notes — Server-Side Scripting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CGI"><span class="toc-number">2.15.1.</span> <span class="toc-text">CGI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server_Side_Includes"><span class="toc-number">2.15.2.</span> <span class="toc-text">Server Side Includes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PHP"><span class="toc-number">2.15.3.</span> <span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cold_Fusion"><span class="toc-number">2.15.4.</span> <span class="toc-text">Cold Fusion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ASP_and_ASP-NET"><span class="toc-number">2.15.5.</span> <span class="toc-text">ASP and ASP.NET</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#References_and_Further_Information"><span class="toc-number">2.16.</span> <span class="toc-text">References and Further Information</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP_1-1_Specification"><span class="toc-number">2.16.1.</span> <span class="toc-text">HTTP 1.1 Specification</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Web-Caching-com"><span class="toc-number">2.16.2.</span> <span class="toc-text">Web-Caching.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#On_Interpreting_Access_Statistics"><span class="toc-number">2.16.3.</span> <span class="toc-text">On Interpreting Access Statistics</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#REDbot"><span class="toc-number">2.16.4.</span> <span class="toc-text">REDbot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cgi_buffer_Library"><span class="toc-number">2.16.5.</span> <span class="toc-text">cgi_buffer Library</span></a></li></ol></li></ol></li></ol>
-		</div>
-		
-		<h2 id="前言">前言</h2>
-<p>全文转载，原地址：<a href="https://www.mnot.net/cache_docs/#BROWSER" target="_blank" rel="external">https://www.mnot.net/cache_docs/#BROWSER</a></p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##前言<br>全文转载，原地址：<a href="https://www.mnot.net/cache_docs/#BROWSER" target="_blank" rel="external">https://www.mnot.net/cache_docs/#BROWSER</a></p>
 <p>中文翻译地址：<a href="http://www.chedong.com/tech/cache_docs.html" target="_blank" rel="external">http://www.chedong.com/tech/cache_docs.html</a></p>
-<h2 id="Caching_Tutorial">Caching Tutorial</h2>
-<blockquote>
+<h2 id="Caching_Tutorial">Caching Tutorial</h2><blockquote>
 <p>This is an informational document. Although technical in nature, it attempts to make the concepts involved understandable and applicable in real-world situations. Because of this, some aspects of the material are simplified or omitted, for the sake of clarity. If you are interested in the minutia of the subject, please explore the References and Further Information at the end.</p>
 </blockquote>
-<h3 id="What’s_a_Web_Cache?_Why_do_people_use_them?">What’s a Web Cache? Why do people use them?</h3>
-<p>A Web cache sits between one or more Web servers (also known as origin servers) and a client or many clients, and watches requests come by, saving copies of the responses — like HTML pages, images and files (collectively known as representations) — for itself. Then, if there is another request for the same URL, it can use the response that it has, instead of asking the origin server for it again.</p>
+<h3 id="What’s_a_Web_Cache?_Why_do_people_use_them?">What’s a Web Cache? Why do people use them?</h3><p>A Web cache sits between one or more Web servers (also known as origin servers) and a client or many clients, and watches requests come by, saving copies of the responses — like HTML pages, images and files (collectively known as representations) — for itself. Then, if there is another request for the same URL, it can use the response that it has, instead of asking the origin server for it again.</p>
 <p>There are two main reasons that Web caches are used:</p>
+<a id="more"></a>
 <ul>
 <li>To reduce latency — Because the request is satisfied from the cache (which is closer to the client) instead of the origin server, it takes less time for it to get the representation and display it. This makes the Web seem more responsive.</li>
 <li>To reduce network traffic — Because representations are reused, it reduces the amount of bandwidth used by a client. This saves money if the client is paying for traffic, and keeps their bandwidth requirements lower and more manageable.</li>
 </ul>
-<h3 id="Kinds_of_Web_Caches">Kinds of Web Caches</h3>
-<h4 id="Browser_Caches">Browser Caches</h4>
-<p>If you examine the preferences dialog of any modern Web browser (like Internet Explorer, Safari or Mozilla), you’ll probably notice a “cache” setting. This lets you set aside a section of your computer’s hard disk to store representations that you’ve seen, just for you. The browser cache works according to fairly simple rules. It will check to make sure that the representations are fresh, usually once a session (that is, the once in the current invocation of the browser).</p>
+<h3 id="Kinds_of_Web_Caches">Kinds of Web Caches</h3><h4 id="Browser_Caches">Browser Caches</h4><p>If you examine the preferences dialog of any modern Web browser (like Internet Explorer, Safari or Mozilla), you’ll probably notice a “cache” setting. This lets you set aside a section of your computer’s hard disk to store representations that you’ve seen, just for you. The browser cache works according to fairly simple rules. It will check to make sure that the representations are fresh, usually once a session (that is, the once in the current invocation of the browser).</p>
 <p>This cache is especially useful when users hit the “back” button or click a link to see a page they’ve just looked at. Also, if you use the same navigation images throughout your site, they’ll be served from browsers’ caches almost instantaneously.</p>
-<h4 id="Proxy_Caches">Proxy Caches</h4>
-<p>Web proxy caches work on the same principle, but a much larger scale. Proxies serve hundreds or thousands of users in the same way; large corporations and ISPs often set them up on their firewalls, or as standalone devices (also known as intermediaries).</p>
+<h4 id="Proxy_Caches">Proxy Caches</h4><p>Web proxy caches work on the same principle, but a much larger scale. Proxies serve hundreds or thousands of users in the same way; large corporations and ISPs often set them up on their firewalls, or as standalone devices (also known as intermediaries).</p>
 <p>Because proxy caches aren’t part of the client or the origin server, but instead are out on the network, requests have to be routed to them somehow. One way to do this is to use your browser’s proxy setting to manually tell it what proxy to use; another is using interception. Interception proxies have Web requests redirected to them by the underlying network itself, so that clients don’t need to be configured for them, or even know about them.</p>
 <p>Proxy caches are a type of shared cache; rather than just having one person using them, they usually have a large number of users, and because of this they are very good at reducing latency and network traffic. That’s because popular representations are reused a number of times.</p>
-<h4 id="Gateway_Caches">Gateway Caches</h4>
-<p>Also known as “reverse proxy caches” or “surrogate caches,” gateway caches are also intermediaries, but instead of being deployed by network administrators to save bandwidth, they’re typically deployed by Webmasters themselves, to make their sites more scalable, reliable and better performing.</p>
+<h4 id="Gateway_Caches">Gateway Caches</h4><p>Also known as “reverse proxy caches” or “surrogate caches,” gateway caches are also intermediaries, but instead of being deployed by network administrators to save bandwidth, they’re typically deployed by Webmasters themselves, to make their sites more scalable, reliable and better performing.</p>
 <p>Requests can be routed to gateway caches by a number of methods, but typically some form of load balancer is used to make one or more of them look like the origin server to clients.</p>
 <p>Content delivery networks (CDNs) distribute gateway caches throughout the Internet (or a part of it) and sell caching to interested Web sites. Speedera and Akamai are examples of CDNs.</p>
 <p>This tutorial focuses mostly on browser and proxy caches, although some of the information is suitable for those interested in gateway caches as well.</p>
-<h3 id="Aren’t_Web_Caches_bad_for_me?_Why_should_I_help_them?">Aren’t Web Caches bad for me? Why should I help them?</h3>
-<p>Web caching is one of the most misunderstood technologies on the Internet. Webmasters in particular fear losing control of their site, because a proxy cache can “hide” their users from them, making it difficult to see who’s using the site.</p>
+<h3 id="Aren’t_Web_Caches_bad_for_me?_Why_should_I_help_them?">Aren’t Web Caches bad for me? Why should I help them?</h3><p>Web caching is one of the most misunderstood technologies on the Internet. Webmasters in particular fear losing control of their site, because a proxy cache can “hide” their users from them, making it difficult to see who’s using the site.</p>
 <p>Unfortunately for them, even if Web caches didn’t exist, there are too many variables on the Internet to assure that they’ll be able to get an accurate picture of how users see their site. If this is a big concern for you, this tutorial will teach you how to get the statistics you need without making your site cache-unfriendly.</p>
 <p>Another concern is that caches can serve content that is out of date, or stale. However, this tutorial can show you how to configure your server to control how your content is cached.</p>
 <blockquote>
@@ -141,8 +261,7 @@ This is an informational doc">
 <p>On the other hand, if you plan your site well, caches can help your Web site load faster, and save load on your server and Internet link. The difference can be dramatic; a site that is difficult to cache may take several seconds to load, while one that takes advantage of caching can seem instantaneous in comparison. Users will appreciate a fast-loading site, and will visit more often.</p>
 <p>Think of it this way; many large Internet companies are spending millions of dollars setting up farms of servers around the world to replicate their content, in order to make it as fast to access as possible for their users. Caches do the same for you, and they’re even closer to the end user. Best of all, you don’t have to pay for them.</p>
 <p>The fact is that proxy and browser caches will be used whether you like it or not. If you don’t configure your site to be cached correctly, it will be cached using whatever defaults the cache’s administrator decides upon.</p>
-<h3 id="How_Web_Caches_Work">How Web Caches Work</h3>
-<p>All caches have a set of rules that they use to determine when to serve a representation from the cache, if it’s available. Some of these rules are set in the protocols (HTTP 1.0 and 1.1), and some are set by the administrator of the cache (either the user of the browser cache, or the proxy administrator).</p>
+<h3 id="How_Web_Caches_Work">How Web Caches Work</h3><p>All caches have a set of rules that they use to determine when to serve a representation from the cache, if it’s available. Some of these rules are set in the protocols (HTTP 1.0 and 1.1), and some are set by the administrator of the cache (either the user of the browser cache, or the proxy administrator).</p>
 <p>Generally speaking, these are the most common rules that are followed (don’t worry if you don’t understand the details, it will be explained below):</p>
 <ol>
 <li>If the response’s headers tell the cache not to keep it, it won’t.</li>
@@ -161,42 +280,37 @@ This is an informational doc">
 </ol>
 <p>If no validator (an <code>ETag</code> or <code>Last-Modified</code> header) is present on a response, and it doesn’t have any explicit freshness information, it will usually — but not always — be considered uncacheable.</p>
 <p>Together, <em>freshness</em> and <em>validation</em> are the most important ways that a cache works with content. A fresh representation will be available instantly from the cache, while a validated representation will avoid sending the entire representation over again if it hasn’t changed.</p>
-<h3 id="How_(and_how_not)_to_Control_Caches">How (and how not) to Control Caches</h3>
-<p>There are several tools that Web designers and Webmasters can use to fine-tune how caches will treat their sites. It may require getting your hands a little dirty with your server’s configuration, but the results are worth it. For details on how to use these tools with your server, see the Implementation sections below.</p>
-<h4 id="HTML_Meta_Tags_and_HTTP_Headers">HTML Meta Tags and HTTP Headers</h4>
-<p>HTML authors can put tags in a document’s <head> section that describe its attributes. These meta tags are often used in the belief that they can mark a document as uncacheable, or expire it at a certain time.</head></p>
+<h3 id="How_(and_how_not)_to_Control_Caches">How (and how not) to Control Caches</h3><p>There are several tools that Web designers and Webmasters can use to fine-tune how caches will treat their sites. It may require getting your hands a little dirty with your server’s configuration, but the results are worth it. For details on how to use these tools with your server, see the Implementation sections below.</p>
+<h4 id="HTML_Meta_Tags_and_HTTP_Headers">HTML Meta Tags and HTTP Headers</h4><p>HTML authors can put tags in a document’s <head> section that describe its attributes. These meta tags are often used in the belief that they can mark a document as uncacheable, or expire it at a certain time.</head></p>
 <p>Meta tags are easy to use, but aren’t very effective. That’s because they’re only honored by a few browser caches, not proxy caches (which almost never read the HTML in the document). While it may be tempting to put a Pragma: no-cache meta tag into a Web page, it won’t necessarily cause it to be kept fresh.</p>
 <blockquote>
 <p>If your site is hosted at an ISP or hosting farm and they don’t give you the ability to set arbitrary HTTP headers (like Expires and Cache-Control), complain loudly; these are tools necessary for doing your job.</p>
 </blockquote>
 <p>On the other hand, true HTTP headers give you a lot of control over how both browser caches and proxies handle your representations. They can’t be seen in the HTML, and are usually automatically generated by the Web server. However, you can control them to some degree, depending on the server you use. In the following sections, you’ll see what HTTP headers are interesting, and how to apply them to your site.</p>
 <p>HTTP headers are sent by the server before the HTML, and only seen by the browser and any intermediate caches. Typical HTTP 1.1 response headers might look like this:</p>
-<pre><code><span class="status">HTTP/1.1 <span class="number">200</span> OK</span>
-<span class="attribute">Date</span>: <span class="string">Fri, 30 Oct 1998 13:19:41 GMT</span>
-<span class="attribute">Server</span>: <span class="string">Apache/1.3.3 (Unix)</span>
-<span class="attribute">Cache-Control</span>: <span class="string">max-age=3600, must-revalidate</span>
-<span class="attribute">Expires</span>: <span class="string">Fri, 30 Oct 1998 14:19:41 GMT</span>
-<span class="attribute">Last-Modified</span>: <span class="string">Mon, 29 Jun 1998 02:28:12 GMT</span>
-<span class="attribute">ETag</span>: <span class="string">"3e86-410-3596fbbc"</span>
-<span class="attribute">Content-Length</span>: <span class="string">1040</span>
-<span class="attribute">Content-Type</span>: <span class="string">text/html</span>
+<pre><code>HTTP/<span class="number">1.1</span> <span class="number">200</span> OK
+Date: Fri, <span class="number">30</span> Oct <span class="number">1998</span> <span class="number">13</span>:<span class="number">19</span>:<span class="number">41</span> GMT
+Server: Apache/<span class="number">1.3</span><span class="number">.3</span> (Unix)
+Cache-Control: max-age=<span class="number">3600</span>, must-revalidate
+Expires: Fri, <span class="number">30</span> Oct <span class="number">1998</span> <span class="number">14</span>:<span class="number">19</span>:<span class="number">41</span> GMT
+Last-Modified: Mon, <span class="number">29</span> Jun <span class="number">1998</span> <span class="number">02</span>:<span class="number">28</span>:<span class="number">12</span> GMT
+ETag: <span class="string">"3e86-410-3596fbbc"</span>
+Content-Length: <span class="number">1040</span>
+Content-Type: text/html
 </code></pre><p>The HTML would follow these headers, separated by a blank line. See the Implementation sections for information about how to set HTTP headers.</p>
-<h4 id="Pragma_HTTP_Headers_(and_why_they_don’t_work)">Pragma HTTP Headers (and why they don’t work)</h4>
-<p>Many people believe that assigning a Pragma: no-cache HTTP header to a representation will make it uncacheable. This is not necessarily true; the HTTP specification does not set any guidelines for Pragma response headers; instead, Pragma request headers (the headers that a browser sends to a server) are discussed. Although a few caches may honor this header, the majority won’t, and it won’t have any effect. Use the headers below instead.</p>
-<h4 id="Controlling_Freshness_with_the_Expires_HTTP_Header">Controlling Freshness with the Expires HTTP Header</h4>
-<p>The <code>Expires</code> HTTP header is a basic means of controlling caches; it tells all caches how long the associated representation is fresh for. After that time, caches will always check back with the origin server to see if a document is changed. Expires headers are supported by practically every cache.</p>
+<h4 id="Pragma_HTTP_Headers_(and_why_they_don’t_work)">Pragma HTTP Headers (and why they don’t work)</h4><p>Many people believe that assigning a Pragma: no-cache HTTP header to a representation will make it uncacheable. This is not necessarily true; the HTTP specification does not set any guidelines for Pragma response headers; instead, Pragma request headers (the headers that a browser sends to a server) are discussed. Although a few caches may honor this header, the majority won’t, and it won’t have any effect. Use the headers below instead.</p>
+<h4 id="Controlling_Freshness_with_the_Expires_HTTP_Header">Controlling Freshness with the Expires HTTP Header</h4><p>The <code>Expires</code> HTTP header is a basic means of controlling caches; it tells all caches how long the associated representation is fresh for. After that time, caches will always check back with the origin server to see if a document is changed. Expires headers are supported by practically every cache.</p>
 <p>Most Web servers allow you to set Expires response headers in a number of ways. Commonly, they will allow setting an absolute time to expire, a time based on the last time that the client retrieved the representation (last access time), or a time based on the last time the document changed on your server (last modification time).</p>
 <p><code>Expires</code> headers are especially good for making static images (like navigation bars and buttons) cacheable. Because they don’t change much, you can set extremely long expiry time on them, making your site appear much more responsive to your users. They’re also useful for controlling caching of a page that is regularly changed. For instance, if you update a news page once a day at 6am, you can set the representation to expire at that time, so caches will know when to get a fresh copy, without users having to hit ‘reload’.</p>
 <p>The <strong>only</strong> value valid in an Expires header is a HTTP date; anything else will most likely be interpreted as ‘in the past’, so that the representation is uncacheable. Also, remember that the time in a HTTP date is Greenwich Mean Time (GMT), not local time.</p>
 <p>For example:</p>
-<pre><code><span class="tag">Expires</span>: <span class="tag">Fri</span>, 30 <span class="tag">Oct</span> 1998 14<span class="pseudo">:19</span><span class="pseudo">:41</span> <span class="tag">GMT</span>
+<pre><code>Expires: Fri, <span class="number">30</span> Oct <span class="number">1998</span> <span class="number">14</span>:<span class="number">19</span>:<span class="number">41</span> GMT
 </code></pre><p>Although the Expires header is useful, it has some limitations. First, because there’s a date involved, the clocks on the Web server and the cache must be synchronised; if they have a different idea of the time, the intended results won’t be achieved, and caches might wrongly consider stale content as fresh.</p>
 <p>Another problem with Expires is that it’s easy to forget that you’ve set some content to expire at a particular time. If you don’t update an Expires time before it passes, each and every request will go back to your Web server, increasing load and latency.</p>
 <blockquote>
 <p>It’s important to make sure that your Web server’s clock is accurate if you use the Expires header. One way to do this is using the <a href="http://www.ntp.org/" target="_blank" rel="external">Network Time Protocol</a> (NTP); talk to your local system administrator to find out more.</p>
 </blockquote>
-<h4 id="Cache-Control_HTTP_Headers">Cache-Control HTTP Headers</h4>
-<p>HTTP 1.1 introduced a new class of headers, Cache-Control response headers, to give Web publishers more control over their content, and to address the limitations of Expires.</p>
+<h4 id="Cache-Control_HTTP_Headers">Cache-Control HTTP Headers</h4><p>HTTP 1.1 introduced a new class of headers, Cache-Control response headers, to give Web publishers more control over their content, and to address the limitations of Expires.</p>
 <p>Useful Cache-Control response headers include:</p>
 <ul>
 <li><strong>max-age</strong>=[seconds] — specifies the maximum amount of time that a representation will be considered fresh. Similar to Expires, this directive is relative to the time of the request, rather than absolute. [seconds] is the number of seconds from the time of the request you wish the representation to be fresh for.</li>
@@ -209,17 +323,15 @@ This is an informational doc">
 <li><strong>proxy-revalidate</strong> — similar to must-revalidate, except that it only applies to proxy caches.</li>
 </ul>
 <p>For example:</p>
-<pre><code>Cache-Contro<span class="variable">l:</span> <span class="built_in">max</span>-age=<span class="number">3600</span>, must-revalidate
+<pre><code><span class="attribute">Cache-Control</span>: <span class="string">max-age=3600, must-revalidate</span>
 </code></pre><p>When both Cache-Control and Expires are present, Cache-Control takes precedence. If you plan to use the Cache-Control headers, you should have a look at the excellent documentation in HTTP 1.1; see References and Further Information.</p>
-<h4 id="Validators_and_Validation">Validators and Validation</h4>
-<p>In How Web Caches Work, we said that validation is used by servers and caches to communicate when a representation has changed. By using it, caches avoid having to download the entire representation when they already have a copy locally, but they’re not sure if it’s still fresh.</p>
+<h4 id="Validators_and_Validation">Validators and Validation</h4><p>In How Web Caches Work, we said that validation is used by servers and caches to communicate when a representation has changed. By using it, caches avoid having to download the entire representation when they already have a copy locally, but they’re not sure if it’s still fresh.</p>
 <p>Validators are very important; if one isn’t present, and there isn’t any freshness information (<code>Expires</code> or <code>Cache-Control</code>) available, caches will not store a representation at all.</p>
 <p>The most common validator is the time that the document last changed, as communicated in Last-Modified header. When a cache has a representation stored that includes a <code>Last-Modified</code> header, it can use it to ask the server if the representation has changed since the last time it was seen, with an <code>If-Modified-Since</code> request.</p>
 <p>HTTP 1.1 introduced a new kind of validator called the ETag. ETags are unique identifiers that are generated by the server and changed every time the representation does. Because the server controls how the ETag is generated, caches can be sure that if the ETag matches when they make a If-None-Match request, the representation really is the same.</p>
 <p>Almost all caches use Last-Modified times as validators; ETag validation is also becoming prevalent.</p>
 <p>Most modern Web servers will generate both ETag and Last-Modified headers to use as validators for static content (i.e., files) automatically; you won’t have to do anything. However, they don’t know enough about dynamic content (like CGI, ASP or database sites) to generate them; see Writing Cache-Aware Scripts.</p>
-<h3 id="Tips_for_Building_a_Cache-Aware_Site">Tips for Building a Cache-Aware Site</h3>
-<p>Besides using freshness information and validation, there are a number of other things you can do to make your site more cache-friendly.</p>
+<p>###Tips for Building a Cache-Aware Site<br>Besides using freshness information and validation, there are a number of other things you can do to make your site more cache-friendly.</p>
 <ul>
 <li><strong>Use URLs consistently</strong> — this is the golden rule of caching. If you serve the same content on different pages, to different users, or from different sites, it should use the same URL. This is the easiest and most effective way to make your site cache-friendly. For example, if you use “/index.html” in your HTML as a reference once, always use it that way.</li>
 <li><strong>Use a common library of images</strong> and other elements and refer back to them from different places.</li>
@@ -230,8 +342,7 @@ This is an informational doc">
 <li><strong>Minimize use of SSL </strong>— because encrypted pages are not stored by shared caches, use them only when you have to, and use images on SSL pages sparingly.</li>
 <li><strong>Check your pages with REDbot </strong>— it can help you apply many of the concepts in this tutorial.</li>
 </ul>
-<h3 id="Writing_Cache-Aware_Scripts">Writing Cache-Aware Scripts</h3>
-<p>By default, most scripts won’t return a validator (a Last-Modified or ETag response header) or freshness information (Expires or Cache-Control). While some scripts really are dynamic (meaning that they return a different response for every request), many (like search engines and database-driven sites) can benefit from being cache-friendly.</p>
+<h3 id="Writing_Cache-Aware_Scripts">Writing Cache-Aware Scripts</h3><p>By default, most scripts won’t return a validator (a Last-Modified or ETag response header) or freshness information (Expires or Cache-Control). While some scripts really are dynamic (meaning that they return a different response for every request), many (like search engines and database-driven sites) can benefit from being cache-friendly.</p>
 <p>Generally speaking, if a script produces output that is reproducible with the same request at a later time (whether it be minutes or days later), it should be cacheable. If the content of the script changes only depending on what’s in the URL, it is cacheable; if the output depends on a cookie, authentication information or other external criteria, it probably isn’t.</p>
 <ul>
 <li>The best way to make a script cache-friendly (as well as perform better) is to dump its content to a plain file whenever it changes. The Web server can then treat it like any other Web page, generating and using validators, which makes your life easier. Remember to only write files that have changed, so the Last-Modified times are preserved.</li>
@@ -245,48 +356,35 @@ This is an informational doc">
 <li><strong>Don’t count on all requests from a user coming from the same host</strong>, because caches often work together.</li>
 <li><strong>Generate Content-Length response headers. </strong>It’s easy to do, and it will allow the response of your script to be used in a persistent connection. This allows clients to request multiple representations on one TCP/IP connection, instead of setting up a connection for every request. It makes your site seem much faster.<br>See the Implementation Notes for more specific information.</li>
 </ul>
-<h3 id="Frequently_Asked_Questions">Frequently Asked Questions</h3>
-<h4 id="What_are_the_most_important_things_to_make_cacheable?">What are the most important things to make cacheable?</h4>
-<p>A good strategy is to identify the most popular, largest representations (especially images) and work with them first.</p>
-<h4 id="How_can_I_make_my_pages_as_fast_as_possible_with_caches?">How can I make my pages as fast as possible with caches?</h4>
-<p>The most cacheable representation is one with a long freshness time set. Validation does help reduce the time that it takes to see a representation, but the cache still has to contact the origin server to see if it’s fresh. If the cache already knows it’s fresh, it will be served directly.</p>
-<h4 id="I_understand_that_caching_is_good,_but_I_need_to_keep_statistics_on_how_many_people_visit_my_page!">I understand that caching is good, but I need to keep statistics on how many people visit my page!</h4>
-<p>If you must know every time a page is accessed, select ONE small item on a page (or the page itself), and make it uncacheable, by giving it a suitable headers. For example, you could refer to a 1x1 transparent uncacheable image from each page. The Referer header will contain information about what page called it.</p>
+<h3 id="Frequently_Asked_Questions">Frequently Asked Questions</h3><p>####What are the most important things to make cacheable?<br>A good strategy is to identify the most popular, largest representations (especially images) and work with them first.</p>
+<h4 id="How_can_I_make_my_pages_as_fast_as_possible_with_caches?">How can I make my pages as fast as possible with caches?</h4><p>The most cacheable representation is one with a long freshness time set. Validation does help reduce the time that it takes to see a representation, but the cache still has to contact the origin server to see if it’s fresh. If the cache already knows it’s fresh, it will be served directly.</p>
+<h4 id="I_understand_that_caching_is_good,_but_I_need_to_keep_statistics_on_how_many_people_visit_my_page!">I understand that caching is good, but I need to keep statistics on how many people visit my page!</h4><p>If you must know every time a page is accessed, select ONE small item on a page (or the page itself), and make it uncacheable, by giving it a suitable headers. For example, you could refer to a 1x1 transparent uncacheable image from each page. The Referer header will contain information about what page called it.</p>
 <p>Be aware that even this will not give truly accurate statistics about your users, and is unfriendly to the Internet and your users; it generates unnecessary traffic, and forces people to wait for that uncached item to be downloaded. For more information about this, see On Interpreting Access Statistics in the references.</p>
-<h4 id="How_can_I_see_a_representation’s_HTTP_headers?">How can I see a representation’s HTTP headers?</h4>
-<p>Many Web browsers let you see the Expires and Last-Modified headers are in a “page info” or similar interface. If available, this will give you a menu of the page and any representations (like images) associated with it, along with their details.</p>
+<h4 id="How_can_I_see_a_representation’s_HTTP_headers?">How can I see a representation’s HTTP headers?</h4><p>Many Web browsers let you see the Expires and Last-Modified headers are in a “page info” or similar interface. If available, this will give you a menu of the page and any representations (like images) associated with it, along with their details.</p>
 <p>To see the full headers of a representation, you can manually connect to the Web server using a Telnet client.</p>
 <p>To do so, you may need to type the port (be default, 80) into a separate field, or you may need to connect to www.example.com:80 or www.example.com 80 (note the space). Consult your Telnet client’s documentation.</p>
 <p>Once you’ve opened a connection to the site, type a request for the representation. For instance, if you want to see the headers for <a href="http://www.example.com/foo.html" target="_blank" rel="external">http://www.example.com/foo.html</a>, connect to www.example.com, port 80, and type:</p>
 <pre><code>GET /foo.html HTTP/1.1 [return]
 Host: www.example.com [<span class="link_label">return</span>][<span class="link_reference">return</span>]
 </code></pre><p>Press the Return key every time you see [return]; make sure to press it twice at the end. This will print the headers, and then the full representation. To see the headers only, substitute HEAD for GET.</p>
-<h4 id="My_pages_are_password-protected;_how_do_proxy_caches_deal_with_them?">My pages are password-protected; how do proxy caches deal with them?</h4>
-<p>By default, pages protected with HTTP authentication are considered private; they will not be kept by shared caches. However, you can make authenticated pages public with a Cache-Control: public header; HTTP 1.1-compliant caches will then allow them to be cached.</p>
+<h4 id="My_pages_are_password-protected;_how_do_proxy_caches_deal_with_them?">My pages are password-protected; how do proxy caches deal with them?</h4><p>By default, pages protected with HTTP authentication are considered private; they will not be kept by shared caches. However, you can make authenticated pages public with a Cache-Control: public header; HTTP 1.1-compliant caches will then allow them to be cached.</p>
 <p>If you’d like such pages to be cacheable, but still authenticated for every user, combine the Cache-Control: public and no-cache headers. This tells the cache that it must submit the new client’s authentication information to the origin server before releasing the representation from the cache. This would look like:</p>
 <pre><code><span class="operator"><span class="keyword">Cache</span>-Control: <span class="keyword">public</span>, <span class="keyword">no</span>-<span class="keyword">cache</span></span>
 </code></pre><p>Whether or not this is done, it’s best to minimize use of authentication; for example, if your images are not sensitive, put them in a separate directory and configure your server not to force authentication for it. That way, those images will be naturally cacheable.</p>
-<h4 id="Should_I_worry_about_security_if_people_access_my_site_through_a_cache?">Should I worry about security if people access my site through a cache?</h4>
-<p>SSL pages are not cached (or decrypted) by proxy caches, so you don’t have to worry about that. However, because caches store non-SSL requests and URLs fetched through them, you should be conscious about unsecured sites; an unscrupulous administrator could conceivably gather information about their users, especially in the URL.</p>
+<h4 id="Should_I_worry_about_security_if_people_access_my_site_through_a_cache?">Should I worry about security if people access my site through a cache?</h4><p>SSL pages are not cached (or decrypted) by proxy caches, so you don’t have to worry about that. However, because caches store non-SSL requests and URLs fetched through them, you should be conscious about unsecured sites; an unscrupulous administrator could conceivably gather information about their users, especially in the URL.</p>
 <p>In fact, any administrator on the network between your server and your clients could gather this type of information. One particular problem is when CGI scripts put usernames and passwords in the URL itself; this makes it trivial for others to find and use their login.</p>
 <p>If you’re aware of the issues surrounding Web security in general, you shouldn’t have any surprises from proxy caches.</p>
-<h4 id="I’m_looking_for_an_integrated_Web_publishing_solution-_Which_ones_are_cache-aware?">I’m looking for an integrated Web publishing solution. Which ones are cache-aware?</h4>
-<p>It varies. Generally speaking, the more complex a solution is, the more difficult it is to cache. The worst are ones which dynamically generate all content and don’t provide validators; they may not be cacheable at all. Speak with your vendor’s technical staff for more information, and see the Implementation notes below.</p>
-<h4 id="My_images_expire_a_month_from_now,_but_I_need_to_change_them_in_the_caches_now!">My images expire a month from now, but I need to change them in the caches now!</h4>
-<p>The Expires header can’t be circumvented; unless the cache (either browser or proxy) runs out of room and has to delete the representations, the cached copy will be used until then.</p>
+<h4 id="I’m_looking_for_an_integrated_Web_publishing_solution-_Which_ones_are_cache-aware?">I’m looking for an integrated Web publishing solution. Which ones are cache-aware?</h4><p>It varies. Generally speaking, the more complex a solution is, the more difficult it is to cache. The worst are ones which dynamically generate all content and don’t provide validators; they may not be cacheable at all. Speak with your vendor’s technical staff for more information, and see the Implementation notes below.</p>
+<h4 id="My_images_expire_a_month_from_now,_but_I_need_to_change_them_in_the_caches_now!">My images expire a month from now, but I need to change them in the caches now!</h4><p>The Expires header can’t be circumvented; unless the cache (either browser or proxy) runs out of room and has to delete the representations, the cached copy will be used until then.</p>
 <p>The most effective solution is to change any links to them; that way, completely new representations will be loaded fresh from the origin server. Remember that any page that refers to these representations will be cached as well. Because of this, it’s best to make static images and similar representations very cacheable, while keeping the HTML pages that refer to them on a tight leash.</p>
 <p>If you want to reload a representation from a specific cache, you can either force a reload (in Firefox, holding down shift while pressing ‘reload’ will do this by issuing a Pragma: no-cache request header) while using the cache. Or, you can have the cache administrator delete the representation through their interface.</p>
-<h4 id="I_run_a_Web_Hosting_service-_How_can_I_let_my_users_publish_cache-friendly_pages?">I run a Web Hosting service. How can I let my users publish cache-friendly pages?</h4>
-<p>If you’re using Apache, consider allowing them to use .htaccess files and providing appropriate documentation.</p>
+<h4 id="I_run_a_Web_Hosting_service-_How_can_I_let_my_users_publish_cache-friendly_pages?">I run a Web Hosting service. How can I let my users publish cache-friendly pages?</h4><p>If you’re using Apache, consider allowing them to use .htaccess files and providing appropriate documentation.</p>
 <p>Otherwise, you can establish predetermined areas for various caching attributes in each virtual server. For instance, you could specify a directory /cache-1m that will be cached for one month after access, and a /no-cache area that will be served with headers instructing caches not to store representations from it.</p>
 <p>Whatever you are able to do, it is best to work with your largest customers first on caching. Most of the savings (in bandwidth and in load on your servers) will be realized from high-volume sites.</p>
-<h4 id="I’ve_marked_my_pages_as_cacheable,_but_my_browser_keeps_requesting_them_on_every_request-_How_do_I_force_the_cache_to_keep_representations_of_them?">I’ve marked my pages as cacheable, but my browser keeps requesting them on every request. How do I force the cache to keep representations of them?</h4>
-<p>Caches aren’t required to keep a representation and reuse it; they’re only required to not keep or use them under some conditions. All caches make decisions about which representations to keep based upon their size, type (e.g., image vs. html), or by how much space they have left to keep local copies. Yours may not be considered worth keeping around, compared to more popular or larger representations.</p>
+<h4 id="I’ve_marked_my_pages_as_cacheable,_but_my_browser_keeps_requesting_them_on_every_request-_How_do_I_force_the_cache_to_keep_representations_of_them?">I’ve marked my pages as cacheable, but my browser keeps requesting them on every request. How do I force the cache to keep representations of them?</h4><p>Caches aren’t required to keep a representation and reuse it; they’re only required to not keep or use them under some conditions. All caches make decisions about which representations to keep based upon their size, type (e.g., image vs. html), or by how much space they have left to keep local copies. Yours may not be considered worth keeping around, compared to more popular or larger representations.</p>
 <p>Some caches do allow their administrators to prioritize what kinds of representations are kept, and some allow representations to be “pinned” in cache, so that they’re always available.</p>
-<h3 id="Implementation_Notes_—_Web_Servers">Implementation Notes — Web Servers</h3>
-<p>Generally speaking, it’s best to use the latest version of whatever Web server you’ve chosen to deploy. Not only will they likely contain more cache-friendly features, new versions also usually have important security and performance improvements.</p>
-<h4 id="Apache_HTTP_Server">Apache HTTP Server</h4>
-<p>Apache uses optional modules to include headers, including both Expires and Cache-Control. Both modules are available in the 1.2 or greater distribution.</p>
+<h3 id="Implementation_Notes_—_Web_Servers">Implementation Notes — Web Servers</h3><p>Generally speaking, it’s best to use the latest version of whatever Web server you’ve chosen to deploy. Not only will they likely contain more cache-friendly features, new versions also usually have important security and performance improvements.</p>
+<h4 id="Apache_HTTP_Server">Apache HTTP Server</h4><p>Apache uses optional modules to include headers, including both Expires and Cache-Control. Both modules are available in the 1.2 or greater distribution.</p>
 <p>The modules need to be built into Apache; although they are included in the distribution, they are not turned on by default. To find out if the modules are enabled in your server, find the httpd binary and run httpd -l; this should print a list of the available modules (note that this only lists compiled-in modules; on later versions of Apache, use httpd -M to include dynamically loaded modules as well). The modules we’re looking for are expires_module and headers_module.</p>
 <ul>
 <li>If they aren’t available, and you have administrative access, you can recompile Apache to include them. This can be done either by uncommenting the appropriate lines in the Configuration file, or using the -enable-module=expires and -enable-module=headers arguments to configure (1.3 or greater). Consult the INSTALL file found with the Apache distribution.</li>
@@ -296,434 +394,203 @@ Host: www.example.com [<span class="link_label">return</span>][<span class="link
 <p>Here’s an example .htaccess file that demonstrates the use of some headers.</p>
 <ul>
 <li><p>htaccess files allow web publishers to use commands normally only found in configuration files. They affect the content of the directory they’re in and their subdirectories. Talk to your server administrator to find out if they’re enabled.</p>
-<h3 id="activate_mod_expires">activate mod_expires</h3>
-<p>  ExpiresActive On</p>
-<h3 id="Expire_-gif’s_1_month_from_when_they’re_accessed">Expire .gif’s 1 month from when they’re accessed</h3>
-<p>  ExpiresByType image/gif A2592000</p>
-<h3 id="Expire_everything_else_1_day_from_when_it’s_last_modified">Expire everything else 1 day from when it’s last modified</h3>
-<h3 id="(this_uses_the_Alternative_syntax)">(this uses the Alternative syntax)</h3>
-<p>  ExpiresDefault “modification plus 1 day”</p>
-<h3 id="Apply_a_Cache-Control_header_to_index-html">Apply a Cache-Control header to index.html</h3>
-  <files index.html=""><br>  Header append Cache-Control “public, must-revalidate”<br>  </files>
+<h3 id="activate_mod_expires">activate mod_expires</h3><p>  ExpiresActive On</p>
+<h3 id="Expire_-gif’s_1_month_from_when_they’re_accessed">Expire .gif’s 1 month from when they’re accessed</h3><p>  ExpiresByType image/gif A2592000</p>
+<h3 id="Expire_everything_else_1_day_from_when_it’s_last_modified">Expire everything else 1 day from when it’s last modified</h3><h3 id="(this_uses_the_Alternative_syntax)">(this uses the Alternative syntax)</h3><p>  ExpiresDefault “modification plus 1 day”</p>
+<h3 id="Apply_a_Cache-Control_header_to_index-html">Apply a Cache-Control header to index.html</h3>  <files index.html=""><br>  Header append Cache-Control “public, must-revalidate”<br>  </files>
 </li>
 <li><p>Note that mod_expires automatically calculates and inserts a Cache-Control:max-age header as appropriate.<br>Apache 2’s configuration is very similar to that of 1.3; see the 2.2 mod_expires and mod_headers documentation for more information.</p>
 </li>
 </ul>
-<h4 id="Microsoft_IIS">Microsoft IIS</h4>
-<p>Microsoft’s Internet Information Server makes it very easy to set headers in a somewhat flexible way. Note that this is only possible in version 4 of the server, which will run only on NT Server.</p>
+<h4 id="Microsoft_IIS">Microsoft IIS</h4><p>Microsoft’s Internet Information Server makes it very easy to set headers in a somewhat flexible way. Note that this is only possible in version 4 of the server, which will run only on NT Server.</p>
 <p>To specify headers for an area of a site, select it in the Administration Tools interface, and bring up its properties. After selecting the HTTP Headers tab, you should see two interesting areas; Enable Content Expiration and Custom HTTP headers. The first should be self-explanatory, and the second can be used to apply Cache-Control headers.</p>
 <p>See the ASP section below for information about setting headers in Active Server Pages. It is also possible to set headers from ISAPI modules; refer to MSDN for details.</p>
-<h4 id="Netscape/iPlanet_Enterprise_Server">Netscape/iPlanet Enterprise Server</h4>
-<p>As of version 3.6, Enterprise Server does not provide any obvious way to set Expires headers. However, it has supported HTTP 1.1 features since version 3.0. This means that HTTP 1.1 caches (proxy and browser) will be able to take advantage of Cache-Control settings you make.</p>
+<h4 id="Netscape/iPlanet_Enterprise_Server">Netscape/iPlanet Enterprise Server</h4><p>As of version 3.6, Enterprise Server does not provide any obvious way to set Expires headers. However, it has supported HTTP 1.1 features since version 3.0. This means that HTTP 1.1 caches (proxy and browser) will be able to take advantage of Cache-Control settings you make.</p>
 <p>To use Cache-Control headers, choose Content Management | Cache Control Directives in the administration server. Then, using the Resource Picker, choose the directory where you want to set the headers. After setting the headers, click ‘OK’. For more information, see the NES manual.</p>
-<h3 id="Implementation_Notes_—_Server-Side_Scripting">Implementation Notes — Server-Side Scripting</h3>
-<p>Because the emphasis in server-side scripting is on dynamic content, it doesn’t make for very cacheable pages, even when the content could be cached. If your content changes often, but not on every page hit, consider setting a Cache-Control: max-age header; most users access pages again in a relatively short period of time. For instance, when users hit the ‘back’ button, if there isn’t any validator or freshness information available, they’ll have to wait until the page is re-downloaded from the server to see it.</p>
+<p>###Implementation Notes — Server-Side Scripting<br>Because the emphasis in server-side scripting is on dynamic content, it doesn’t make for very cacheable pages, even when the content could be cached. If your content changes often, but not on every page hit, consider setting a Cache-Control: max-age header; most users access pages again in a relatively short period of time. For instance, when users hit the ‘back’ button, if there isn’t any validator or freshness information available, they’ll have to wait until the page is re-downloaded from the server to see it.</p>
 <blockquote>
 <p>One thing to keep in mind is that it may be easier to set HTTP headers with your Web server rather than in the scripting language. Try both.</p>
 </blockquote>
-<h4 id="CGI">CGI</h4>
-<p>CGI scripts are one of the most popular ways to generate content. You can easily append HTTP response headers by adding them before you send the body; Most CGI implementations already require you to do this for the Content-Type header. For instance, in Perl;</p>
+<h4 id="CGI">CGI</h4><p>CGI scripts are one of the most popular ways to generate content. You can easily append HTTP response headers by adding them before you send the body; Most CGI implementations already require you to do this for the Content-Type header. For instance, in Perl;</p>
 <pre><code><span class="comment">#!/usr/bin/perl</span>
-<span class="literal">print</span> <span class="string">"Content-type: text/html\n"</span><span class="comment">;</span>
-<span class="literal">print</span> <span class="string">"Expires: Thu, 29 Oct 1998 17:04:19 GMT\n"</span><span class="comment">;</span>
-<span class="literal">print</span> <span class="string">"\n"</span><span class="comment">;</span>
+<span class="built_in">print</span> <span class="string">"Content-type: text/html\n"</span>;
+<span class="built_in">print</span> <span class="string">"Expires: Thu, 29 Oct 1998 17:04:19 GMT\n"</span>;
+<span class="built_in">print</span> <span class="string">"\n"</span>;
 <span class="comment">### the content body follows...</span>
 </code></pre><p>Since it’s all text, you can easily generate Expires and other date-related headers with in-built functions. It’s even easier if you use Cache-Control: max-age;</p>
-<pre><code><span class="literal">print</span> <span class="string">"Cache-Control: max-age=600\n"</span><span class="comment">;</span>
+<pre><code>print "<span class="operator"><span class="keyword">Cache</span>-Control: <span class="keyword">max</span>-age=<span class="number">600</span>\<span class="keyword">n</span><span class="string">";</span></span>
 </code></pre><p>This will make the script cacheable for 10 minutes after the request, so that if the user hits the ‘back’ button, they won’t be resubmitting the request.</p>
 <p>The CGI specification also makes request headers that the client sends available in the environment of the script; each header has ‘HTTP_’ prepended to its name. So, if a client makes an If-Modified-Since request, it will show up as HTTP_IF_MODIFIED_SINCE.</p>
 <p>See also the cgi_buffer library, which automatically handles ETag generation and validation, Content-Length generation and gzip content-coding for Perl and Python CGI scripts with a one-line include. The Python version can also be used to wrap arbitrary CGI scripts with.</p>
-<h4 id="Server_Side_Includes">Server Side Includes</h4>
-<p>SSI (often used with the extension .shtml) is one of the first ways that Web publishers were able to get dynamic content into pages. By using special tags in the pages, a limited form of in-HTML scripting was available.</p>
+<h4 id="Server_Side_Includes">Server Side Includes</h4><p>SSI (often used with the extension .shtml) is one of the first ways that Web publishers were able to get dynamic content into pages. By using special tags in the pages, a limited form of in-HTML scripting was available.</p>
 <p>Most implementations of SSI do not set validators, and as such are not cacheable. However, Apache’s implementation does allow users to specify which SSI files can be cached, by setting the group execute permissions on the appropriate files, combined with the XbitHack full directive. For more information, see the mod_include documentation.</p>
-<h4 id="PHP">PHP</h4>
-<p>PHP is a server-side scripting language that, when built into the server, can be used to embed scripts inside a page’s HTML, much like SSI, but with a far larger number of options. PHP can be used as a CGI script on any Web server (Unix or Windows), or as an Apache module.</p>
+<h4 id="PHP">PHP</h4><p>PHP is a server-side scripting language that, when built into the server, can be used to embed scripts inside a page’s HTML, much like SSI, but with a far larger number of options. PHP can be used as a CGI script on any Web server (Unix or Windows), or as an Apache module.</p>
 <p>By default, representations processed by PHP are not assigned validators, and are therefore uncacheable. However, developers can set HTTP headers by using the Header() function.</p>
 <p>For example, this will create a Cache-Control header, as well as an Expires header three days in the future:</p>
-<pre><code><span class="php"><span class="preprocessor">&lt;?php</span>
+<pre><code>&lt;?php
  Header(<span class="string">"Cache-Control: must-revalidate"</span>);
 
  <span class="variable">$offset</span> = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span> * <span class="number">3</span>;
  <span class="variable">$ExpStr</span> = <span class="string">"Expires: "</span> . gmdate(<span class="string">"D, d M Y H:i:s"</span>, time() + <span class="variable">$offset</span>) . <span class="string">" GMT"</span>;
  Header(<span class="variable">$ExpStr</span>);
-<span class="preprocessor">?&gt;</span></span>
+?&gt;
 </code></pre><p>Remember that the Header() function MUST come before any other output.</p>
 <p>As you can see, you’ll have to create the HTTP date for an Expires header by hand; PHP doesn’t provide a function to do it for you (although recent versions have made it easier; see the <a href="http://php.net/manual/zh/function.date.php" target="_blank" rel="external">PHP’s date documentation</a>). Of course, it’s easy to set a Cache-Control: max-age header, which is just as good for most situations.</p>
 <p>For more information, see the<a href="http://php.net/manual/zh/function.header.php" target="_blank" rel="external"> manual entry for header.</a></p>
 <p>See also the cgi_buffer library, which automatically handles ETag generation and validation, Content-Length generation and gzip content-coding for PHP scripts with a one-line include.</p>
-<h4 id="Cold_Fusion">Cold Fusion</h4>
-<p>Cold Fusion, by Macromedia is a commercial server-side scripting engine, with support for several Web servers on Windows, Linux and several flavors of Unix.</p>
+<h4 id="Cold_Fusion">Cold Fusion</h4><p>Cold Fusion, by Macromedia is a commercial server-side scripting engine, with support for several Web servers on Windows, Linux and several flavors of Unix.</p>
 <p>Cold Fusion makes setting arbitrary HTTP headers relatively easy, with the CFHEADER tag. Unfortunately, their example for setting an Expires header, as below, is a bit misleading.</p>
-<pre><code>&lt;CFHEADER <span class="variable">NAME=</span><span class="string">"Expires"</span> <span class="variable">VALUE=</span><span class="string">"#Now()#"</span>&gt;
+<pre><code><span class="tag">&lt;<span class="title">CFHEADER</span> <span class="attribute">NAME</span>=<span class="value">"Expires"</span> <span class="attribute">VALUE</span>=<span class="value">"#Now()#"</span>&gt;</span>
 </code></pre><p>It doesn’t work like you might think, because the time (in this case, when the request is made) doesn’t get converted to a HTTP-valid date; instead, it just gets printed as a representation of Cold Fusion’s Date/Time object. Most clients will either ignore such a value, or convert it to a default, like January 1, 1970.</p>
 <p>However, Cold Fusion does provide a date formatting function that will do the job; GetHttpTimeString. In combination with DateAdd, it’s easy to set Expires dates; here, we set a header to declare that representations of the page expire in one month;</p>
-<pre><code>&lt;cfheader <span class="variable">name=</span><span class="string">"Expires"</span> 
-  <span class="variable">value=</span><span class="string">"#GetHttpTimeString(DateAdd('m', 1, Now()))#"</span>&gt;
+<pre><code>&lt;cfheader <span class="property">name</span>=<span class="string">"Expires"</span> 
+  value=<span class="string">"#GetHttpTimeString(DateAdd('m', 1, Now()))#"</span>&gt;
 </code></pre><p>You can also use the CFHEADER tag to set Cache-Control: max-age and other headers.</p>
 <p>Remember that Web server headers are passed through in some deployments of Cold Fusion (such as CGI); check yours to determine whether you can use this to your advantage, by setting headers on the server instead of in Cold Fusion.</p>
-<h4 id="ASP_and_ASP-NET">ASP and ASP.NET</h4>
-<p>When setting HTTP headers from ASPs, make sure you either place the Response method calls before any HTML generation, or use Response.Buffer to buffer the output. Also, note that some versions of IIS set a Cache-Control: private header on ASPs by default, and must be declared public to be cacheable by shared caches.</p>
+<h4 id="ASP_and_ASP-NET">ASP and ASP.NET</h4><p>When setting HTTP headers from ASPs, make sure you either place the Response method calls before any HTML generation, or use Response.Buffer to buffer the output. Also, note that some versions of IIS set a Cache-Control: private header on ASPs by default, and must be declared public to be cacheable by shared caches.</p>
 <blockquote>
 <p>Active Server Pages, built into IIS and also available for other Web servers, also allows you to set HTTP headers. For instance, to set an expiry time, you can use the properties of the Response object;</p>
 </blockquote>
-<pre><code><span class="vbscript">&lt;% <span class="built_in">Response</span>.Expires=<span class="number">1440</span> %&gt;</span>
+<pre><code><span class="tag">&lt;<span class="title">%</span> <span class="attribute">Response.Expires</span>=<span class="value">1440</span> %&gt;</span>
 </code></pre><p>specifying the number of minutes from the request to expire the representation. Cache-Control headers can be added like this:</p>
-<pre><code><span class="vbscript">&lt;% <span class="built_in">Response</span>.CacheControl=<span class="string">"public"</span> %&gt;</span>
+<pre><code><span class="xml"></span><span class="vbscript">&lt;% <span class="built_in">Response</span>.CacheControl=<span class="string">"public"</span> %&gt;</span><span class="xml"></span>
 </code></pre><p>In ASP.NET, Response.Expires is deprecated; the proper way to set cache-related headers is with Response.Cache;</p>
-<pre><code><span class="built_in">Response</span>.Cache.SetExpires ( DateTime.<span class="built_in">Now</span>.AddMinutes ( <span class="number">60</span> ) ) ;
-<span class="built_in">Response</span>.Cache.SetCacheability ( HttpCacheability.<span class="keyword">Public</span> ) ;
-</code></pre><h3 id="References_and_Further_Information">References and Further Information</h3>
-<h4 id="HTTP_1-1_Specification">HTTP 1.1 Specification</h4>
-<p>The HTTP 1.1 spec has many extensions for making pages cacheable, and is the authoritative guide to implementing the protocol. See sections 13, 14.9, 14.21, and 14.25.</p>
-<h4 id="Web-Caching-com">Web-Caching.com</h4>
-<p>An excellent introduction to caching concepts, with links to other online resources.</p>
-<h4 id="On_Interpreting_Access_Statistics">On Interpreting Access Statistics</h4>
-<p>Jeff Goldberg’s informative rant on why you shouldn’t rely on access statistics and hit counters.</p>
-<h4 id="REDbot">REDbot</h4>
-<p>Examines HTTP resources to determine how they will interact with Web caches, and generally how well they use the protocol.</p>
-<h4 id="cgi_buffer_Library">cgi_buffer Library</h4>
-<p>One-line include in Perl CGI, Python CGI and PHP scripts automatically handles ETag generation and validation, Content-Length generation and gzip Content-Encoding — correctly. The Python version can also be used as a wrapper around arbitrary CGI scripts.</p>
- 
-		<blockquote><p style="font-size: 20px;">版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh">创意共享3.0许可证</a>）</p></blockquote>
-	</div>
-		<footer class="article-footer clearfix">
+<pre><code><span class="tag">Response</span><span class="class">.Cache</span><span class="class">.SetExpires</span> ( <span class="tag">DateTime</span><span class="class">.Now</span><span class="class">.AddMinutes</span> ( 60 ) ) ;
+<span class="tag">Response</span><span class="class">.Cache</span><span class="class">.SetCacheability</span> ( <span class="tag">HttpCacheability</span><span class="class">.Public</span> ) ;
+</code></pre><h3 id="References_and_Further_Information">References and Further Information</h3><h4 id="HTTP_1-1_Specification">HTTP 1.1 Specification</h4><p>The HTTP 1.1 spec has many extensions for making pages cacheable, and is the authoritative guide to implementing the protocol. See sections 13, 14.9, 14.21, and 14.25.</p>
+<h4 id="Web-Caching-com">Web-Caching.com</h4><p>An excellent introduction to caching concepts, with links to other online resources.</p>
+<h4 id="On_Interpreting_Access_Statistics">On Interpreting Access Statistics</h4><p>Jeff Goldberg’s informative rant on why you shouldn’t rely on access statistics and hit counters.</p>
+<h4 id="REDbot">REDbot</h4><p>Examines HTTP resources to determine how they will interact with Web caches, and generally how well they use the protocol.</p>
+<h4 id="cgi_buffer_Library">cgi_buffer Library</h4><p>One-line include in Perl CGI, Python CGI and PHP scripts automatically handles ETag generation and validation, Content-Length generation and gzip Content-Encoding — correctly. The Python version can also be used as a wrapper around arbitrary CGI scripts.</p>
 
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/干货/">干货</a>
-</div>
-
-
-
-<div class="article-share" id="share">
-
-  <div data-url="http://blog.xumingyang.cn/2015/04/06/wiki/Caching Tutorial/" data-title="Caching Tutorial | MingYang&#39;s blog" data-tsina="2133408912" class="share clearfix">
+      
+    </div>
+    
   </div>
-
-</div>
-</footer>   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2015/04/08/Java中一些被遗忘的数据结构/" title="Java中一些被遗忘的数据结构">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Java中一些被遗忘的数据结构</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2015/04/03/设计数据结构系列(二)/"  title="设计合适的数据结构(二)">
- <strong>NEXT:</strong><br/> 
- <span>设计合适的数据结构(二)
-</span>
-</a>
-</div>
-
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/08/Java中一些被遗忘的数据结构/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Java中一些被遗忘的数据结构
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/04/03/设计合适的数据结构(二)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">设计合适的数据结构(二)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
 </nav>
 
-	
-<section class="comment">
-	<div class="ds-thread"></div>
-</section>
-
-</div>  
-
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Caching_Tutorial"><span class="toc-number">2.</span> <span class="toc-text">Caching Tutorial</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What’s_a_Web_Cache?_Why_do_people_use_them?"><span class="toc-number">2.1.</span> <span class="toc-text">What’s a Web Cache? Why do people use them?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kinds_of_Web_Caches"><span class="toc-number">2.2.</span> <span class="toc-text">Kinds of Web Caches</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Browser_Caches"><span class="toc-number">2.2.1.</span> <span class="toc-text">Browser Caches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Proxy_Caches"><span class="toc-number">2.2.2.</span> <span class="toc-text">Proxy Caches</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Gateway_Caches"><span class="toc-number">2.2.3.</span> <span class="toc-text">Gateway Caches</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aren’t_Web_Caches_bad_for_me?_Why_should_I_help_them?"><span class="toc-number">2.3.</span> <span class="toc-text">Aren’t Web Caches bad for me? Why should I help them?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How_Web_Caches_Work"><span class="toc-number">2.4.</span> <span class="toc-text">How Web Caches Work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How_(and_how_not)_to_Control_Caches"><span class="toc-number">2.5.</span> <span class="toc-text">How (and how not) to Control Caches</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTML_Meta_Tags_and_HTTP_Headers"><span class="toc-number">2.5.1.</span> <span class="toc-text">HTML Meta Tags and HTTP Headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pragma_HTTP_Headers_(and_why_they_don’t_work)"><span class="toc-number">2.5.2.</span> <span class="toc-text">Pragma HTTP Headers (and why they don’t work)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Controlling_Freshness_with_the_Expires_HTTP_Header"><span class="toc-number">2.5.3.</span> <span class="toc-text">Controlling Freshness with the Expires HTTP Header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache-Control_HTTP_Headers"><span class="toc-number">2.5.4.</span> <span class="toc-text">Cache-Control HTTP Headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Validators_and_Validation"><span class="toc-number">2.5.5.</span> <span class="toc-text">Validators and Validation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tips_for_Building_a_Cache-Aware_Site"><span class="toc-number">2.6.</span> <span class="toc-text">Tips for Building a Cache-Aware Site</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Writing_Cache-Aware_Scripts"><span class="toc-number">2.7.</span> <span class="toc-text">Writing Cache-Aware Scripts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Frequently_Asked_Questions"><span class="toc-number">2.8.</span> <span class="toc-text">Frequently Asked Questions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#What_are_the_most_important_things_to_make_cacheable?"><span class="toc-number">2.8.1.</span> <span class="toc-text">What are the most important things to make cacheable?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How_can_I_make_my_pages_as_fast_as_possible_with_caches?"><span class="toc-number">2.8.2.</span> <span class="toc-text">How can I make my pages as fast as possible with caches?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I_understand_that_caching_is_good,_but_I_need_to_keep_statistics_on_how_many_people_visit_my_page!"><span class="toc-number">2.8.3.</span> <span class="toc-text">I understand that caching is good, but I need to keep statistics on how many people visit my page!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How_can_I_see_a_representation’s_HTTP_headers?"><span class="toc-number">2.8.4.</span> <span class="toc-text">How can I see a representation’s HTTP headers?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#My_pages_are_password-protected;_how_do_proxy_caches_deal_with_them?"><span class="toc-number">2.8.5.</span> <span class="toc-text">My pages are password-protected; how do proxy caches deal with them?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Should_I_worry_about_security_if_people_access_my_site_through_a_cache?"><span class="toc-number">2.8.6.</span> <span class="toc-text">Should I worry about security if people access my site through a cache?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I’m_looking_for_an_integrated_Web_publishing_solution-_Which_ones_are_cache-aware?"><span class="toc-number">2.8.7.</span> <span class="toc-text">I’m looking for an integrated Web publishing solution. Which ones are cache-aware?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#My_images_expire_a_month_from_now,_but_I_need_to_change_them_in_the_caches_now!"><span class="toc-number">2.8.8.</span> <span class="toc-text">My images expire a month from now, but I need to change them in the caches now!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I_run_a_Web_Hosting_service-_How_can_I_let_my_users_publish_cache-friendly_pages?"><span class="toc-number">2.8.9.</span> <span class="toc-text">I run a Web Hosting service. How can I let my users publish cache-friendly pages?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#I’ve_marked_my_pages_as_cacheable,_but_my_browser_keeps_requesting_them_on_every_request-_How_do_I_force_the_cache_to_keep_representations_of_them?"><span class="toc-number">2.8.10.</span> <span class="toc-text">I’ve marked my pages as cacheable, but my browser keeps requesting them on every request. How do I force the cache to keep representations of them?</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation_Notes_—_Web_Servers"><span class="toc-number">2.9.</span> <span class="toc-text">Implementation Notes — Web Servers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache_HTTP_Server"><span class="toc-number">2.9.1.</span> <span class="toc-text">Apache HTTP Server</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#activate_mod_expires"><span class="toc-number">2.10.</span> <span class="toc-text">activate mod_expires</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expire_-gif’s_1_month_from_when_they’re_accessed"><span class="toc-number">2.11.</span> <span class="toc-text">Expire .gif’s 1 month from when they’re accessed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expire_everything_else_1_day_from_when_it’s_last_modified"><span class="toc-number">2.12.</span> <span class="toc-text">Expire everything else 1 day from when it’s last modified</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#(this_uses_the_Alternative_syntax)"><span class="toc-number">2.13.</span> <span class="toc-text">(this uses the Alternative syntax)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Apply_a_Cache-Control_header_to_index-html"><span class="toc-number">2.14.</span> <span class="toc-text">Apply a Cache-Control header to index.html</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Microsoft_IIS"><span class="toc-number">2.14.1.</span> <span class="toc-text">Microsoft IIS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Netscape/iPlanet_Enterprise_Server"><span class="toc-number">2.14.2.</span> <span class="toc-text">Netscape/iPlanet Enterprise Server</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation_Notes_—_Server-Side_Scripting"><span class="toc-number">2.15.</span> <span class="toc-text">Implementation Notes — Server-Side Scripting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CGI"><span class="toc-number">2.15.1.</span> <span class="toc-text">CGI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Server_Side_Includes"><span class="toc-number">2.15.2.</span> <span class="toc-text">Server Side Includes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PHP"><span class="toc-number">2.15.3.</span> <span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cold_Fusion"><span class="toc-number">2.15.4.</span> <span class="toc-text">Cold Fusion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ASP_and_ASP-NET"><span class="toc-number">2.15.5.</span> <span class="toc-text">ASP and ASP.NET</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#References_and_Further_Information"><span class="toc-number">2.16.</span> <span class="toc-text">References and Further Information</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP_1-1_Specification"><span class="toc-number">2.16.1.</span> <span class="toc-text">HTTP 1.1 Specification</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Web-Caching-com"><span class="toc-number">2.16.2.</span> <span class="toc-text">Web-Caching.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#On_Interpreting_Access_Statistics"><span class="toc-number">2.16.3.</span> <span class="toc-text">On Interpreting Access Statistics</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#REDbot"><span class="toc-number">2.16.4.</span> <span class="toc-text">REDbot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cgi_buffer_Library"><span class="toc-number">2.16.5.</span> <span class="toc-text">cgi_buffer Library</span></a></li></ol></li></ol></li></ol>
-  </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
-<aside class="clearfix">
-
   
-<div class="categorieslist">
-	<p class="asidetitle">分类</p>
-		<ul>
-		
-			<li><a href="/categories/Docker/" title="Docker">Docker<sup>2</sup></a></li>
-		
-			<li><a href="/categories/Java/" title="Java">Java<sup>12</sup></a></li>
-		
-			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
-		
-			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
-		
-			<li><a href="/categories/基础知识/" title="基础知识">基础知识<sup>2</sup></a></li>
-		
-			<li><a href="/categories/大数据/" title="大数据">大数据<sup>1</sup></a></li>
-		
-			<li><a href="/categories/干货/" title="干货">干货<sup>2</sup></a></li>
-		
-		</ul>
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
 </div>
 
 
-  
-<div class="tagslist">
-	<p class="asidetitle">标签</p>
-		<ul class="clearfix">
-		
-			<li><a href="/tags/CAS/" title="CAS">CAS<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Callable/" title="Callable">Callable<sup>1</sup></a></li>
-		
-			<li><a href="/tags/ConcurrentLinkedDeque/" title="ConcurrentLinkedDeque">ConcurrentLinkedDeque<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/LSM/" title="LSM">LSM<sup>1</sup></a></li>
-		
-			<li><a href="/tags/LinkedBlockingDeque/" title="LinkedBlockingDeque">LinkedBlockingDeque<sup>1</sup></a></li>
-		
-			<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/expdp/" title="expdp">expdp<sup>1</sup></a></li>
-		
-			<li><a href="/tags/interface/" title="interface">interface<sup>1</sup></a></li>
-		
-			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
-		
-			<li><a href="/tags/java-final-static/" title="java final static">java final static<sup>1</sup></a></li>
-		
-			<li><a href="/tags/maker/" title="maker">maker<sup>1</sup></a></li>
-		
-			<li><a href="/tags/oracle/" title="oracle">oracle<sup>1</sup></a></li>
-		
-			<li><a href="/tags/spool/" title="spool">spool<sup>1</sup></a></li>
-		
-			<li><a href="/tags/sqluldr2/" title="sqluldr2">sqluldr2<sup>1</sup></a></li>
-		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>1</sup></a></li>
-		
-			<li><a href="/tags/大数据/" title="大数据">大数据<sup>1</sup></a></li>
-		
-			<li><a href="/tags/容器/" title="容器">容器<sup>2</sup></a></li>
-		
-			<li><a href="/tags/并发/" title="并发">并发<sup>1</sup></a></li>
-		
-			<li><a href="/tags/序列化/" title="序列化">序列化<sup>1</sup></a></li>
-		
-		</ul>
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="wiki/Caching Tutorial" data-title="Caching Tutorial" data-url="http://blog.xumingyang.cn/2015/04/06/wiki/Caching Tutorial/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
 </div>
 
 
-  <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
-    <ul>
-      <li><a href="http://blog.liuwanlin.info/" target="_blank" title="流星的博客">流星的博客</a></li>
-      <li><a href="http://study.163.com/curricula/cs.htm" target="_blank" title="计算机专业体系">网易云课堂</a></li>
-    </ul>
-</div>
 
 
-  <div class="rsspart">
-	<a href="atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
-
-</aside>
-</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
     </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<div class="social-font clearfix">
-		
-		<a href="http://weibo.com/2133408912" target="_blank" title="weibo"></a>
-		
-		
-		<a href="https://twitter.com/xmysilas" target="_blank" title="twitter"></a>
-		
-		
-		<a href="https://github.com/xumyselfcn" target="_blank" title="github"></a>
-		
-		
-		
-	</div>
-		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
-		
-		<a href="http://blog.xumingyang.cn" target="_blank" title="MingYang">MingYang</a>
-		
-		</p>
-</div>
+  </div>
 </footer>
-    <script src="/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
-        
-    }
-  });
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      h  = $('article h2')
-      ah = $('article h2'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  if(ah.length==0){
-    t.css('display','none');
-  }else{
-    c.click(function(){
-      ta.css('display', 'block').addClass('fadeIn');
-    });
-    o.click(function(){
-      ta.css('display', 'none');
-    });
-    $(window).scroll(function(){
-      ta.css("top",Math.max(140,320-$(this).scrollTop()));
-    });
-  };
-});
-</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
 
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina');
-  var html = [
-  '<a href="#" class="overlay" id="qrcode"></a>',
-  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
-  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-  $('.article-share-qrcode').click(function(){
-    var imgSrc = $('#qrcode-pic').attr('data-src');
-    $('#qrcode-pic').attr('src', imgSrc);
-    $('#qrcode-pic').load(function(){
-        $('.qrcode strong').text(' ');
-    });
-  });
-});     
-</script>
-
-
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"xumyselfcn"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-}); 
-</script>
-
-
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-56283023-2', 'blog.xumingyang.cn## e.g. yangjian.me your google analytics site or set the value as auto.');  
-ga('send', 'pageview');
-</script>
 <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?04e728ca15bc5226511b0c701ac60ce8";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
-  </body>
+  </div>
+</body>
 </html>

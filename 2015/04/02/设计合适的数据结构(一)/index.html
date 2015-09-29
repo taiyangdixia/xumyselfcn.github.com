@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>设计合适的数据结构(一) | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。
+Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。
+这种抽象数据类型又称为池（或者包）。它对存储工作很有用，产生的新工作被插入到池中；而当有工人可用时，将从">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计合适的数据结构(一)">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/04/02/设计合适的数据结构(一)/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。
+Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。
+这种抽象数据类型又称为池（或者包）。它对存储工作很有用，产生的新工作被插入到池中；而当有工人可用时，将从">
+<meta property="og:updated_time" content="2015-09-07T08:05:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计合适的数据结构(一)">
+<meta name="twitter:description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。
+Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。
+这种抽象数据类型又称为池（或者包）。它对存储工作很有用，产生的新工作被插入到池中；而当有工人可用时，将从">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-设计合适的数据结构(一)" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/02/设计合适的数据结构(一)/" class="article-date">
+  	<time datetime="2015-04-02T12:28:31.000Z" itemprop="datePublished">2015-04-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      设计合适的数据结构(一)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/基础知识/">基础知识</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题背景">问题背景</h2><blockquote>
+<p>设计实现一个抽象数据类型，能支持下列操作：</p>
+<p>Insert(x):即使x已在数据结构中，也要进行插入操作，换句话说，数据结构支持重复的元素。</p>
+<p>Remove():从数据结构中删除任意一个元素，然后返回该值。同样，任意元素都可以被删除。如果同一个元素有多份副本，那么只需要删除其中一份副本。</p>
+<p>这种抽象数据类型又称为池（或者包）。它对存储工作很有用，产生的新工作被插入到池中；而当有工人可用时，将从池中删除一项工作。所有的操作都只需要O(1)的时间。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="第一版">第一版</h3><p>本题初见，感觉队列(或者栈)比较满足，因为只需要支持插入操作和删除任意一个元素并返回该值就行，甚至对于重复元素也不需要进行特别的修改，代码如下：</p>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Pool&lt;E&gt;</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">LinkedList&lt;E&gt;</span>{</span>
+    <span class="keyword">private</span> static <span class="keyword">final</span> long serialVersionUID = -<span class="number">6070787603102142467</span>L;
+    <span class="type">Queue</span>&lt;<span class="type">E</span>&gt; queue = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;<span class="type">E</span>&gt;();
+
+    public void insert(<span class="type">E</span> e){
+        queue.add(e);
+    }
+
+    public <span class="type">E</span> remove(){
+        <span class="keyword">return</span> queue.poll();
+    }
+
+}
+</code></pre><p>这种情况对于工人消耗工作的速度<code>大于等于</code>工作生成的速度时，比较推荐。因为队列不会增长的很快，否则，数据结构中存储的元素数量会越来越多，最终甚至会导致OOM(OutOfMemery)。一般可以给队列设置个容量最大值，当触发这个最大值时，则不会再进行插入操作。多线程情况下，就是生产线程进入wait状态(当队列中有元素删除时，再将生产队列唤醒)。</p>
+<h3 id="第二版">第二版</h3><p>这里有个问题，对于重复工作——也就是数据结构中有很多副本的话，这个数据结构其实是有压缩的空间的，增加一个计数部分。比如像下面这样增加一个内部类：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span>&lt;<span class="title">E</span>&gt;</span>{
+    <span class="keyword">int</span> <span class="keyword">count</span> = <span class="number">0</span>;
+    E e;
+    Entry(E e){
+        <span class="keyword">this</span>.e = e;
+    }
+    <span class="keyword">private</span> <span class="keyword">boolean</span> delete(){
+        <span class="keyword">if</span>(<span class="keyword">count</span> &gt; <span class="number">0</span>)
+            <span class="keyword">count</span>--;
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+    <span class="keyword">private</span> <span class="keyword">void</span> add(){
+        <span class="keyword">count</span>++;
+    }
+}
+</code></pre><p>但是这样的话每次插入和删除都要遍历一遍，才能确定是否里面存在该值，然后进行对应的count++或者count–操作。虽然省了空间，但是时间复杂度却变成了O(n)。有没有办法能够压缩空间，又让时间复杂度为O(1)呢？</p>
+<h3 id="第三版">第三版</h3><p>从实际情况来看，回到刚才的情景中，其实“工作”类型数量有限，我们完全可以确定好某个“工作”所在的位置：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Pool&lt;E&gt;{
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Entry&lt;E&gt;{
+        <span class="keyword">int</span> count = <span class="number">0</span>;
+        E e;
+        Entry(E e){
+            <span class="keyword">this</span>.e = e;
+        }
+        <span class="function"><span class="keyword">private</span> boolean <span class="title">delete</span><span class="params">()</span></span>{
+            <span class="keyword">if</span>(count &gt; <span class="number">0</span>)
+                count--;
+            <span class="keyword">else</span>
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span></span>{
+            count++;
+        }
+    }
+    <span class="comment">//默认的工作类型</span>
+    <span class="keyword">enum</span> WorkType{
+        ONE,TWO,THREE,FOUR;
+    }
+
+    Entry[] <span class="built_in">queue</span> = <span class="keyword">new</span> Entry[WorkType.values().length];
+    <span class="keyword">int</span> size = <span class="number">0</span>;
+
+    <span class="comment">/*插入时，先判断e的工作类型，然后再将该工作类型处的Entry的count加一，同时size也加1。E中也需要有描述工作类型的属性。*/</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(Entry e)</span></span>{
+    }
+    <span class="comment">//这个相对复杂些，可操作性也更大    </span>
+    <span class="function"><span class="keyword">public</span> Entry <span class="title">remove</span><span class="params">()</span></span>{
+    }
+}
+</code></pre><p>可以把数组的每个元素看成一个桶，具体的remove操作，先判断<code>size&gt;0</code>，然后从数组第一个“桶”开始往后看，若该项的<code>count!=0</code>就直接返回对应的Entry，并且count–；基于此，这种方案适用的场景是：</p>
+<ul>
+<li>工作类型比较少且已知</li>
+<li>需要实现工作优先级</li>
+</ul>
+<p>工作优先级的实现在remove里面，数组中的每个“桶”，删除的时候从优先级高的开始删。</p>
+<h3 id="第四版">第四版</h3><p>这里可以借鉴Hash。存储工作队列的依然用的数组，具体的存放通过hash来映射。这个版本同上面那个的区别在于：</p>
+<ul>
+<li>不受限与具体的工作类型</li>
+<li>会有空间浪费，但是依然可以保证insert和remove的O(1)时间复杂度</li>
+<li>若出现碰撞，则直接进行扩容操作（或者限制每个hash值中链表的长度，参照HashMap）</li>
+<li>不利于实现工作优先级</li>
+<li>适用于有大量重复工作类型且工作类型未知的情况</li>
+</ul>
+<p>这里结合了数组和链表的优点。其实HashMap也是如此，一方面吸取了数组的随机存取的优点，另一方面用链表补充了数组某位置碰撞产生的问题。</p>
+<h2 id="扩展问题一">扩展问题一</h2><blockquote>
+<p>假设每个元素在数据结构中只出现一次，那么插入操作就必须检查是否有重复的元素存在。像上题那样实现这种数据类型，而且要加上重复元素检验的功能。在最坏情况下每个操作的复杂度是多少？对平均而言，怎样设计数据结构最好？</p>
+</blockquote>
+<p>针对上面的第一版，重复元素检验的时间复杂度是O(n)。可以基于第四版进行改进，其实就是使用类似于HashSet的数据结构，天然无重复元素。这样重复元素的检验可以控制在常数时间内，最坏情况也是如此。</p>
+<h2 id="扩展问题二">扩展问题二</h2><blockquote>
+<p>假设所有的元素都可以用1到n直接的整数来编号，且n足够小以至于我们可以分配大小为O(n)的内存。每个元素最多只能出现一次。设计一个算法，其insert和remove操作的时间复杂度为O(1)。</p>
+</blockquote>
+<p>这种情况其实就是上面第三版考虑的情况，可以直接使用第三版。</p>
+<p>第三版中的remove函数其实还是有点问题的，使用数组存储，必须挨个看那个“桶”里面有元素（就是count&gt;0）。其实还是有办法避免这种情况的，就是再搞一个Set，里面存放count&gt;0的“桶”的位置，每次从Set里面取“桶”的编号。不过多了一个维护Set的开销，但是这个的时间复杂度是O(1)的，所以还是可以满足题目要求的。</p>
+<p>其实因为n比较小，在实际情况中挨个看也不会消耗很多时间的。</p>
+<h2 id="参考资料">参考资料</h2><ul>
+<li>本题来自<a href="http://book.douban.com/subject/1436134/" target="_blank" rel="external">《算法引论》</a>P63页习题4.10-4.12</li>
+<li>关于HashMap的一些资料<ul>
+<li>首推HashMap的源码</li>
+<li><a href="http://beyond99.blog.51cto.com/1469451/429789" target="_blank" rel="external">Java HashMap实现详解</a></li>
+<li><a href="http://github.thinkingbar.com/hashmap-analysis/" target="_blank" rel="external">HashMap源码剖析</a></li>
+<li><a href="http://stackoverflow.com/questions/9335169/understanding-strange-java-hash-function" target="_blank" rel="external">Understanding strange Java hash function</a></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/03/设计合适的数据结构(二)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          设计合适的数据结构(二)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/28/源码浅析-Callable和Future/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">源码浅析-Callable和Future</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="设计合适的数据结构(一)" data-title="设计合适的数据结构(一)" data-url="http://blog.xumingyang.cn/2015/04/02/设计合适的数据结构(一)/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

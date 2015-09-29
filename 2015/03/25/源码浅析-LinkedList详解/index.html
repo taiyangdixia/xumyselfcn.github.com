@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>源码浅析-LinkedList详解 | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version &quot;1.7.0_40&quot;
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (bu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码浅析-LinkedList详解">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/25/源码浅析-LinkedList详解/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="概述LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version &quot;1.7.0_40&quot;
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (bu">
+<meta property="og:image" content="http://blog.xumingyang.me/imgs/java-collection.jpg">
+<meta property="og:updated_time" content="2015-09-07T07:11:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="源码浅析-LinkedList详解">
+<meta name="twitter:description" content="概述LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。
+//java version &quot;1.7.0_40&quot;
+//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)
+//Java HotSpot(TM) Client VM (bu">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-源码浅析-LinkedList详解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/25/源码浅析-LinkedList详解/" class="article-date">
+  	<time datetime="2015-03-26T01:28:31.000Z" itemprop="datePublished">2015-03-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      源码浅析-LinkedList详解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/容器/">容器</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Java/">Java</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述">概述</h2><p>LinkedList是一个双向链表，继承自AbstractSequentialList类，实现了List、Deque、Cloneable和Serializable接口。</p>
+<pre><code><span class="comment">//java version "1.7.0_40"</span>
+<span class="comment">//Java(TM) SE Runtime Environment (build 1.7.0_40-b43)</span>
+<span class="comment">//Java HotSpot(TM) Client VM (build 24.0-b56, mixed mode, sharing)</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;
+    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span>{
+    ...
+}
+</code></pre><p>对比上一篇<a href="http://blog.xumingyang.cn/2015/03/27/ArrayList%E8%AF%A6%E8%A7%A3/">ArrayList详解</a> ，我们已经可以大概得知LinkedList有哪些特性了：是线性存储、可以当队列使用、可以调用clone方法、可以序列化。<br><a id="more"></a></p>
+<h2 id="特性">特性</h2><ul>
+<li>LinkedList是双向链表</li>
+<li>实现 Queue 接口，提供先进先出队列操作</li>
+<li>在列表的开头及结尾 get、remove和insert元素提供了统一的命名方法，这些操作允许将链接列表用作堆栈、队列或双端队列 (deque)</li>
+<li>clone、modCount和序列化的情况同ArrayList一致</li>
+</ul>
+<h2 id="详解">详解</h2><h3 id="1、双向链表">1、双向链表</h3><pre><code><span class="keyword">transient</span> <span class="keyword">int</span> <span class="keyword">size</span> = <span class="number">0</span>;
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+</code></pre><p>从其属性定义看，一个指向头结点，一个指向尾节点，这里的Node是LinkedList的一个内部类：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> Node&lt;E&gt; {
+    E item;
+    Node&lt;E&gt; <span class="keyword">next</span>;
+    Node&lt;E&gt; prev;
+
+    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; <span class="keyword">next</span>) {
+        <span class="keyword">this</span>.item = element;
+        <span class="keyword">this</span>.<span class="keyword">next</span> = <span class="keyword">next</span>;
+        <span class="keyword">this</span>.prev = prev;
+    }
+}
+</code></pre><h3 id="实现Queue接口">实现Queue接口</h3><p>其实LinkedList不仅可以拿来当Queue使用，也可以当Stack使用，因为它是双向链表！其内部提供的方法有：</p>
+<pre><code>public boolean <span class="function"><span class="title">add</span><span class="params">(E e)</span></span> 
+public void <span class="function"><span class="title">addFirst</span><span class="params">(E e)</span></span> 
+public void <span class="function"><span class="title">addLast</span><span class="params">(E e)</span></span> 
+public E <span class="function"><span class="title">get</span><span class="params">(int index)</span></span> 
+public E <span class="function"><span class="title">getFirst</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">getLast</span><span class="params">()</span></span> 
+public boolean <span class="function"><span class="title">offer</span><span class="params">(E e)</span></span> 
+public boolean <span class="function"><span class="title">offerFirst</span><span class="params">(E e)</span></span> 
+public boolean <span class="function"><span class="title">offerLast</span><span class="params">(E e)</span></span> 
+public E <span class="function"><span class="title">peek</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">peekFirst</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">peekLast</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">poll</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">pollFirst</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">pollLast</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">pop</span><span class="params">()</span></span> 
+public void <span class="function"><span class="title">push</span><span class="params">(E e)</span></span> 
+public E <span class="function"><span class="title">remove</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">removeFirst</span><span class="params">()</span></span> 
+public E <span class="function"><span class="title">removeLast</span><span class="params">()</span></span> 
+public int <span class="function"><span class="title">size</span><span class="params">()</span></span> 
+</code></pre><p>队列和栈需要的方法全部都提供了</p>
+<h3 id="其他">其他</h3><ol>
+<li>LinkedList有两个内部类：ListItr和DescendingIterator，分别用来提供正向（从first到last）迭代器和反向（从last到first）迭代器。</li>
+<li>remove(int)和remove(Object)的时间复杂度都是O(n)，因为需要先找到那个int 值/Object对象。</li>
+</ol>
+<h2 id="LinkedList和ArrayList的区别、联系">LinkedList和ArrayList的区别、联系</h2><p>相同点是两者都实现了List, Cloneable, Serializable接口，两者都是线性集合，都可以克隆，序列化。</p>
+<p>ArrayList 采用的是数组形式来保存对象的，这种方式将对象放在连续的位置中，所以最大的缺点就是插入删除时非常麻烦，优点是查询速度快</p>
+<p>LinkedList 采用的将对象存放在独立的空间中，而且在每个空间中还保存下一个链接的索引，但是缺点就是查找非常麻烦，要丛第一个索引开始，优点是插入、删除快。</p>
+<p>更详细的可以参考<a href="http://www.importnew.com/6629.html" target="_blank" rel="external">这篇</a></p>
+<p>下面是Java Collection Framework框架图，点击可放大。<br><img src="http://blog.xumingyang.me/imgs/java-collection.jpg" alt="Collection FrameWork"></p>
+<h2 id="参考资料">参考资料</h2><ul>
+<li>LinkedList源码</li>
+<li><a href="http://www.importnew.com/6629.html" target="_blank" rel="external">LinkedList和ArrayList的区别</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/26/源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          源码浅析-使用ThreadPoolExecutor创建线程池-以Executors提供的几种方式为例
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/23/源码分析-ArrayList详解/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">源码分析-ArrayList详解</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="源码浅析-LinkedList详解" data-title="源码浅析-LinkedList详解" data-url="http://blog.xumingyang.cn/2015/03/25/源码浅析-LinkedList详解/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>源码浅析-Callable和Future | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="用Callable接口可以干啥简单来说，以前多线程的run方法返回值是void，那现在我想让各个线程有返回值咋办：使用Callable接口！
+话不多说，先上例子，这个例子引自“飘过的小牛”的这篇文章中。代码如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码浅析-Callable和Future">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/28/源码浅析-Callable和Future/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="用Callable接口可以干啥简单来说，以前多线程的run方法返回值是void，那现在我想让各个线程有返回值咋办：使用Callable接口！
+话不多说，先上例子，这个例子引自“飘过的小牛”的这篇文章中。代码如下：">
+<meta property="og:updated_time" content="2015-09-07T08:05:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="源码浅析-Callable和Future">
+<meta name="twitter:description" content="用Callable接口可以干啥简单来说，以前多线程的run方法返回值是void，那现在我想让各个线程有返回值咋办：使用Callable接口！
+话不多说，先上例子，这个例子引自“飘过的小牛”的这篇文章中。代码如下：">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-源码浅析-Callable和Future" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/28/源码浅析-Callable和Future/" class="article-date">
+  	<time datetime="2015-03-28T14:28:31.000Z" itemprop="datePublished">2015-03-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      源码浅析-Callable和Future
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Callable/">Callable</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Java/">Java</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="用Callable接口可以干啥">用Callable接口可以干啥</h2><p>简单来说，以前多线程的run方法返回值是void，那现在我想让各个线程有返回值咋办：使用Callable接口！</p>
+<p>话不多说，先上例子，这个例子引自“飘过的小牛”的<a href="http://github.thinkingbar.com/thinking_in_java_chapter21-part01/" target="_blank" rel="external">这篇文章中</a>。代码如下：</p>
+<a id="more"></a>
+<pre><code>class <span class="type">TaskWithResult</span> implements <span class="type">Callable</span>&lt;<span class="type">String</span>&gt; {
+    private <span class="type">int</span> id;
+    public <span class="type">TaskWithResult</span>(<span class="type">int</span> id) {
+        this.id = id;
+    }
+    //必须重写call函数
+    @<span class="type">Override</span>
+    public <span class="type">String</span> call() {
+          <span class="keyword">return</span> <span class="string">"result of TaskWithResult: "</span> + id;
+    }
+}
+public class <span class="type">Test</span> {
+    public <span class="keyword">static</span> <span class="type">void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">ExecutorService</span> exec = <span class="type">Executors</span>.newCachedThreadPool();
+        <span class="type">ArrayList</span>&lt;<span class="type">Future</span>&lt;<span class="type">String</span>&gt;&gt; <span class="literal">result</span> = new <span class="type">ArrayList</span>&lt;<span class="type">Future</span>&lt;<span class="type">String</span>&gt;&gt;();
+        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
+            <span class="literal">result</span>.add(exec.submit(new <span class="type">TaskWithResult</span>(i)));
+        }
+
+        <span class="keyword">for</span>(<span class="type">Future</span>&lt;<span class="type">String</span>&gt; fs : <span class="literal">result</span>) {
+            <span class="keyword">try</span> {
+                <span class="type">System</span>.<span class="keyword">out</span>.println(fs.get());
+            } catch (<span class="type">InterruptedException</span> | <span class="type">ExecutionException</span> e) {
+                // <span class="type">TODO</span> <span class="type">Auto</span>-generated catch <span class="keyword">block</span>
+                e.printStackTrace();
+            } <span class="keyword">finally</span> {
+                exec.shutdown();
+            }
+        }
+    }
+}
+</code></pre><!--more-->
+<p>这个例子的完整源码可以在<a href="https://github.com/xumyselfcn/sourceCode4Blog/blob/master/callable/Test.java" target="_blank" rel="external">这里</a>看到。代码中有两个类，一个TaskWithResult，实现了Callable接口，类中重写call函数；另一个Test类使用Executors.newCachedThreadPool()创建线程池。</p>
+<pre><code><span class="type">ExecutorService</span> exec = <span class="type">Executors</span>.newCachedThreadPool();
+<span class="type">ArrayList</span>&lt;<span class="type">Future</span>&lt;<span class="type">String</span>&gt;&gt; <span class="literal">result</span> = new <span class="type">ArrayList</span>&lt;<span class="type">Future</span>&lt;<span class="type">String</span>&gt;&gt;();
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
+    <span class="literal">result</span>.add(exec.submit(new <span class="type">TaskWithResult</span>(i)));
+}
+
+<span class="type">Future</span>的get()方法用于取出返回的值
+</code></pre><p>这几行比较关键，第一行创建线程池，第二行创建了result——其类型是Future&lt;\String>，然后exec调用了submit方法创建线程，并将submit方法的返回值装入result中。这表明：</p>
+<ul>
+<li>使用exec.submit(new TaskWithResult(i))可以执行线程</li>
+<li>submit()方法有返回值，是Future<string>类型</string></li>
+</ul>
+<p>那这个exec.submit()方法和exec.execute()方法有什么区别呢？进一步，实现Callable接口和Runnable接口有什么不同呢？</p>
+<ul>
+<li>实现Callable接口，必须重写call方法；而Runnable则对应的是run方法</li>
+<li>call方法有返回值；run方法没有返回值</li>
+<li>call方法可以抛出异常；run方法不能抛出异常</li>
+<li>使用run方法实现的多线程，使用call方法同样可以实现</li>
+</ul>
+<p><strong>Callable是类似于Runnable的接口，实现Callable接口的类和实现Runnable的类都是可被其他线程执行的任务。</strong>可以看看<a href="http://www.oschina.net/question/54100_83333" target="_blank" rel="external">这里面</a>的三个实例，可以帮助理解、加深一下印象。</p>
+<p>##究竟如何获取不同线程的返回值-Future登场<br>回到上面的那个例子</p>
+<pre><code><span class="literal">result</span>.add(exec.submit(new <span class="type">TaskWithResult</span>(i)));
+</code></pre><p>我们可以看到，在for循环里面，将每个exec.submit()方法的返回值放进了result里面。然后在后面，通过增强for循环获取每个Future，然后执行Future.get()方法获取线程返回值。</p>
+<p>现在我们先来看看这个submit方法里面究竟做了什么：</p>
+<pre><code><span class="comment">//根据ExecutorService exec = Executors.newCachedThreadPool();</span>
+<span class="comment">//找到submit实现的位置在AbstractExecutorService类中。</span>
+<span class="comment">//该类通过重载实现了三个不同的submit方法。</span>
+<span class="keyword">public</span> Future&lt;?&gt; submit(Runnable <span class="keyword">task</span>) {
+    <span class="keyword">if</span> (<span class="keyword">task</span> == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    RunnableFuture&lt;<span class="keyword">Void</span>&gt; ftask = newTaskFor(<span class="keyword">task</span>, <span class="keyword">null</span>);
+    execute(ftask);
+    <span class="keyword">return</span> ftask;
+}
+<span class="keyword">public</span> &lt;T&gt; Future&lt;T&gt; submit(Runnable <span class="keyword">task</span>, T result) {
+    <span class="keyword">if</span> (<span class="keyword">task</span> == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    RunnableFuture&lt;T&gt; ftask = newTaskFor(<span class="keyword">task</span>, result);
+    execute(ftask);
+    <span class="keyword">return</span> ftask;
+}
+<span class="keyword">public</span> &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; <span class="keyword">task</span>) {
+    <span class="keyword">if</span> (<span class="keyword">task</span> == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    RunnableFuture&lt;T&gt; ftask = newTaskFor(<span class="keyword">task</span>);
+    execute(ftask);
+    <span class="keyword">return</span> ftask;
+}
+</code></pre><p>这里，我们的样例应该调用的是第三个submit函数。函数执行的过程就是：</p>
+<ol>
+<li>先判断task是否为null</li>
+<li>创建一个ftask对象</li>
+<li>执行ftask</li>
+<li>返回ftask</li>
+</ol>
+<p>好嘛，<strong>里面其实执行线程的还是execute函数</strong>，可以印证上面的一个结论：<strong>Callable是类似于Runnable的接口，实现Callable接口的类和实现Runnable的类都是可被其他线程执行的任务，</strong>因为Callable里面其实就是用Runnable来实现创建多线程的。</p>
+<p>仔细看看这三个submit函数，主要区别就在于每个submit函数的第三行，我把他们放在一起对比下：</p>
+<pre><code><span class="type">RunnableFuture</span>&lt;<span class="type">Void</span>&gt; ftask = newTaskFor(task, null);
+<span class="type">RunnableFuture</span>&lt;T&gt; ftask = newTaskFor(task, <span class="literal">result</span>);
+<span class="type">RunnableFuture</span>&lt;T&gt; ftask = newTaskFor(task);
+</code></pre><p>ftask的类型是RunnableFuture的，那这个RunnableFuture是什么呢？先别着急看答案，我们来猜一猜：</p>
+<ul>
+<li>RunnableFuture必然实现了Runnable接口（因为ftask可以作为execute()方法的参数）</li>
+<li>RunnableFuture必然实现了Future接口（因为ftask可以作为submit()方法的返回值）</li>
+</ul>
+<p>欧凯，我们来看看源码：</p>
+<pre><code>public <span class="keyword">interface</span> <span class="type">RunnableFuture</span>&lt;V&gt; extends <span class="type">Runnable</span>, <span class="type">Future</span>&lt;V&gt; {
+    /**
+     * <span class="type">Sets</span> this <span class="type">Future</span> to the <span class="literal">result</span> <span class="keyword">of</span> its computation
+     * unless it has been cancelled.
+     */
+    <span class="type">void</span> run();
+}
+</code></pre><p>果然。实现Runnable接口不必多说，那这个Future接口是做什么的？</p>
+<p>现在有必要介绍一下Future接口了。</p>
+<pre><code>/**
+ * A &lt;tt&gt;<span class="type">Future</span>&lt;/tt&gt; represents the <span class="literal">result</span> <span class="keyword">of</span> an asynchronous
+ * computation.  <span class="type">Methods</span> are provided to check <span class="keyword">if</span> the computation <span class="keyword">is</span>
+ * complete, to wait <span class="keyword">for</span> its completion, <span class="keyword">and</span> to retrieve the <span class="literal">result</span> <span class="keyword">of</span>
+ * the computation.  <span class="type">The</span> <span class="literal">result</span> can only be retrieved <span class="keyword">using</span> <span class="keyword">method</span>
+ * &lt;tt&gt;get&lt;/tt&gt; <span class="keyword">when</span> the computation has completed, blocking <span class="keyword">if</span>
+ * necessary until it <span class="keyword">is</span> ready.  <span class="type">Cancellation</span> <span class="keyword">is</span> performed by the
+ * &lt;tt&gt;cancel&lt;/tt&gt; <span class="keyword">method</span>.  <span class="type">Additional</span> methods are provided to
+ * determine <span class="keyword">if</span> the task completed normally <span class="keyword">or</span> was cancelled. <span class="type">Once</span> a
+ * computation has completed, the computation cannot be cancelled.
+ * <span class="type">If</span> you would like to use a &lt;tt&gt;<span class="type">Future</span>&lt;/tt&gt; <span class="keyword">for</span> the sake
+ * <span class="keyword">of</span> cancellability but <span class="keyword">not</span> provide a usable <span class="literal">result</span>, you can
+ * declare types <span class="keyword">of</span> the form {@code <span class="type">Future</span>&lt;?&gt;} <span class="keyword">and</span>
+ * <span class="keyword">return</span> &lt;tt&gt;null&lt;/tt&gt; <span class="keyword">as</span> a <span class="literal">result</span> <span class="keyword">of</span> the underlying task.
+ * /
+public <span class="keyword">interface</span> <span class="type">Future</span>&lt;V&gt; {
+    boolean cancel(boolean mayInterruptIfRunning);
+    boolean isCancelled();
+    boolean isDone();
+    V get() throws <span class="type">InterruptedException</span>, <span class="type">ExecutionException</span>;
+    V get(long timeout, <span class="type">TimeUnit</span> unit)
+        throws <span class="type">InterruptedException</span>, <span class="type">ExecutionException</span>, <span class="type">TimeoutException</span>;
+}
+</code></pre><p>Future表示异步的计算结果，还提供了与之相关的一系列的函数。这里重点注意函数名为get()的两个函数。<strong>具体的Future模式在<a href="http://zha-zi.iteye.com/blog/1408189" target="_blank" rel="external">这篇文章</a>中有详细描述，一定不能错过！</strong>。</p>
+<p>以下是从Future模式这个文章中摘录的：</p>
+<p>Future对象本身可以看作是一个显式的引用，一个对异步处理结果的引用。由于其异步性质，在创建之初，它所引用的对象可能还并不可用（比如尚在运算中，网络传输中或等待中）。这时，得到Future的程序流程如果并不急于使用Future所引用的对象，那么它可以做其它任何想做的事儿，当流程进行到需要Future背后引用的对象时，可能有两种情况：</p>
+<ul>
+<li>希望能看到这个对象可用，并完成一些相关的后续流程。如果实在不可用，也可以进入其它分支流程。</li>
+<li>“没有你我的人生就会失去意义，所以就算海枯石烂，我也要等到你。”（当然，如果实在没有毅力枯等下去，设一个超时也是可以理解的）</li>
+</ul>
+<p>对于前一种情况，可以通过调用Future.isDone()判断引用的对象是否就绪，并采取不同的处理；而后一种情况则只需调用get()或get(long timeout, TimeUnit unit)通过同步阻塞方式等待对象就绪。实际运行期是阻塞还是立即返回就取决于get()的调用时机和对象就绪的先后了。</p>
+<p>简单而言，Future模式可以在连续流程中满足数据驱动的并发需求，既获得了并发执行的性能提升，又不失连续流程的简洁优雅。但是Futrue模式有个重大缺陷：当消费者工作得不够快的时候，它会阻塞住生产者线程，从而可能导致系统吞吐量的下降。所以不建议在高性能的服务端使用。</p>
+<p>java.util.concurrent.Callable与java.util.concurrent.Future类可以协助您完成Future模式。<strong>Future模式在请求发生时，会先产生一个Future对象给发出请求的客户。它的作用类似于代理(Proxy)对象，而同时所代理的真正目标对象的生成是由一个新的线程持续进行。真正的目标对象生成之后，将之设置到Future之中，而当客户端真正需要目标对象时，目标对象也已经准备好，可以让客户提取使用。</strong></p>
+<h2 id="参考资料">参考资料</h2><ul>
+<li>Callable及相关源码</li>
+<li><a href="http://www.cnblogs.com/whgw/archive/2011/09/28/2194760.html" target="_blank" rel="external">Callable与Future的介绍</a></li>
+<li><a href="http://zha-zi.iteye.com/blog/1408189" target="_blank" rel="external">Future 模式详解（并发使用）</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/02/设计合适的数据结构(一)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          设计合适的数据结构(一)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/27/wiki/Java中的final和static关键字[转]/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java中的final和static关键字[转]</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="源码浅析-Callable和Future" data-title="源码浅析-Callable和Future" data-url="http://blog.xumingyang.cn/2015/03/28/源码浅析-Callable和Future/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>docker 入门操作 | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Docker is a platform for developers and sysadmins to develop, ship, and run applications. Docker lets you quickly assemble applications from components and eliminates the friction that can come when s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker 入门操作">
+<meta property="og:url" content="http://blog.xumingyang.cn/2014/10/15/wiki/docker 入门操作/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="Docker is a platform for developers and sysadmins to develop, ship, and run applications. Docker lets you quickly assemble applications from components and eliminates the friction that can come when s">
+<meta property="og:updated_time" content="2015-09-07T08:06:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker 入门操作">
+<meta name="twitter:description" content="Docker is a platform for developers and sysadmins to develop, ship, and run applications. Docker lets you quickly assemble applications from components and eliminates the friction that can come when s">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-wiki/docker 入门操作" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/10/15/wiki/docker 入门操作/" class="article-date">
+  	<time datetime="2014-10-16T00:38:00.000Z" itemprop="datePublished">2014-10-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      docker 入门操作
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Docker/">Docker</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a href="https://www.docker.com/" target="_blank" rel="external">Docker</a> is a platform for developers and sysadmins to <strong>develop, ship, and run applications</strong>. Docker lets you quickly assemble applications from components and eliminates the friction that can come when shipping code. Docker lets you get your code tested and deployed into production as fast as possible.</p>
+</blockquote>
+<p>检查docker是否安装成功：</p>
+<pre><code>root@<span class="operator"><span class="keyword">do</span>:~# docker <span class="keyword">version</span>
+//如下显示则表明docker安装成功。
+
+<span class="keyword">Client</span> <span class="keyword">version</span>: <span class="number">1.0</span><span class="number">.1</span>
+<span class="keyword">Client</span> API <span class="keyword">version</span>: <span class="number">1.12</span>
+<span class="keyword">Go</span> <span class="keyword">version</span> (<span class="keyword">client</span>): go1<span class="number">.2</span><span class="number">.1</span>
+Git <span class="keyword">commit</span> (<span class="keyword">client</span>): <span class="number">990021</span>a
+<span class="keyword">Server</span> <span class="keyword">version</span>: <span class="number">1.0</span><span class="number">.1</span>
+<span class="keyword">Server</span> API <span class="keyword">version</span>: <span class="number">1.12</span>
+<span class="keyword">Go</span> <span class="keyword">version</span> (<span class="keyword">server</span>): go1<span class="number">.2</span><span class="number">.1</span>
+Git <span class="keyword">commit</span> (<span class="keyword">server</span>): <span class="number">990021</span>a</span>
+</code></pre><a id="more"></a>
+<h3 id="使用Docker输出hello_world">使用Docker输出hello world</h3><pre><code>docker run <span class="string">ubuntu:</span><span class="number">14.04</span> <span class="regexp">/bin/</span>echo <span class="string">'Hello world'</span>
+</code></pre><p><code>docker run</code>：运行容器</p>
+<p><code>ubuntu:14.04</code>：指定image。</p>
+<blockquote>
+<p>This is the source of the container we ran. Docker calls this an image. </p>
+</blockquote>
+<p>这里我们运行的是ubuntu 14.04 操作系统 image。</p>
+<p><code>/bin/echo &#39;Hello world&#39;</code>：当我们的容器启动之后，Docker创建了一个新的Ubuntu14.04环境，然后在这个ubuntu系统中执行<code>/bin/echo &#39;Hello world&#39;</code>。</p>
+<h3 id="创建一个可交互的容器">创建一个可交互的容器</h3><pre><code>root<span class="variable">@do</span><span class="symbol">:~</span><span class="comment"># docker run -t -i ubuntu:14.04 /bin/bash</span>
+root<span class="variable">@dc270626bc6e</span><span class="symbol">:/</span><span class="comment"># </span>
+</code></pre><p>这里多了两个参数<code>t</code>和<code>i</code>。</p>
+<blockquote>
+<p>-t：assigns a pseudo-tty or terminal inside our new container</p>
+<p>-i：allows us to make an interactive connection by grabbing the standard in (STDIN) of the container</p>
+</blockquote>
+<p>这个时候，我们可以在新创建的ubuntu终端里面进行bash操作。</p>
+<pre><code>root<span class="variable">@do</span><span class="symbol">:~</span><span class="comment"># docker run -t -i ubuntu:14.04 /bin/bash</span>
+root<span class="variable">@dc270626bc6e</span><span class="symbol">:/</span><span class="comment"># pwd</span>
+/
+root<span class="variable">@dc270626bc6e</span><span class="symbol">:/</span><span class="comment"># ls</span>
+bin  boot  dev    etc  home  <span class="class"><span class="keyword">lib</span>    <span class="title">lib64</span>  <span class="title">media</span>  <span class="title">mnt</span>  <span class="title">opt</span>    <span class="title">proc</span>  <span class="title">root</span>  <span class="title">run</span>  <span class="title">sbin</span>  <span class="title">srv</span>  <span class="title">sys</span>  <span class="title">tmp</span>  <span class="title">usr</span>  <span class="title">var</span></span>
+root<span class="variable">@dc270626bc6e</span><span class="symbol">:/</span><span class="comment"># </span>
+</code></pre><p>最后输入<code>exit</code>或者按Ctrl+d来关闭这个容器。</p>
+<h3 id="创建一个在后台运行的容器">创建一个在后台运行的容器</h3><pre><code>root@<span class="keyword">do</span>:~<span class="preprocessor"># docker run -d ubuntu:<span class="number">14.04</span> /bin/sh -c <span class="string">"while true; do echo hello world; sleep 1; done"</span></span>
+<span class="number">0</span>c981b692eb2f2b3aee085cb873231e9f77ddf9516352bbf080176d8c8567df7
+</code></pre><blockquote>
+<p>The -d flag tells Docker to run the container and put it in the background, to daemonize it.表示在后台运行该容器。</p>
+</blockquote>
+<p>提交刚才的命令之后，终端会打印<br>    0c981b692eb2f2b3aee085cb873231e9f77ddf9516352bbf080176d8c8567df7</p>
+<p>这个是创建的容器的ID，用于唯一标志容器。</p>
+<blockquote>
+<p>The container ID is a bit long and unwieldy and a bit later on we’ll see a shorter ID and some ways to name our containers to make working with them easier.</p>
+</blockquote>
+<p>该容器中执行<code>/bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;</code>。这个时候在前台看不见任何输出。</p>
+<p>执行<code>docker ps</code>查看后台运行的容器。</p>
+<pre><code>root@<span class="operator"><span class="keyword">do</span>:~# docker ps
+<span class="keyword">CONTAINER</span> <span class="keyword">ID</span>        IMAGE               COMMAND                CREATED             <span class="keyword">STATUS</span>              PORTS               <span class="keyword">NAMES</span>
+<span class="number">0</span>c981b692eb2        ubuntu:<span class="number">14.04</span>        /<span class="keyword">bin</span>/sh -<span class="keyword">c</span> <span class="string">'while tr   4 seconds ago       Up 4 seconds                            backstabbing_brown</span></span>
+</code></pre><p>最后一列Names是docker自动给容器分配的名称，自己也可以对其进行修改。</p>
+<p>执行<code>docker logs [name]</code>查看后台容器的输出。</p>
+<pre><code>root<span class="variable">@do</span><span class="symbol">:~</span><span class="comment"># docker logs backstabbing_brown</span>
+hello world
+hello world
+hello world
+<span class="string">``</span><span class="string">`</span>
+</code></pre><p>执行<code>docker stop [name]</code>，关闭该后台容器。</p>
+<pre><code>root<span class="variable">@do</span><span class="symbol">:~</span><span class="comment"># docker stop backstabbing_brown</span>
+backstabbing_brown
+</code></pre><h3 id="本篇命令总结">本篇命令总结</h3><pre><code>docker run <span class="string">ubuntu:</span><span class="number">14.04</span> <span class="regexp">/bin/</span>echo <span class="string">'Hello world'</span>
+
+docker run -t -i <span class="string">ubuntu:</span><span class="number">14.04</span> <span class="regexp">/bin/</span>bash (-t带终端，-i可交互)
+
+docker run -d <span class="string">ubuntu:</span><span class="number">14.04</span> <span class="regexp">/bin/</span>sh -c <span class="string">"while true; do echo hello world; sleep 1; done"</span>
+(返回 container ID，用于唯一标示container。)
+
+docker ps
+查看docker的后台进程
+
+docker logs [NAMES]
+这里的[NAMES]是使用 docker ps 查看后台进程的时候，最后一列信息。
+docker logs 会返回该容器的标准输出
+
+docker stop [NAMES]
+停止正在运行的容器
+</code></pre><blockquote>
+<p>参考自docker文档：<a href="https://docs.docker.com/userguide/dockerizing/" target="_blank" rel="external">https://docs.docker.com/userguide/dockerizing/</a></p>
+<p><a href="https://docs.docker.com/reference/commandline/cli/" target="_blank" rel="external">这里</a>有更多的关于Docker的命令介绍。</p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/12/08/从Oracle数据库中大量导出文本数据的实践/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          从Oracle数据库中大量导出文本数据的实践
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/05/20/wiki/JVM垃圾收集/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JVM垃圾收集</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="wiki/docker 入门操作" data-title="docker 入门操作" data-url="http://blog.xumingyang.cn/2014/10/15/wiki/docker 入门操作/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>源码浅析-Java中的并发数据集合 | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码浅析-Java中的并发数据集合">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/03/12/源码浅析-Java中的并发数据集合/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="概述并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果操">
+<meta property="og:updated_time" content="2015-09-07T07:10:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="源码浅析-Java中的并发数据集合">
+<meta name="twitter:description" content="概述并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是线程安全的。
+一般来说，并发集合有如下两大类：
+
+
+阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。
+非阻塞集合：这种集合也包括添加和删除数据的操作。如果操">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-源码浅析-Java中的并发数据集合" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/12/源码浅析-Java中的并发数据集合/" class="article-date">
+  	<time datetime="2015-03-13T00:37:11.000Z" itemprop="datePublished">2015-03-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      源码浅析-Java中的并发数据集合
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CAS/">CAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ConcurrentLinkedDeque/">ConcurrentLinkedDeque</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinkedBlockingDeque/">LinkedBlockingDeque</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Java/">Java</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="概述">概述</h2><p>并发集合是在并发环境下使用的一类集合，不同于普通的集合：ArrayList、HashSet等，并发集合在并发环境下不需要考虑数据不一致的情况，也就是说使用并发集合是<a href="http://zh.wikipedia.org/wiki/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" target="_blank" rel="external">线程安全</a>的。</p>
+<p>一般来说，并发集合有如下两大类：</p>
+<blockquote>
+<ul>
+<li>阻塞集合：这种集合包括添加和删除数据的操作。如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：这种集合也包括添加和删除数据的操作。如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<p>具体的集合如下：</p>
+<ul>
+<li>非阻塞列表，使用ConcurrentLinkedDeque类。</li>
+<li>非阻塞可导航的map，使用<a href="http://ifeve.com/concurrent-collections-6/" target="_blank" rel="external">ConcurrentSkipListMap</a>类。</li>
+<li>阻塞列表，使用LinkedBlockingDeque类。</li>
+<li>用在生产者与消费者数据的阻塞列表，使用LinkedTransferQueue类。</li>
+<li>使用优先级排序元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-4/" target="_blank" rel="external">PriorityBlockingQueue</a>类。</li>
+<li>存储延迟元素的阻塞列表，使用<a href="http://ifeve.com/concurrent-collections-5/" target="_blank" rel="external">DelayQueue</a>类。</li>
+</ul>
+<p><strong>下面详细从ConcurrentLinkedDeque和LinkedBlockingDeque源码入手分析。</strong></p>
+<h2 id="ConcurrentLinkedDeque">ConcurrentLinkedDeque</h2><p>这是一个非阻塞集合，其主要成员对象如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; head;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Node&lt;E&gt; tail;
+</code></pre><p>常用的方法有：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> addFirst(E e)
+<span class="keyword">public</span> <span class="keyword">void</span> addLast(E e)
+<span class="keyword">public</span> <span class="keyword">boolean</span> add(E e) <span class="comment">//内部调用 addLast(E e)</span>
+
+<span class="keyword">public</span> <span class="keyword">boolean</span> offerFirst(E e) <span class="comment">//调用addFirst(E e)</span>
+<span class="keyword">public</span> <span class="keyword">boolean</span> offerLast(E e) <span class="comment">//调用addLast(E e)</span>
+<span class="keyword">public</span> <span class="keyword">boolean</span> offer(E e) <span class="comment">//内部调用offerLast(E e)</span>
+
+<span class="keyword">public</span> E pollFirst() <span class="comment">//弹出第一个，并返回</span>
+<span class="keyword">public</span> E pollLast() <span class="comment">//弹出最后一个 并返回</span>
+
+<span class="keyword">public</span> E removeFirst() <span class="comment">//调用pollFirst()</span>
+<span class="keyword">public</span> E removeLast() <span class="comment">//调用pollLast()</span>
+
+<span class="keyword">public</span> <span class="function">E <span class="title">poll</span><span class="params">()</span>           </span>{ <span class="function"><span class="keyword">return</span> <span class="title">pollFirst</span><span class="params">()</span></span>; }
+<span class="keyword">public</span> <span class="function">E <span class="title">remove</span><span class="params">()</span>         </span>{ <span class="function"><span class="keyword">return</span> <span class="title">removeFirst</span><span class="params">()</span></span>; }
+<span class="keyword">public</span> <span class="function">E <span class="title">peek</span><span class="params">()</span>           </span>{ <span class="function"><span class="keyword">return</span> <span class="title">peekFirst</span><span class="params">()</span></span>; }
+<span class="keyword">public</span> <span class="function">E <span class="title">element</span><span class="params">()</span>        </span>{ <span class="function"><span class="keyword">return</span> <span class="title">getFirst</span><span class="params">()</span></span>; }
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span>     </span>{ addFirst(e); }
+<span class="keyword">public</span> <span class="function">E <span class="title">pop</span><span class="params">()</span>            </span>{ <span class="function"><span class="keyword">return</span> <span class="title">removeFirst</span><span class="params">()</span></span>; }
+</code></pre><p>以offerFirst()代码为例，查看ConcurrentLinkedDeque内部方法的实现：</p>
+<pre><code>public boolean offerFirst(<span class="keyword">E</span> <span class="keyword">e</span>) {
+    linkFirst(<span class="keyword">e</span>);
+    <span class="keyword">return</span> true;
+}
+
+private void linkFirst(<span class="keyword">E</span> <span class="keyword">e</span>) {
+    checkNotNull(<span class="keyword">e</span>);
+    final Node&lt;<span class="keyword">E</span>&gt; newNode = new Node&lt;<span class="keyword">E</span>&gt;(<span class="keyword">e</span>);
+
+    restartFromHead:
+    <span class="keyword">for</span> (;;)
+        <span class="keyword">for</span> (Node&lt;<span class="keyword">E</span>&gt; <span class="keyword">h</span> = head, p = <span class="keyword">h</span>, q;;) {
+            <span class="keyword">if</span> ((q = p.prev) != null &amp;&amp;
+                (q = (p = q).prev) != null)
+                <span class="comment">// Check for head updates every other hop.</span>
+                <span class="comment">// If p == q, we are sure to follow head instead.</span>
+                p = (<span class="keyword">h</span> != (<span class="keyword">h</span> = head)) ? <span class="keyword">h</span> : q;
+            <span class="keyword">else</span> <span class="keyword">if</span> (p.next == p) <span class="comment">// PREV_TERMINATOR</span>
+                <span class="keyword">continue</span> restartFromHead;
+            <span class="keyword">else</span> {
+                <span class="comment">// p is first node</span>
+                newNode.lazySetNext(p); <span class="comment">// CAS piggyback</span>
+                <span class="keyword">if</span> (p.casPrev(null, newNode)) {
+                    <span class="comment">// Successful CAS is the linearization point</span>
+                    <span class="comment">// for e to become an element of this deque,</span>
+                    <span class="comment">// and for newNode to become "live".</span>
+                    <span class="keyword">if</span> (p != <span class="keyword">h</span>) <span class="comment">// hop two nodes at a time</span>
+                        casHead(<span class="keyword">h</span>, newNode);  <span class="comment">// Failure is OK.</span>
+                    <span class="keyword">return</span>;
+                }
+                <span class="comment">// Lost CAS race to another thread; re-read prev</span>
+            }
+        }
+}
+</code></pre><p>ConcurrentLinkedDeque类中的head和tail是有volatile关键字修饰的，上面插入头结点的关键部分使用的是Node内部类中的方法，具体代码最后有附上。其方法并没有使用任何同步措施，比如：synchronizd关键字或ReentrantLock类，也正是因为这个，所以可以做到非阻塞，读者注意比较下面LinkedBlockingDeque。</p>
+<h2 id="LinkedBlockingDeque">LinkedBlockingDeque</h2><p>这是一个阻塞集合，其主要成员如下</p>
+<pre><code><span class="comment">//主要成员对象</span>
+<span class="keyword">transient</span> Node&lt;E&gt; first;
+<span class="keyword">transient</span> Node&lt;E&gt; last;
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> <span class="keyword">count</span>;
+
+<span class="comment">/** Main lock guarding all access */</span>
+<span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();
+
+<span class="comment">/** Condition for waiting takes */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = lock.newCondition();
+
+<span class="comment">/** Condition for waiting puts */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> Condition notFull = lock.newCondition();
+</code></pre><p>常用方法同上面的ConcurrentLinkedDeque类中提供的方法比较类似，addFirst/addLast/offerFirst/offerLast/pollFirst/pollLast等均有提供，不同的是，这些方法中都使用了lock进行同步，以offerFirst()方法为例</p>
+<pre><code><span class="function"><span class="keyword">public</span> boolean <span class="title">offerFirst</span>(<span class="params">E e</span>) </span>{
+    <span class="keyword">if</span> (e == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();
+    Node&lt;E&gt; node = <span class="keyword">new</span> Node&lt;E&gt;(e);
+    final ReentrantLock <span class="keyword">lock</span> = <span class="keyword">this</span>.<span class="keyword">lock</span>;
+    <span class="keyword">lock</span>.<span class="keyword">lock</span>();
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> linkFirst(node);
+    } <span class="keyword">finally</span> {
+        <span class="keyword">lock</span>.unlock();
+    }
+}
+
+<span class="function"><span class="keyword">private</span> boolean <span class="title">linkFirst</span>(<span class="params">Node&lt;E&gt; node</span>) </span>{
+    <span class="comment">// assert lock.isHeldByCurrentThread();</span>
+    <span class="keyword">if</span> (count &gt;= capacity)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    Node&lt;E&gt; f = first;
+    node.next = f;
+    first = node;
+    <span class="keyword">if</span> (last == <span class="keyword">null</span>)
+        last = node;
+    <span class="keyword">else</span>
+        f.prev = node;
+    ++count;
+    notEmpty.signal();
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+</code></pre><p>在向当前deque中插入新数据时，会先使用lock()方法上锁，然后插入新节点作为第一个元素。</p>
+<p><strong>ConcurrentLinkedDeque和LinkedBlockingDeque的区别</strong></p>
+<ul>
+<li>第一个区别：两者的方法一个使用Lock加锁，另一个则不是。</li>
+<li>第二个区别：两者的内部Node类也有很大不同（具体看下面附上的Node类的代码）</li>
+</ul>
+<p>ConcurrentLinkedDeque类的Node类</p>
+<pre><code><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="keyword">volatile</span> Node&lt;E&gt; prev;
+    <span class="keyword">volatile</span> E item;
+    <span class="keyword">volatile</span> Node&lt;E&gt; next;
+
+    Node() {  <span class="comment">// default constructor for NEXT_TERMINATOR, PREV_TERMINATOR</span>
+    }
+
+    <span class="comment">/**
+     * Constructs a new node.  Uses relaxed write because item can
+     * only be seen after publication via casNext or casPrev.
+     */</span>
+    Node(E item) {
+        UNSAFE.putObject(<span class="keyword">this</span>, itemOffset, item);
+    }
+
+    <span class="function"><span class="keyword">boolean</span> <span class="title">casItem</span><span class="params">(E cmp, E val)</span> </span>{
+        <span class="function"><span class="keyword">return</span> UNSAFE.<span class="title">compareAndSwapObject</span><span class="params">(<span class="keyword">this</span>, itemOffset, cmp, val)</span></span>;
+    }
+
+    <span class="function"><span class="keyword">void</span> <span class="title">lazySetNext</span><span class="params">(Node&lt;E&gt; val)</span> </span>{
+        UNSAFE.putOrderedObject(<span class="keyword">this</span>, nextOffset, val);
+    }
+
+    <span class="function"><span class="keyword">boolean</span> <span class="title">casNext</span><span class="params">(Node&lt;E&gt; cmp, Node&lt;E&gt; val)</span> </span>{
+        <span class="function"><span class="keyword">return</span> UNSAFE.<span class="title">compareAndSwapObject</span><span class="params">(<span class="keyword">this</span>, nextOffset, cmp, val)</span></span>;
+    }
+
+    <span class="function"><span class="keyword">void</span> <span class="title">lazySetPrev</span><span class="params">(Node&lt;E&gt; val)</span> </span>{
+        UNSAFE.putOrderedObject(<span class="keyword">this</span>, prevOffset, val);
+    }
+
+    <span class="function"><span class="keyword">boolean</span> <span class="title">casPrev</span><span class="params">(Node&lt;E&gt; cmp, Node&lt;E&gt; val)</span> </span>{
+        <span class="function"><span class="keyword">return</span> UNSAFE.<span class="title">compareAndSwapObject</span><span class="params">(<span class="keyword">this</span>, prevOffset, cmp, val)</span></span>;
+    }
+
+    <span class="comment">// Unsafe mechanics</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> prevOffset;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> itemOffset;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> nextOffset;
+
+    <span class="keyword">static</span> {
+        <span class="keyword">try</span> {
+            UNSAFE = sun.misc.Unsafe.getUnsafe();
+            Class k = Node.class;
+            prevOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"prev"</span>));
+            itemOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"item"</span>));
+            nextOffset = UNSAFE.objectFieldOffset
+                (k.getDeclaredField(<span class="string">"next"</span>));
+        } <span class="keyword">catch</span> (Exception e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);
+        }
+    }
+}
+</code></pre><p>LinkedBlockingDeque类的Node类</p>
+<pre><code>static final class Node<span class="variable">&lt;E&gt;</span> {
+    /<span class="keyword">*</span><span class="keyword">*</span>
+     <span class="keyword">*</span> The item, or null if this node has been removed.
+     <span class="keyword">*</span>/
+    E item;
+
+    /<span class="keyword">*</span><span class="keyword">*</span>
+     <span class="keyword">*</span> One of:
+     <span class="keyword">*</span> - the real predecessor Node
+     <span class="keyword">*</span> - this Node, meaning the predecessor is tail
+     <span class="keyword">*</span> - null, meaning there is no predecessor
+     <span class="keyword">*</span>/
+    Node<span class="variable">&lt;E&gt;</span> prev;
+
+    /<span class="keyword">*</span><span class="keyword">*</span>
+     <span class="keyword">*</span> One of:
+     <span class="keyword">*</span> - the real successor Node
+     <span class="keyword">*</span> - this Node, meaning the successor is head
+     <span class="keyword">*</span> - null, meaning there is no successor
+     <span class="keyword">*</span>/
+    Node<span class="variable">&lt;E&gt;</span> next;
+
+    Node(E x) {
+        item = x;
+    }
+}
+</code></pre><p>有注意到ConcurrentLinkedDeque类的Node类的cas开头的几个函数吗?比如：casItem(),casNext()和casPrev(),这些都是CAS操作，CAS(Compare &amp; Set 或者 Compare &amp; Swap)为并发操作对象的提供更好的性能，CAS操作通过以下3个步骤来实现对变量值得修改：</p>
+<ul>
+<li>获取当前内存中的变量的值</li>
+<li>用一个新的临时变量(temporal variable)保存改变后的新值</li>
+<li>如果当前内存中的值等于变量的旧值，则将新值赋值到当前变量；否则不进行任何操作</li>
+</ul>
+<p>这里先介绍一下<code>乐观锁</code>和<code>悲观锁</code>：</p>
+<blockquote>
+<ul>
+<li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。悲观锁假定其他用户企图访问或者改变你正在访问、更改的对象的概率是很高的，因此在悲观锁的环境中，在你开始改变此对象之前就将该对象锁住，并且直到你提交了所作的更改之后才释放锁。</li>
+<li>乐观锁:假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。观锁不能解决脏读的问题。乐观锁则认为其他用户企图改变你正在更改的对象的概率是很小的，因此乐观锁直到你准备提交所作的更改时才将对象锁住，当你读取以及改变该对象时并不加锁。可见乐观锁加锁的时间要比悲观锁短，乐观锁可以用较大的锁粒度获得较好的并发访问性能。乐观锁中如果因为冲突失败就重试，直到成功为止。</li>
+</ul>
+</blockquote>
+<p>对于这个机制，你不需要使用任何同步机制，这样你就避免了deadlocks，也获得了更好的性能。这种机制能保证多个并发线程对一个共享变量操作做到最终一致。Java 在原子类中实现了CAS机制。这些类提供了compareAndSet() 方法；这个方法是CAS操作的实现和其他方法的基础。</p>
+<p>显然，阻塞队列使用悲观锁，基于Lock实现；非阻塞使用乐观锁，基于volatile和CAS实现。</p>
+<h2 id="总结">总结</h2><ul>
+<li>阻塞集合：如果操作不能立即进行，是因为集合已满或者为空，该程序将被阻塞，直到操作可以进行。</li>
+<li>非阻塞集合：如果操作不能立即进行，这个操作将返回null值或抛出异常，但该线程将不会阻塞。</li>
+</ul>
+<p>问题1：CAS机制和传统的使用锁或者关键字相比，各自的优缺点，各自的适用情景(扩展阅读中有答案)？</p>
+<p>这里先说一下<a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">CAS的优缺点</a>：</p>
+<blockquote>
+<ul>
+<li><p>优点：<br>非阻塞算法（通常叫作乐观算法）相对于基于锁的版本有几个性能优势。首先，它用硬件的原生形态代替 JVM 的锁定代码路径，从而在更细的粒度层次上（独立的内存位置）进行同步，失败的线程也可以立即重试，而不会被挂起后重新调度。更细的粒度降低了争用的机会，不用重新调度就能重试的能力也降低了争用的成本。即使有少量失败的 CAS 操作，这种方法仍然会比由于锁争用造成的重新调度快得多。</p>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>1、ABA问题<br>CAS操作容易导致ABA问题,也就是在做a++之间，a可能被多个线程修改过了，只不过回到了最初的值，这时CAS会认为a的值没有变。a在外面逛了一圈回来，你能保证它没有做任何坏事，不能！！也许它讨闲，把b的值减了一下，把c的值加了一下等等，更有甚者如果a是一个对象，这个对象有可能是新创建出来的，a是一个引用呢情况又如何，所以这里面还是存在着很多问题的，解决ABA问题的方法有很多，可以考虑增加一个修改计数，只有修改计数不变的且a值不变的情况下才做a++，也可以考虑引入版本号，当版本号相同时才做a++操作等，这和事务原子性处理有点类似！</li>
+<li>2、比较花费CPU资源，即使没有任何争用也会做一些无用功。</li>
+<li>3、会增加程序测试的复杂度，稍不注意就会出现问题。</li>
+</ul>
+</li>
+</ul>
+<p>可以用CAS在无锁的情况下实现原子操作，但要明确应用场合，非常简单的操作且又不想引入锁可以考虑使用CAS操作(比如get/set)，当想要非阻塞地完成某一操作也可以考虑CAS。不推荐在复杂操作中引入CAS，会使程序可读性变差，且难以测试，同时会出现ABA问题。嘿嘿嘿，CAS操作适用于那种读多写少的情况，因为这时CAS在更新时候冲突的概率会大大降低。</p>
+</blockquote>
+<h2 id="补充知识点">补充知识点</h2><ol>
+<li>java中CAS的实现被封装在<a href="http://www.docjar.com/html/api/sun/misc/Unsafe.java.html" target="_blank" rel="external">sun.misc.Unsafe</a>类中。</li>
+<li>java.util.concurrent.atomic中的AtomicInteger、AtomicIntegerArray、AtomicLong等都是基于CAS实现的。</li>
+<li>volilate和cas只能乐观锁保证的状态控制的正确，而在设置状态失败的时候，仍然需要阻塞线程。juc里提供了LockSupport的park和unpark方法用于阻塞线程。而不同的场景下需要不同的等待策略和锁共享策略，juc提供了AbstractQueuedSynchronizer（AQS）为基类的一序列不同的锁，底层都是基于CAS、LocakSupport和Queue来管理。</li>
+</ol>
+<h2 id="参考资料">参考资料</h2><ul>
+<li><a href="http://ifeve.com/concurrent-collections-1/" target="_blank" rel="external">并发集合</a></li>
+<li><a href="http://ifeve.com/concurrent-collections-9/" target="_blank" rel="external">使用原子 arrays</a></li>
+<li><a href="http://www.cnblogs.com/Bob-FD/p/3352216.html" target="_blank" rel="external">乐观锁和悲观锁的区别</a></li>
+<li><a href="http://www.cnblogs.com/pingh/p/3505486.html" target="_blank" rel="external">乐观锁与悲观锁及其实现</a></li>
+<li>Java源码（JDK的源码在jdk安装目录下：src.zip）</li>
+</ul>
+<h2 id="本文扩展阅读">本文扩展阅读</h2><ul>
+<li><a href="http://www.infoq.com/cn/articles/atomic-operation" target="_blank" rel="external">原子操作的实现原理</a></li>
+<li><a href="http://www.cnblogs.com/Mainz/p/3546347.html" target="_blank" rel="external">非阻塞同步算法与CAS算法</a></li>
+<li><a href="http://coolshell.cn/articles/8239.html" target="_blank" rel="external">无锁队列的实现</a></li>
+<li><a href="http://ifeve.com/reentrantlock-and-fairness/" target="_blank" rel="external">ReentrantLock(重入锁)以及公平性</a></li>
+</ul>
+<h2 id="Java并发资料">Java并发资料</h2><ul>
+<li><a href="http://ifeve.com/java-concurrency-thread-directory/" target="_blank" rel="external">Java并发性和多线程</a></li>
+<li><a href="http://ifeve.com/java-7-concurrency-cookbook/" target="_blank" rel="external">Java 7 并发编程指南</a></li>
+<li><a href="http://ifeve.com/concurrency-modle-seven-week-1/" target="_blank" rel="external">七周七并发模型</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/23/RandomAccess详解/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          RandomAccess详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/02/26/Java 中的重要知识点/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java 中的重要知识点</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="源码浅析-Java中的并发数据集合" data-title="源码浅析-Java中的并发数据集合" data-url="http://blog.xumingyang.cn/2015/03/12/源码浅析-Java中的并发数据集合/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

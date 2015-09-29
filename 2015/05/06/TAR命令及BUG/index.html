@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>TAR命令及BUG | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文主要介绍tar的用法，以及高版本tar命令的一个bug。该bug的报错信息如下tar file changed as we read it">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TAR命令及BUG">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/05/06/TAR命令及BUG/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="本文主要介绍tar的用法，以及高版本tar命令的一个bug。该bug的报错信息如下tar file changed as we read it">
+<meta property="og:updated_time" content="2015-09-07T08:02:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TAR命令及BUG">
+<meta name="twitter:description" content="本文主要介绍tar的用法，以及高版本tar命令的一个bug。该bug的报错信息如下tar file changed as we read it">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-TAR命令及BUG" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/06/TAR命令及BUG/" class="article-date">
+  	<time datetime="2015-05-06T12:55:31.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      TAR命令及BUG
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tar/">tar</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/linux/">linux</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="TAR命令">TAR命令</h2><p>tar是linux下最常用的<strong>打包</strong>程序，注意啊，是打包，不是压缩，tar本身不具有压缩功能，他是调用压缩功能实现的~如下是个小例子<br><a id="more"></a></p>
+<pre><code>#解包
+tar xvf FileName<span class="class">.tar</span>
+#打包
+tar cvf FileName<span class="class">.tar</span> DirName
+</code></pre><p>如下是涉及到压缩，解压的例子</p>
+<pre><code>#解压
+tar zxvf FileName<span class="class">.tar</span><span class="class">.gz</span>
+#压缩
+tar zcvf FileName<span class="class">.tar</span><span class="class">.gz</span> DirName
+
+#解压
+tar jxvf FileName<span class="class">.tar</span><span class="class">.bz2</span>
+#压缩
+tar jcvf FileName<span class="class">.tar</span><span class="class">.bz2</span> DirName
+</code></pre><p>只将压缩文件中部分文件解压出来：</p>
+<pre><code>[root@localhost test]<span class="preprocessor"># tar -zcvf log30.tar.gz log2012.log log2013.log </span>
+log2012.<span class="built_in">log</span>
+log2013.<span class="built_in">log</span>
+[root@localhost test]<span class="preprocessor"># ls -al log30.tar.gz </span>
+-rw-r--r-- <span class="number">1</span> root root <span class="number">1512</span> <span class="number">11</span>-<span class="number">30</span> <span class="number">08</span>:<span class="number">19</span> log30.tar.gz
+[root@localhost test]<span class="preprocessor"># tar -zxvf log30.tar.gz log2013.log</span>
+log2013.<span class="built_in">log</span>
+[root@localhost test]<span class="preprocessor"># ll</span>
+-rw-r--r-- <span class="number">1</span> root root   <span class="number">1512</span> <span class="number">11</span>-<span class="number">30</span> <span class="number">08</span>:<span class="number">19</span> log30.tar.gz
+[root@localhost test]<span class="preprocessor"># cd test3</span>
+[root@localhost test3]<span class="preprocessor"># tar -zxvf /opt/soft/test/log30.tar.gz log2013.log</span>
+log2013.<span class="built_in">log</span>
+[root@localhost test3]<span class="preprocessor"># ll</span>
+总计 <span class="number">4</span>
+-rw-r--r-- <span class="number">1</span> root root <span class="number">61</span> <span class="number">11</span>-<span class="number">13</span> <span class="number">06</span>:<span class="number">03</span> log2013.<span class="built_in">log</span>
+[root@localhost test3]<span class="preprocessor">#</span>
+</code></pre><h2 id="我遇到的一个tar的bug">我遇到的一个tar的bug</h2><p>背景：同一个工程，执行程序通过shell脚本进行调用。这个工程在两台机器上一个执行成功，一个执行失败，该工程所必须的环境变量都已经正确设置。</p>
+<p>根据log日志显示，出错部分是shell脚本的tar命令附近，一开始根本没有往tar命令身上想，老是以为环境变量哪里出了问题，结果折腾了很久也没发现问题所在。然后仔细排查log信息时候发现有如下的报错信息：</p>
+<pre><code>tar: .: <span class="type">file</span> changed <span class="keyword">as</span> we <span class="command">read</span> <span class="keyword">it</span>
+</code></pre><p>google了一下，发现有人也遇到了同样的问题。出现问题的场景也一样：压缩当前目录下的所有文件时，出错。然后查看了<a href="http://stackoverflow.com/questions/20318852/tar-file-changed-as-we-read-it" target="_blank" rel="external">stackoverflow上面的一个问题</a>，里面说有可能是tar命令的问题，高版本的tar命令存在bug，在压缩当前文件夹时会报错。</p>
+<p>随后查看两台机器的tar版本分别是1.14和1.26。然后我在出问题的机器上使用tar 1.14版本就可以正确执行。</p>
+<h2 id="tar命令的参数">tar命令的参数</h2><p>必要参数有如下：</p>
+<pre><code>-<span class="ruby"><span class="constant">A</span> 新增压缩文件到已存在的压缩
+</span>-<span class="ruby"><span class="constant">B</span> 设置区块大小
+</span>-<span class="ruby">c 建立新的压缩文件
+</span>-<span class="ruby">d 记录文件的差别
+</span>-<span class="ruby">r 添加文件到已经压缩的文件
+</span>-<span class="ruby">u 添加改变了和现有的文件到已经存在的压缩文件
+</span>-<span class="ruby">x 从压缩的文件中提取文件
+</span>-<span class="ruby">t 显示压缩文件的内容
+</span>-<span class="ruby">z 支持gzip解压文件
+</span>-<span class="ruby">j 支持bzip2解压文件
+</span>-<span class="ruby"><span class="constant">Z</span> 支持compress解压文件
+</span>-<span class="ruby">v 显示操作过程
+</span>-<span class="ruby">l 文件系统边界设置
+</span>-<span class="ruby">k 保留原有文件不覆盖
+</span>-<span class="ruby">m 保留文件不被覆盖
+</span>-<span class="ruby"><span class="constant">W</span> 确认压缩文件的正确性</span>
+</code></pre><p>可选参数如下：</p>
+<pre><code>-<span class="ruby">b 设置区块数目
+</span>-<span class="ruby"><span class="constant">C</span> 切换到指定目录
+</span>-<span class="ruby">f 指定压缩文件
+</span>-<span class="ruby">-help 显示帮助信息
+</span>-<span class="ruby">-version 显示版本信息</span>
+</code></pre><h2 id="参考资料">参考资料</h2><ul>
+<li><a href="http://www.cnblogs.com/peida/archive/2012/11/30/2795656.html" target="_blank" rel="external">每天一个linux命令（28）：tar命令</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/04/15/Linux环境变量/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux环境变量</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="TAR命令及BUG" data-title="TAR命令及BUG" data-url="http://blog.xumingyang.cn/2015/05/06/TAR命令及BUG/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

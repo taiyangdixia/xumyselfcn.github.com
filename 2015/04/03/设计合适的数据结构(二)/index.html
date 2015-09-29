@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>设计合适的数据结构(二) | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+
+insert(x)：如果x不在数据结构中，则插入x
+delete(x)：从数据结构中删除x（如果x存在）
+find_next(x)：在数据结构中搜索比x大的最小关键字
+
+所有这些操作在最坏情况下的复杂度要求为O(log n)，其中n是数据结构中元素的个数。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计合适的数据结构(二)">
+<meta property="og:url" content="http://blog.xumingyang.cn/2015/04/03/设计合适的数据结构(二)/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+
+insert(x)：如果x不在数据结构中，则插入x
+delete(x)：从数据结构中删除x（如果x存在）
+find_next(x)：在数据结构中搜索比x大的最小关键字
+
+所有这些操作在最坏情况下的复杂度要求为O(log n)，其中n是数据结构中元素的个数。">
+<meta property="og:updated_time" content="2015-09-07T08:05:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计合适的数据结构(二)">
+<meta name="twitter:description" content="问题背景
+设计实现一个抽象数据类型，能支持下列操作：
+
+insert(x)：如果x不在数据结构中，则插入x
+delete(x)：从数据结构中删除x（如果x存在）
+find_next(x)：在数据结构中搜索比x大的最小关键字
+
+所有这些操作在最坏情况下的复杂度要求为O(log n)，其中n是数据结构中元素的个数。">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-设计合适的数据结构(二)" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/04/03/设计合适的数据结构(二)/" class="article-date">
+  	<time datetime="2015-04-03T19:28:31.000Z" itemprop="datePublished">2015-04-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      设计合适的数据结构(二)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/基础知识/">基础知识</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题背景">问题背景</h2><blockquote>
+<p>设计实现一个抽象数据类型，能支持下列操作：</p>
+<ul>
+<li>insert(x)：如果x不在数据结构中，则插入x</li>
+<li>delete(x)：从数据结构中删除x（如果x存在）</li>
+<li>find_next(x)：在数据结构中搜索比x大的最小关键字</li>
+</ul>
+<p>所有这些操作在最坏情况下的复杂度要求为O(log n)，其中n是数据结构中元素的个数。</p>
+</blockquote>
+<a id="more"></a>
+<p>分析：上面的insert和delete这两个操作都需要先在数据结构中查找x。查找如果要控制在O(log n)的时间复杂度的话一般就是二叉搜索树和二分查找，但是二分查找需要基于有序线性表，所以不一定可以。</p>
+<h3 id="树">树</h3><p>对于二叉搜索树需要注意其退化成链表的情况（这样就不能保证O(log n)的时间复杂度了），此时需要加上平衡算法。如何保持二叉树的节点分布均匀的平衡算法是平衡二叉树的关键；平衡算法是一种在B树中插入和删除节点的策略。关于二叉搜索树及相关的平衡树（AVL树，红黑树等）可以参考<a href="http://blog.csdn.net/chlele0105/article/details/8473846" target="_blank" rel="external">这篇博文</a>。</p>
+<h3 id="跳表">跳表</h3><p>如果不使用树，其实还可以使用跳表，同样可以把插入删除的时间复杂度控制在O(log n)，至于查找比x大的最小关键字也不难在O(log n)时间内找到。关于跳表，这里就不展开描述了（其实让我描述也说不清楚 = = ），同样，推荐文章给大家看：<a href="http://kenby.iteye.com/blog/1187303" target="_blank" rel="external">这篇</a>和<a href="http://www.cnblogs.com/xuqiang/archive/2011/05/22/2053516.html" target="_blank" rel="external">这篇</a>。</p>
+<h3 id="放弃数组或者链表">放弃数组或者链表</h3><p>如果想使用二分查找，那么首先数据结构必须是有序的线性表。如此一来，那么插入和删除的时候要做到O(log n)就比较困难了，因为如果选择数组作为底层存储的话，虽然查找可以做到O(log n)，但是插入和删除的时间复杂度是O(n)。如果选择链表，那二分查找本身就做不到O(log n)的时间复杂度了，即使插入和删除是O(1)也无济于事。</p>
+<h3 id="其他方案">其他方案</h3><p>还有没有其他的方法呢，不会只有BST一类的和跳表这两种吧。。。</p>
+<h2 id="扩展问题一">扩展问题一</h2><blockquote>
+<p>insert和delete函数要求不变，第三个方法改成实现find_smallest(k)：在数据结构中搜索第k小的关键字。所有这些操作在最坏情况下的复杂度要求为O(log n)。</p>
+</blockquote>
+<p>PS：可以使用AVL树，在每个节点上增加一个数据域：存放这个节点的子节点的个数（包括自己）。</p>
+<h2 id="扩展问题二">扩展问题二</h2><blockquote>
+<p>insert和delete函数要求不变，第三个方法改成实现find_next(x,k)：在数据结构中把比x大的关键字从小到大排序，搜索第k个这样的关键字。所有这些操作在最坏情况下的复杂度要求为O(log n)。</p>
+</blockquote>
+<h2 id="参考资料">参考资料</h2><ul>
+<li><a href="http://blog.csdn.net/chlele0105/article/details/8473846" target="_blank" rel="external">B树、B+树、AVL树、红黑树</a></li>
+<li><a href="http://www.cnblogs.com/xuqiang/archive/2011/05/22/2053516.html" target="_blank" rel="external">跳表SkipList</a></li>
+<li><a href="http://kenby.iteye.com/blog/1187303" target="_blank" rel="external">SkipList跳表</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/06/wiki/Caching Tutorial/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Caching Tutorial
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/04/02/设计合适的数据结构(一)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">设计合适的数据结构(一)</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="设计合适的数据结构(二)" data-title="设计合适的数据结构(二)" data-url="http://blog.xumingyang.cn/2015/04/03/设计合适的数据结构(二)/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

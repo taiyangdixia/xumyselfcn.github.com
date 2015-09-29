@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Scala的三个特殊类型Nothing、Any、Option | Mingyang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Scala的三个特殊类型Nothing、Any、Option1234567891011121314151617181920import java.util._var list1 : List[Int] = new ArrayList[Int]var list2 = new ArrayList[Int]var list3 = new ArrayList[Any]	var ref1 : Int = 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scala的三个特殊类型Nothing、Any、Option">
+<meta property="og:url" content="http://blog.xumingyang.cn/2014/03/19/wiki/Scala的三个特殊类型Nothing、Any、Option/index.html">
+<meta property="og:site_name" content="Mingyang's Blog">
+<meta property="og:description" content="Scala的三个特殊类型Nothing、Any、Option1234567891011121314151617181920import java.util._var list1 : List[Int] = new ArrayList[Int]var list2 = new ArrayList[Int]var list3 = new ArrayList[Any]	var ref1 : Int = 1">
+<meta property="og:updated_time" content="2015-09-08T02:17:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scala的三个特殊类型Nothing、Any、Option">
+<meta name="twitter:description" content="Scala的三个特殊类型Nothing、Any、Option1234567891011121314151617181920import java.util._var list1 : List[Int] = new ArrayList[Int]var list2 = new ArrayList[Int]var list3 = new ArrayList[Any]	var ref1 : Int = 1">
+  
+    <link rel="alternative" href="/atom.xml" title="Mingyang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/author.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mingyang</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://liuwanlin.info/">SuperLin&#39;s Blog</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.zhanxusen.me">liberalist</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://study.163.com/curricula/cs.htm">Netease MooC</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">scuer, bupter, XuZhou</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">mingyang</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/img/author.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">mingyang</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="weibo" target="_blank" href="http://weibo.com/xumyselfcn" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="http://blog.xumingyang.cn/atom.xml" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/xumyselfcn#163.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-wiki/Scala的三个特殊类型Nothing、Any、Option" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/03/19/wiki/Scala的三个特殊类型Nothing、Any、Option/" class="article-date">
+  	<time datetime="2014-03-19T14:17:16.000Z" itemprop="datePublished">2014-03-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Scala的三个特殊类型Nothing、Any、Option
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Scala/">Scala</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Scala的三个特殊类型Nothing、Any、Option">Scala的三个特殊类型Nothing、Any、Option</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util._</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> list1 : <span class="type">List</span>[<span class="type">Int</span>] = <span class="keyword">new</span> <span class="type">ArrayList</span>[<span class="type">Int</span>]</span><br><span class="line"><span class="keyword">var</span> list2 = <span class="keyword">new</span> <span class="type">ArrayList</span>[<span class="type">Int</span>]</span><br><span class="line"><span class="keyword">var</span> list3 = <span class="keyword">new</span> <span class="type">ArrayList</span>[<span class="type">Any</span>]	</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ref1 : <span class="type">Int</span> = <span class="number">1</span></span><br><span class="line"><span class="keyword">var</span> ref2 : <span class="type">Any</span> = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">list2 add <span class="number">1</span></span><br><span class="line">list2 add <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="function"><span class="keyword">val</span> <span class="title">index</span> <span class="title">&lt;-</span> 0 <span class="title">until</span> <span class="title">list2</span>.<span class="title">size</span>(</span>))</span><br><span class="line">&#123;</span><br><span class="line">	total += list2.get(index)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println(<span class="string">"total is: "</span>+total)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>解释一下上面的代码：</p>
+<ul>
+<li><p>import里面的下划线，等价于java里的 ( * ),该语句导入了java.util包中的所有的类。</p>
+</li>
+<li><p>创建list1引用，只想ArrayList[Int]的实例。然后创建另一个引用list2，指向为指导参数类型的ArrayList实例。<code>在幕后，Scala实际上穿件了一个ArrayList[Nothing]</code>的实例。如果将list1赋给list2，则会编译报错。</p>
+</li>
+<li>默认情况下，Scala是不允许把一个持有任意类型实例的容器赋值给持有Any实例的容器。也就是若将list2赋值给list3，会发生编译错误。</li>
+<li>ref1赋值给ref2可以通过编译，这个等价于将Integer引用赋给一个Object类型的引用。</li>
+</ul>
+<h3 id="Nothing类型">Nothing类型</h3><p>在Scala中Nothing是所有类的子类。Scala把new ArrayList 当做ArrayList[Nothing]这样的实例。基类实例是不能当做派生类实例，Nothing是最底层的子类。</p>
+<p>Scala使用Nothing——所有类型的子类——帮助类型推演更平滑的进行。既然他是任何类的子类，他就可以替换任何东西。Nothing是抽象的，在运行时，他的实例并不会真实存在，纯粹就是类型推演的帮手。</p>
+<h3 id="Any类型">Any类型</h3><p>Any是所有Scala类型的超类。Any可以持有任何类型对象的引用。Any是抽象类，有如下的方法： !=() 、 ==() 、 asInstanceOf() 、 equals() 、 hashCode() 、 isInstanceOf() 和 toString()。</p>
+<p>Any的直接后代是<strong>AnyVal</strong>和<strong>AnyRef</strong>。</p>
+<ul>
+<li>AnyVal是所有可以映射为Java基本类型（比如Int，Double等）的Scala类型的基类。</li>
+<li>AnyRef是所有引用类型的基类。</li>
+</ul>
+<p><strong>AnyRef</strong>直接映射为Java的Object，在Scala中使用它，就如同在Java里使用Object一样。</p>
+<p><strong>Any</strong>或<strong>AnyVal</strong>在编译成字节码时，Scala也会在内部把他们当做Object的引用处理。Object的某些方法也不能通过Any或AnyVal的引用来调用。</p>
+<h3 id="Option类型">Option类型</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">commentOnPractice</span>(</span>input: <span class="type">String</span>) = &#123;</span><br><span class="line">	<span class="comment">//rather than returning null</span></span><br><span class="line">	<span class="keyword">if</span>(input == <span class="string">"test"</span>) <span class="type">Some</span> (<span class="string">"good"</span>) <span class="keyword">else</span> <span class="type">None</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(input &lt;- <span class="type">Set</span>(<span class="string">"test"</span>,<span class="string">"hack"</span>))&#123;</span><br><span class="line">	<span class="function"><span class="keyword">val</span> <span class="title">comment</span> =</span> commentOnPractice(input)</span><br><span class="line">	println(<span class="string">"input "</span> + input +<span class="string">" comment "</span>+comment.getOrElse(<span class="string">"Found no comments"</span>))</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码输出如下：</p>
+<blockquote>
+<p>input test comment good</p>
+<p>input hack comment Found no comments</p>
+</blockquote>
+<ul>
+<li>这里，commentOnPractice()也许会返回一个注释（String），也许压根没有注释，这两点分别用Some[T]和None的实例表示。这两个类都集成Option[T]。</li>
+<li>调用返回Option[T]的getOrElse()方法，可以主动的应对结果不存在(None)的情形。</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/16/wiki/Java内存区域/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Java内存区域
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/03/16/wiki/Rest 与 Rest java 框架/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Rest 与 Rest java 框架</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="wiki/Scala的三个特殊类型Nothing、Any、Option" data-title="Scala的三个特殊类型Nothing、Any、Option" data-url="http://blog.xumingyang.cn/2014/03/19/wiki/Scala的三个特殊类型Nothing、Any、Option/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"xumyselfcn"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 mingyang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
