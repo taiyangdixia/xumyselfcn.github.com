@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://img-niren.qiniudn.com/1-2.png">
 <meta property="og:image" content="http://img-niren.qiniudn.com/expdp-modify.png">
 <meta property="og:image" content="http://img-niren.qiniudn.com/sqluldr2-modify.png">
-<meta property="og:updated_time" content="2015-09-29T02:45:51.000Z">
+<meta property="og:updated_time" content="2015-09-29T02:48:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从Oracle数据库中大量导出文本数据的实践">
 <meta name="twitter:description" content="背景在网页上选择待导出的数据表和字段，从Oracle数据库中导出，以文本方式保存。比较大的一张表估计得有几千万行了。目标导出速度得达到15w行/s左右。
@@ -135,7 +135,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
+						<a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Callable/" style="font-size: 10px;">Callable</a> <a href="/tags/ConcurrentLinkedDeque/" style="font-size: 10px;">ConcurrentLinkedDeque</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/LSM/" style="font-size: 10px;">LSM</a> <a href="/tags/LinkedBlockingDeque/" style="font-size: 10px;">LinkedBlockingDeque</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/expdp/" style="font-size: 10px;">expdp</a> <a href="/tags/interface/" style="font-size: 10px;">interface</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-final-static/" style="font-size: 10px;">java final static</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/maker/" style="font-size: 10px;">maker</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/spool/" style="font-size: 10px;">spool</a> <a href="/tags/sqluldr2/" style="font-size: 10px;">sqluldr2</a> <a href="/tags/tar/" style="font-size: 10px;">tar</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 10px;">大数据</a> <a href="/tags/容器/" style="font-size: 13.33px;">容器</a> <a href="/tags/并发/" style="font-size: 10px;">并发</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/数据结构/" style="font-size: 16.67px;">数据结构</a>
 					</div>
 				</section>
 				
@@ -313,7 +313,7 @@ spool off;
 </code></pre><p>就可以导出common表中的数据了，在当前路径中生成文件data.csv。</p>
 <p>这里有关于expdp和sqluldr2的性能测试截图：</p>
 <p>这个是expdp工具的测试截图<br><img src="http://img-niren.qiniudn.com/expdp-modify.png" alt=""><br>这个是sqluldr2工具的测试截图<br><img src="http://img-niren.qiniudn.com/sqluldr2-modify.png" alt=""></p>
-<p>两者导出的数据都是一样的，一共26405520GB。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
+<p>两者导出的数据都是一样的，一共26405520行记录，大约1.4GB。两者耗时相差不大，都在两分钟以内，不过，可以发现sqluldr2甚至比oracle官方提供的expdp工具还要快一些。</p>
 <p>在实际项目中遇到了一个问题：这个工具（不止这个工具，除了第一种方案，其他的都需要）必须得在有oracle环境下才能运行，项目部署的用户和数据库的用户并不是同一个。</p>
 <p>一个方法就是在当前用户下，切换到另外一个用户去执行命令，但是这就需要输入数据库用户的用户名和密码，查资料可以通过安装expect工具，写成shell脚本，然后程序直接调用执行这个脚本。</p>
 <p>另一个方法是在数据库用户下部署一个server，当需要导出数据的时候，给该server发送相应的信息（包括需要导出的表名，字段名）。server接受信息之后开始执行数据导出工作。</p>
