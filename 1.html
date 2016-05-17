@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="http://cdn.bootcss.com/pure/0.6.0/pure.css" rel="stylesheet">
+
+<style>
+.pure-form fieldset {
+    padding: 0 20px;
+}
+input#room {
+    margin-top: 50px;
+    width: 100%;
+    font-size: 50px;
+}
+textarea#msg{
+    margin-top: 50px;
+    width:100%;
+    font-size: 50px;
+}
+button#send {
+    font-size: 50px;
+}
+div{
+    text-align: center;
+    margin-top: 50px;
+}
+</style>
+</head>
+
+<form class="pure-form">
+
+    <fieldset class="pure-group">
+        <input id="room" type="text" class="pure-input" placeholder="房间号">
+        <textarea id="msg" class="pure-input" placeholder="消息"></textarea>
+    </fieldset>
+    <div>
+        <button id="send" type="submit" class="button-xlarge pure-u-1-2 pure-button pure-button-primary">无限弹</button>
+    </div>
+</form>
+
+
+
+<script src="http://mat1.gtimg.com/libs/jquery2/2.2.0/jquery.js"></script>
+
+<script>
+  $("#send").on('click', function(e){
+    e.preventDefault();
+    var room = $("#room").val();
+      var msg = $("#msg").val();
+    if(room && msg){
+      $.ajax({url: "http://121.42.211.99:3000/msg/"+room+"/23213123-212131-"+msg,
+          type: "GET",
+          dataType: "jsonp",
+          jsonp: "callback",
+          jsonpCallback: myCallback
+        });
+    }
+  });
+
+  window.myCallback = function(data) {
+
+  };
+
+
+  
+</script>
+</html>
